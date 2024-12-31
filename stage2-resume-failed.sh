@@ -12,9 +12,9 @@ if [ "$1" != "CONFIRM_STAGE2_RESUME=YES" ]; then
   echo "Please edit 'massos-rootfs/sources/build-system.sh' as root and" >&2
   echo "remove lines 39 up to where your build failed. Otherwise, it will" >&2
   echo "try to rebuild the whole system from the start, which WILL cause" >&2
-  echo "issues if the system is already part-built." >&2
+  echo "issues and inconsistencies if the system is already part-built." >&2
   echo -e "\nOnce you've done that, re-run this script like this:" >&2
-  echo -e "\n$0 CONFIRM_STAGE2_RESUME=YES" >&2
+  echo -e "\n$(basename $0) CONFIRM_STAGE2_RESUME=YES" >&2
   exit 1
 fi
 # Setup the environment.

@@ -14,5 +14,6 @@ if [ $STATUS -ne 0 ]; then
   exit $STATUS
 else
   echo -e "\nGood, it looks like everything downloaded successfully!"
-  echo "Now you can begin the build of MassOS by running './stage1.sh'."
+  echo "You can verify the downloads by running './verify-sources.sh'."
+  echo "Then you can begin the build of MassOS by running './stage1.sh'."
 fi

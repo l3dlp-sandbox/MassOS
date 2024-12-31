@@ -94,13 +94,15 @@ cp finalize.sh "$MASSOS"/sources
 utils/programs/mass-chroot "$MASSOS" /sources/finalize.sh
 # Install preupgrade and postupgrade.
 cp utils/{pre,post}upgrade "$MASSOS"/tmp
+# Install Live CD cleanup script for osinstallgui.
+install -t "$MASSOS"/tmp -m755 utils/livecd-cleanup.sh
 # Strip executables and libraries to free up space.
 printf "Stripping binaries and libraries... "
-find "$MASSOS"/usr/{bin,lib,libexec,sbin} -type f -not -name \*.a -and -not -name \*.o -and -not -name \*.mod -and -not -name \*.module -exec strip --strip-unneeded {} ';' &> /dev/null || true
-find "$MASSOS"/usr/lib -type f -name \*.a -or -name \*.o -or -name \*.mod -or -name \*.module -exec strip --strip-debug {} ';' &>/dev/null || true
+find "$MASSOS"/usr/{bin,lib,libexec,sbin} -type f -not -name \*.a -and -not -name \*.o -and -not -name \*.mod -and -not -name \*.module -exec strip --strip-unneeded {} + &> /dev/null || true
+find "$MASSOS"/usr/lib -type f -name \*.a -or -name \*.o -or -name \*.mod -or -name \*.module -exec strip --strip-debug {} + &>/dev/null || true
 echo "Done!"
 # Finish the MassOS system.
-outfile="massos-$(cat utils/massos-release)-rootfs-x86_64-$1.tar"
+outfile="massos-$(cat "$MASSOS"/etc/massos-release)-rootfs-x86_64-$1.tar"
 printf "Creating $outfile... "
 cd "$MASSOS"
 tar -cpf ../"$outfile" *
@@ -116,5 +118,5 @@ rm -rf "$MASSOS"
 # Finishing message.
 echo
 echo "We know it took time, but the build has finally finished successfully!"
-echo "If you want to create a Live ISO file for your build, check out the"
-echo "scripts at <https://github.com/MassOS-Linux/livecd-installer>."
+echo "If you want to create a Live ISO file for your build, use the script"
+echo "'./create-livecd.sh'."

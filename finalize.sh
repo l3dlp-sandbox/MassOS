@@ -9,6 +9,8 @@ if [ $EUID -ne 0 ] || [ ! -d /sources ]; then
   echo "stage3.sh will automatically run it in a chroot environment." >&2
   exit 1
 fi
+# Set up basic environment variables, still necessary here unfortunately.
+. sources/build.env
 # Compress manual pages.
 zman /usr/share/man
 # Remove leftover junk in /root.
@@ -31,6 +33,8 @@ rm -rf /usr/docs
 rm -rf /usr/share/gtk-doc/html/*
 # Remove libtool archives.
 find /usr/{lib,libexec} -name \*.la -delete
+# Remove unwanted Python bytecode cache files in /usr/bin.
+rm -rf /usr/bin/__pycache__
 # Remove any temporary files.
 rm -rf /tmp/*
 # As a finishing touch, run ldconfig and other misc commands.

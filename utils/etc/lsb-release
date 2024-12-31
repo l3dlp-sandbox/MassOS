@@ -1,4 +1,4 @@
 DISTRIB_ID="MassOS"
-DISTRIB_RELEASE="development"
-DISTRIB_CODENAME="development"
+DISTRIB_RELEASE="experimental"
+DISTRIB_CODENAME="experimental"
 DISTRIB_DESCRIPTION="MassOS"

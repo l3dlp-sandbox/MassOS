@@ -1,19 +1,27 @@
-Copyright (C) 2021-2022 The Sonic Master / MassOS Developers.
+Copyright (C) 2021-2024 Daniel Massey / MassOS Developers.
 
 ===============================================================================
 
 The scripts and utilities found in MassOS repositories are licensed under the
 GNU GPLv3+ (see below). The individual programs which make up the MassOS system
 are licensed under various different licenses. The license for each individual
-piece of software can be found in '/usr/share/licenses' on a MassOS system.
+piece of software can be found under the directory '/usr/share/licenses/' on a
+MassOS system. The developers/maintainers of MassOS make no additional claims
+of copyright or authorship over these projects, except where explicitly stated.
 
-In the core MassOS system, we try to only include free software which is either
-in the public domain, or protected by a GPL-compatible license. Contributions
-to MassOS should also follow this where possible. The live ISO for MassOS does
-contain some non-free firmware for certain hardware, however we always provide
-an additional "nofirmware" ISO, which conains only fully free software. The
-software center may also list non-free programs, however the core MassOS system
-will always remain free.
+Most of the software in the core MassOS system is free software - either in the
+public domain, or protected by a GPL-compatible license. Some exceptions are
+made where the developers/maintainers feel necessary, such as to ensure support
+for commonly used hardware devices. Full details of exceptions, can be found at
+<https://github.com/MassOS-Linux/MassOS/wiki/MassOS-and-Free-Software>.
+
+Every effort is made to comply with the terms of the GPL where possible. This
+includes, but is not limited to, ensuring GPL-protected object code is never
+directly linked, either statically or dynamically, with GPL-incompatible object
+code. However, the existence of GPL and GPL-incompatible software on the same
+system, when functioning as standalone projects that do not directly interact
+with each other, is acceptable and is not restricted by the terms of the GPL,
+despite a common misconception.
 
 ===============================================================================
 

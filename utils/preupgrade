@@ -1,3 +1,9 @@
+# Upgrading from original MassOS (pre-2023) is not allowed.
+if [ "$(cat /etc/massos-release | cut -d'-' -f1)" != "experimental" ]; then
+  echo "Error: Upgrading from a pre-2023 MassOS version is not allowed." >&2
+  echo "Please back up your personal data and perform a clean reinstall." >&2
+  exit 1
+fi
 # Check for a new version of Glibc (breaks this utility).
 if [ "$(ldd --version | head -n1 | cut -d' ' -f4)" != "2.36" ]; then
   echo "
@@ -7,7 +13,7 @@ therefore not possible. To upgrade, please boot a MassOS live environment, run
 the installation program, and choose 'Repair' --> 'Refresh'. This won't erase
 your apps or data. For information on how to do this, see the following URL:
 
-  https://github.com/MassOS-Linux/MassOS/blob/main/installation-guide.md
+  https://github.com/MassOS-Linux/MassOS/wiki/Upgrading-MassOS
 " >&2
   exit 1
 fi

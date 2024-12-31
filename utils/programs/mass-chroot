@@ -8,13 +8,13 @@ if [ $EUID -ne 0 ]; then
   exit 1
 fi
 
-chrootdir="$1"
-shift
-
-if [ -z "$chrootdir" ]; then
-  echo "Usage: mass-chroot <chroot dir> [optional custom command]"
+if [ -z "$1" ]; then
+  echo "Usage: mass-chroot <chroot dir> [optional custom command]" >&2
   exit 1
 fi
+
+chrootdir="$1"
+shift
 
 if [ ! -d "$chrootdir" ]; then
   echo "Error: $chrootdir is not a directory I can chroot into." >&2

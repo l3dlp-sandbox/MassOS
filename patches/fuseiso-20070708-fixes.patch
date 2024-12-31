@@ -1,0 +1,99 @@
+diff -aruN old/src/fuseiso.c new/src/fuseiso.c
+--- old/src/fuseiso.c	2007-05-06 18:01:17.000000000 +0100
++++ new/src/fuseiso.c	2023-12-09 15:15:02.614103543 +0000
+@@ -295,7 +295,7 @@
+         "    -f                 -- run in foreground, do not daemonize\n"
+         "    -d                 -- run in foreground and print debug information\n"
+         "    -s                 -- run single-threaded\n"
+-        "\nPlease consult with FUSE ducumentation for more information\n",
++        "\nPlease consult with FUSE documentation for more information\n",
+         VERSION, 
+         prog);
+ };
+diff -aruN old/src/isofs.c new/src/isofs.c
+--- old/src/isofs.c	2007-07-08 13:22:59.000000000 +0100
++++ new/src/isofs.c	2023-12-09 15:15:08.860829433 +0000
+@@ -178,7 +178,7 @@
+                         context.data_size = isonum_723(context.pd.logical_block_size);
+                         
+                         if(!context.block_size) {
+-                            fprintf(stderr, "init: wrong block data size %d, using default 2048\n", context.data_size);
++                            fprintf(stderr, "init: wrong block data size %Lu, using default 2048\n", context.data_size);
+                             context.data_size = 2048;
+                         };
+                         
+@@ -324,7 +324,7 @@
+     
+     if(context.block_size != 2048) {
+         // report unusual data block size
+-        printf("Data block size: %d\n", context.block_size);
++        printf("Data block size: %Lu\n", context.block_size);
+     };
+     
+     char buf[129];
+@@ -479,7 +479,7 @@
+     };
+     size_t len = read(context.fd, buf, context.data_size);
+     if(len != context.data_size) {
+-        fprintf(stderr, "isofs_read_raw_block: can`t read full block, read only %d bytes from offset %d, %d required; errno %d, message %s\n", 
++        fprintf(stderr, "isofs_read_raw_block: can`t read full block, read only %d bytes from offset %d, %Lu required; errno %d, message %s\n", 
+             len, (int) off, context.data_size, errno, strerror(errno));
+         fprintf(stderr, "isofs_read_raw_block: huh? reading zeros beyond file end? someone want to save a penny?\n");
+         memset(buf + len, 0, context.data_size - len);
+@@ -1532,13 +1532,23 @@
+             if(path[1] != '\0') { // not root dir
+                 strcat(absolute_entry, "/");
+             };
+-            strcat(absolute_entry, entry);
+-            if(g_hash_table_lookup(lookup_table, absolute_entry)) {
+-                // already in lookup cache
++
++            if(strlen(absolute_entry) + strlen(entry) <= PATH_MAX-1) {
++                strcat(absolute_entry, entry);
++                if(g_hash_table_lookup(lookup_table, absolute_entry)) {
++                    // already in lookup cache
++                    isofs_free_inode(inode);
++                } else {
++                    g_hash_table_insert(lookup_table, g_strdup(absolute_entry), inode);
++                };
++            }
++            else {
++                printf("readdir: absolute path name for entry '%s' exceeding PATH_MAX (%d)\n", entry, PATH_MAX);
+                 isofs_free_inode(inode);
+-            } else {
+-                g_hash_table_insert(lookup_table, g_strdup(absolute_entry), inode);
+-            };
++                free(buf);
++                free(entry);
++                return -EIO;
++            }
+             
+             free(entry);
+             
+@@ -1608,6 +1618,10 @@
+ };
+ 
+ static int isofs_real_read_zf(isofs_inode *inode, char *out_buf, size_t size, off_t offset) {
++    if( inode->zf_block_shift > 17 ) {
++        fprintf(stderr, "isofs_real_read_zf: can't handle ZF block size of 2^%d\n", inode->zf_block_shift);
++        return -EIO;
++    }
+     int zf_block_size = 1 << inode->zf_block_shift;
+     int zf_start = offset / zf_block_size;
+     int zf_end = (offset + size) / zf_block_size;
+diff -aruN old/src/isofs.h new/src/isofs.h
+--- old/src/isofs.h	2006-10-17 02:50:39.000000000 +0100
++++ new/src/isofs.h	2023-12-09 15:14:59.590741521 +0000
+@@ -38,9 +38,9 @@
+     struct iso_directory_record *root;
+     int file_offset; // offset to begin of useful data (for .nrg files)
+     int id_offset; // offset to CD001 inside file
+-    size_t block_size; // raw block size
+-    size_t block_offset; // offset from block start to data
+-    size_t data_size; // data size inside block 
++    off_t block_size; // raw block size
++    off_t block_offset; // offset from block start to data
++    off_t data_size; // data size inside block 
+     int susp; // parse susp entries
+     int susp_skip; // skip bytes from susp SP entry
+     int joliet_level; // joliet extension level (1, 2 or 3)

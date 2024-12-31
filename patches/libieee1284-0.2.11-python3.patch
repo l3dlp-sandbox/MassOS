@@ -1,3 +1,12 @@
+From 357005f6b19c4e2febd3c0f17e59de541accbe92 Mon Sep 17 00:00:00 2001
+From: Anatol Pomozov <anatol.pomozov@gmail.com>
+Date: Sun, 17 Nov 2024 11:10:11 +0100
+Subject: [PATCH 1/2] Fix Python 3 compatibility
+
+---
+ src/ieee1284module.c | 136 +++++++++++++++++++++++++------------------
+ 1 file changed, 79 insertions(+), 57 deletions(-)
+
 diff --git a/src/ieee1284module.c b/src/ieee1284module.c
 index 23c1f29..c6d6928 100644
 --- a/src/ieee1284module.c
@@ -264,3 +273,26 @@ index 23c1f29..c6d6928 100644
 +	
 +	return m;
  }
+
+From cf59766dd848bd8b4318b1c67b5df053903ddefb Mon Sep 17 00:00:00 2001
+From: Carl Smedstad <carl.smedstad@protonmail.com>
+Date: Sun, 17 Nov 2024 11:11:37 +0100
+Subject: [PATCH 2/2] Fix Python 3.12 compatibility
+
+---
+ src/ieee1284module.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/ieee1284module.c b/src/ieee1284module.c
+index c6d6928..23a4426 100644
+--- a/src/ieee1284module.c
++++ b/src/ieee1284module.c
+@@ -579,7 +579,7 @@ WRITE_METHOD(ecp_write_addr)
+ /***/
+ 
+ static PyTypeObject ParportType = {
+-	PyObject_HEAD_INIT(NULL)
++	PyVarObject_HEAD_INIT(NULL, 0)
+ 	"ieee1284.Parport",	/* const char *tp_name; */
+ 	sizeof (ParportObject),	/* Py_ssize_t tp_basicsize */
+ 	0,		/* Py_ssize_t tp_itemsize; */

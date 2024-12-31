@@ -34,11 +34,11 @@ fi
 # Important verification message.
 if [ "$2" != "CONFIRM_STAGE3_RESUME=YES" ]; then
   echo "Please edit 'massos-rootfs/sources/build-stage3.sh' as root and" >&2
-  echo "remove lines 18 up to where your build failed. Otherwise, it will" >&2
+  echo "remove lines 13 up to where your build failed. Otherwise, it will" >&2
   echo "try to rebuild the whole system from the start, which WILL cause" >&2
-  echo "issues if the system is already part-built." >&2
+  echo "issues and inconsistencies if the system is already part-built." >&2
   echo -e "\nOnce you've done that, re-run this script like this:" >&2
-  echo -e "\n$0 $1 CONFIRM_STAGE3_RESUME=YES" >&2
+  echo -e "\n$(basename $0) $1 CONFIRM_STAGE3_RESUME=YES" >&2
   exit 1
 fi
 # Put Stage 3 files into the system.
@@ -51,13 +51,15 @@ cp finalize.sh "$MASSOS"/sources
 utils/programs/mass-chroot "$MASSOS" /sources/finalize.sh
 # Install preupgrade and postupgrade.
 cp utils/{pre,post}upgrade "$MASSOS"/tmp
+# Install Live CD cleanup script for osinstallgui.
+install -t "$MASSOS"/tmp -m755 utils/livecd-cleanup.sh
 # Strip executables and libraries to free up space.
 printf "Stripping binaries and libraries... "
 find "$MASSOS"/usr/{bin,lib,libexec,sbin} -type f -not -name \*.a -and -not -name \*.o -and -not -name \*.mod -and -not -name \*.module -exec strip --strip-unneeded {} ';' &> /dev/null || true
 find "$MASSOS"/usr/lib -type f -name \*.a -or -name \*.o -or -name \*.mod -or -name \*.module -exec strip --strip-debug {} ';' &>/dev/null || true
 echo "Done!"
 # Finish the MassOS system.
-outfile="massos-$(cat utils/massos-release)-rootfs-x86_64-$1.tar"
+outfile="massos-$(cat "$MASSOS"/etc/massos-release)-rootfs-x86_64-$1.tar"
 printf "Creating $outfile... "
 cd "$MASSOS"
 tar -cpf ../"$outfile" *
@@ -73,5 +75,5 @@ rm -rf "$MASSOS"
 # Finishing message.
 echo
 echo "We know it took time, but the build has finally finished successfully!"
-echo "If you want to create a Live ISO file for your build, check out the"
-echo "scripts at <https://github.com/MassOS-Linux/livecd-installer>."
+echo "If you want to create a Live ISO file for your build, use the script"
+echo "'./create-livecd.sh'."
