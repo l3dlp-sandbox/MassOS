@@ -1258,10 +1258,48 @@ make -j1 install
 install -t /usr/share/licenses/cyrus-sasl -Dm644 COPYING
 cd ..
 rm -rf cyrus-sasl-2.1.28
+# libmnl.
+tar -xf libmnl-1.0.5.tar.bz2
+cd libmnl-1.0.5
+./configure --prefix=/usr
+make
+make install
+install -t /usr/share/licenses/libmnl -Dm644 COPYING
+cd ..
+rm -rf libmnl-1.0.5
+# libnftnl.
+tar -xf libnftnl-1.2.8.tar.xz
+cd libnftnl-1.2.8
+./configure --prefix=/usr
+make
+make install
+install -t /usr/share/licenses/libnftnl -Dm644 COPYING
+cd ..
+rm -rf libnftnl-1.2.8
+# libnfnetlink.
+tar -xf libnfnetlink-1.0.2.tar.bz2
+cd libnfnetlink-1.0.2
+./configure --prefix=/usr
+make
+make install
+install -t /usr/share/licenses/libnfnetlink -Dm644 COPYING
+cd ..
+rm -rf libnfnetlink-1.0.2
+# nftables (will be rebuilt after Jansson for JSON support).
+tar -xf nftables-1.1.1.tar.xz
+cd nftables-1.1.1
+./configure --prefix=/usr --sysconfdir=/etc --disable-debug --without-json
+make
+pip --disable-pip-version-check wheel --no-build-isolation --no-cache-dir --no-deps -w dist ./py
+make install
+pip --disable-pip-version-check install --root-user-action ignore --no-cache-dir --no-index --no-user -f dist nftables
+install -t /usr/share/licenses/nftables -Dm644 COPYING
+cd ..
+rm -rf nftables-1.1.1
 # iptables.
 tar -xf iptables-1.8.11.tar.xz
 cd iptables-1.8.11
-./configure --prefix=/usr --enable-libipq --disable-nftables
+./configure --prefix=/usr --enable-libipq --enable-nftables
 make
 make install
 install -t /usr/share/licenses/iptables -Dm644 COPYING
@@ -2287,11 +2325,13 @@ compress="xz"
 # Make the initramfs reproducible.
 reproducible="yes"
 
-# Add module to support live CD booting.
-add_dracutmodules+=" dmsquash-live "
+# These modules are required to support live CD booting; do not remove them.
+add_dracutmodules+=" dmsquash-live overlayfs "
 
-# Exclude modules which are unneeded for MassOS or have missing dependencies.
-omit_dracutmodules+=" cifs connman dash dbus-broker fcoe fcoe-uefi kernel-modules-extra mksh nbd network-legacy network-manager nfs qemu qemu-net rngd "
+# These modules are unneeded for booting MassOS and would bloat the initramfs.
+# Some of them also have dependencies outside the scope of MassOS.
+# Remove them from the exclude list only if you know what you are doing.
+omit_dracutmodules+=" biosdevname cifs connman dash dbus-broker dmraid fcoe fcoe-uefi hwdb iscsi kernel-modules-extra kernel-network-modules lunmask memstrack mksh multipath nbd network network-legacy network-manager nfs nvdimm nvmf qemu qemu-net rngd usrmount virtiofs "
 END
 install -t /usr/share/licenses/dracut -Dm644 COPYING
 cd ..
@@ -2741,24 +2781,6 @@ make install
 install -t /usr/share/licenses/tpm2-tools -Dm644 docs/LICENSE
 cd ..
 rm -rf tpm2-tools-5.7
-# open-isns.
-tar -xf open-isns-0.103.tar.gz
-cd open-isns-0.103
-meson setup build --prefix=/usr --buildtype=minsize --default-library=shared -Dlibdir=lib -Dslp=disabled
-ninja -C build
-ninja -C build install
-install -t /usr/share/licenses/open-isns -Dm644 COPYING
-cd ..
-rm -rf open-isns-0.103
-# open-iscsi.
-tar -xf open-iscsi-2.1.10.tar.gz
-cd open-iscsi-2.1.10
-meson setup build --prefix=/usr --buildtype=minsize -Drulesdir=/usr/lib/udev/rules.d
-ninja -C build
-ninja -C build install
-install -t /usr/share/licenses/open-iscsi -Dm644 COPYING
-cd ..
-rm -rf open-iscsi-2.1.10
 # libusb.
 tar -xf libusb-1.0.27.tar.bz2
 cd libusb-1.0.27
@@ -2888,6 +2910,14 @@ make install
 install -t /usr/share/licenses/jansson -Dm644 LICENSE
 cd ..
 rm -rf jansson-2.14
+# nftables (rebuild with Jansson for JSON support).
+tar -xf nftables-1.1.1.tar.xz
+cd nftables-1.1.1
+./configure --prefix=/usr --sysconfdir=/etc --disable-debug --with-json
+make
+make install
+cd ..
+rm -rf nftables-1.1.1
 # libassuan.
 tar -xf libassuan-3.0.1.tar.bz2
 cd libassuan-3.0.1
@@ -5565,6 +5595,25 @@ pip --disable-pip-version-check install --root-user-action ignore --no-cache-dir
 install -t /usr/share/licenses/python-dbusmock -Dm644 COPYING
 cd ..
 rm -rf python-dbusmock-0.32.2
+# pycups.
+tar -xf pycups-2.0.4.tar.gz
+cd pycups-2.0.4
+pip --disable-pip-version-check wheel --no-build-isolation --no-deps --no-cache-dir -w dist .
+pip --disable-pip-version-check install --root-user-action ignore --no-cache-dir --no-index --no-user -f dist pycups
+install -t /usr/share/licenses/pycups -Dm644 COPYING
+cd ..
+rm -rf pycups-2.0.4
+# firewalld.
+tar -xf firewalld-2.3.0.tar.bz2
+cd firewalld-2.3.0
+./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+make
+make install
+rm -f /etc/xdg/autostart/firewall-applet.desktop
+systemctl enable firewalld
+install -t /usr/share/licenses/firewalld -Dm644 COPYING
+cd ..
+rm -rf firewalld-2.3.0
 # gexiv2.
 tar -xf gexiv2-0.14.3.tar.xz
 cd gexiv2-0.14.3
@@ -5737,6 +5786,23 @@ ninja install
 install -t /usr/share/licenses/ldac -Dm644 ../LICENSE
 cd ../..
 rm -rf ldacBT
+# libfreeaptx.
+tar -xf libfreeaptx-0.1.1.tar.gz
+cd libfreeaptx-0.1.1
+make PREFIX=/usr CC=gcc CFLAGS="$CFLAGS"
+make PREFIX=/usr install
+install -t /usr/share/licenses/libfreeaptx -Dm644 COPYING
+cd ..
+rm -rf libfreeaptx-0.1.1
+# liblc3.
+tar -xf liblc3-1.1.1.tar.gz
+cd liblc3-1.1.1
+meson setup build --prefix=/usr --buildtype=minsize -Dpython=true -Dtools=true
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/liblc3 -Dm644 LICENSE
+cd ..
+rm -rf liblc3-1.1.1
 # libical.
 tar -xf libical-3.0.19.tar.gz
 cd libical-3.0.19
@@ -6143,6 +6209,17 @@ rm -f /usr/bin/hp-{uninstall,upgrade} /usr/share/hplip/{uninstall,upgrade}.py
 install -t /usr/share/licenses/hplip -Dm644 COPYING
 cd ..
 rm -rf hplip-3.24.4
+# system-config-printer.
+tar -xf system-config-printer-1.5.18.tar.xz
+cd system-config-printer-1.5.18
+patch -Np1 -i ../patches/system-config-printer-1.5.18-pythonbuild.patch
+./bootstrap
+./configure --prefix=/usr --sysconfdir=/etc --disable-rpath --with-cups-serverbin-dir=/usr/lib/cups --with-systemdsystemunitdir=/usr/lib/systemd/system --with-udev-rules --with-udevdir=/usr/lib/udev
+make
+make install
+install -t /usr/share/licenses/system-config-printer -Dm644 COPYING
+cd ..
+rm -rf system-config-printer-1.5.18
 # Tk.
 tar -xf tk8.6.15-src.tar.gz
 cd tk8.6.15/unix
@@ -6334,6 +6411,7 @@ cd samba-4.21.2
 make
 make install
 ln -sfr /usr/bin/smbspool /usr/lib/cups/backend/smb
+rm -f /etc/sysconfig/samba
 rm -f /usr/bin/{cifsdd,ctdb,ctdb_diagnostics,dbwrap_tool,dumpmscat,gentest,ldbadd,ldbdel,ldbedit,ldbmodify,ldbrename,ldbsearch,locktest,ltdbtool,masktest,mdsearch,mvxattr,ndrdump,ntlm_auth,oLschema2ldif,onnode,pdbedit,ping_pong,profiles,regdiff,regpatch,regshell,regtree,samba-regedit,samba-tool,sharesec,smbcontrol,smbpasswd,smbstatus,smbtorture,tdbbackup,tdbdump,tdbrestore,tdbtool,testparm,wbinfo}
 rm -f /usr/sbin/{ctdbd,ctdbd_wrapper,eventlogadm,nmbd,samba,samba_dnsupdate,samba_downgrade_db,samba-gpupdate,samba_kcc,samba_spnupdate,samba_upgradedns,smbd,winbindd}
 rm -rf /usr/include/samba-4.0/{charset.h,core,credentials.h,dcerpc.h,dcerpc_server.h,dcesrv_core.h,domain_credentials.h,gen_ndr,ldb_wrap.h,lookup_sid.h,machine_sid.h,ndr,ndr.h,param.h,passdb.h,policy.h,rpc_common.h,samba,share.h,smb2_lease_struct.h,smbconf.h,smb_ldap.h,smbldap.h,tdr.h,tsocket.h,tsocket_internal.h,util,util_ldb.h}
@@ -6555,6 +6633,7 @@ cd libostree-2024.10
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static --enable-experimental-api --enable-gtk-doc --with-curl --with-dracut --with-ed25519-libsodium --with-modern-grub --with-grub2-mkconfig-path=/usr/bin/grub-mkconfig --with-openssl --without-soup
 make
 make install
+rm -f /etc/dracut.conf.d/ostree.conf
 install -t /usr/share/licenses/libostree -Dm644 COPYING
 cd ..
 rm -rf libostree-2024.10
@@ -7259,7 +7338,7 @@ cd pipewire-1.2.7
 mkdir -p subprojects/wireplumber
 tar -xf ../wireplumber-0.5.7.tar.bz2 -C subprojects/wireplumber --strip-components=1
 mkdir pipewire-build; cd pipewire-build
-meson setup --prefix=/usr --buildtype=minsize -Dexamples=disabled -Dffmpeg=enabled -Dtests=disabled -Dvulkan=enabled -Dsession-managers=wireplumber -Dwireplumber:system-lua=true -Dwireplumber:tests=false ..
+meson setup --prefix=/usr --buildtype=minsize -Dbluez5-backend-native-mm=enabled -Dexamples=disabled -Dffmpeg=enabled -Dpw-cat-ffmpeg=enabled -Dtests=disabled -Dvulkan=enabled -Dsession-managers=wireplumber -Dwireplumber:system-lua=true -Dwireplumber:tests=false ..
 ninja
 ninja install
 systemctl --global enable pipewire.socket pipewire-pulse.socket
@@ -7457,8 +7536,9 @@ install -t /usr/share/licenses/busybox -Dm644 LICENSE
 cd ..
 rm -rf busybox-1.37.0
 # Linux Kernel.
-tar -xf linux-6.12.7.tar.xz
-cd linux-6.12.7
+tar -xf linux-6.12.8.tar.xz
+cd linux-6.12.8
+make mrproper
 cp ../kernel-config .config
 make olddefconfig
 make
@@ -7494,13 +7574,13 @@ find "$builddir" -type f -name '*.o' -delete
 ln -sr "$builddir" "/usr/src/linux"
 install -t /usr/share/licenses/linux -Dm644 COPYING LICENSES/exceptions/* LICENSES/preferred/*
 cd ..
-rm -rf linux-6.12.7
+rm -rf linux-6.12.8
 unset builddir
 # NVIDIA Open Kernel Modules.
-tar -xf open-gpu-kernel-modules-565.57.01.tar.gz
-cd open-gpu-kernel-modules-565.57.01
+tar -xf open-gpu-kernel-modules-565.77.tar.gz
+cd open-gpu-kernel-modules-565.77
 patch -Np1 -i ../patches/nvidia-open-kernel-modules-565.57.01-fix.patch
-make SYSSRC=/usr/src/linux
+make CC=gcc SYSSRC=/usr/src/linux
 install -t /usr/lib/modules/$KREL/extramodules -Dm644 kernel-open/*.ko
 strip --strip-debug /usr/lib/modules/$KREL/extramodules/*.ko
 for i in /usr/lib/modules/$KREL/extramodules/*.ko; do xz --threads=$(nproc) "$i"; done
@@ -7508,13 +7588,13 @@ echo "options nvidia NVreg_OpenRmEnableUnsupportedGpus=1" > /usr/lib/modprobe.d/
 depmod $KREL
 install -t /usr/share/licenses/nvidia-open-kernel-modules -Dm644 COPYING
 cd ..
-rm -rf open-gpu-kernel-modules-565.57.01
+rm -rf open-gpu-kernel-modules-565.77
 unset KREL
 # MassOS release detection utility.
 gcc $CFLAGS massos-release.c -o massos-release
 install -t /usr/bin -Dm755 massos-release
 # Determine the version of osinstallgui that should be used by the Live CD.
-echo "0.1.0" > /usr/share/massos/.osinstallguiver
+echo "0.2.0" > /usr/share/massos/.osinstallguiver
 # Determine firmware versions that should be installed.
 cat > /usr/share/massos/firmwareversions << "END"
 # This file defines the firmware versions corresponding to this MassOS build.

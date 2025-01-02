@@ -293,7 +293,7 @@ sed -i '/^dbusdir =/ s/sysconfdir/datadir/' data/configs/Makefile.{am,in}
 ./configure --prefix=/usr --sysconfdir=/etc --with-dhcp-config=/etc/dhcp/dhcpd.conf
 make
 make install
-mv /etc/xdg/autostart/blueman.desktop /usr/share/blueman/autostart.desktop
+cp -af /etc/xdg/autostart/blueman.desktop /usr/share/blueman/autostart.desktop
 cat > /usr/sbin/blueman-autostart << "END"
 #!/bin/bash
 

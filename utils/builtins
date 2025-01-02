@@ -117,6 +117,7 @@ ffmpeg
 figlet
 file
 findutils
+firewalld
 flac
 flashrom
 flatpak
@@ -276,6 +277,7 @@ libexif
 libffi
 libfido2
 libfontenc
+libfreeaptx
 libfs
 libgcrypt
 libgdata
@@ -303,14 +305,18 @@ libjcat
 libjpeg-turbo
 libksba
 libldap
+liblc3
 libmbim
 libmetalink
 libmicrodns
+libmnl
 libmodplug
 libmpeg2
 libmtp
 libndp
 libnfs
+libnfnetlink
+libnftnl
 libnghttp2
 libnghttp3
 libnice
@@ -469,6 +475,7 @@ network-manager-applet
 networkmanager
 networkmanager-openvpn
 newt
+nftables
 ninja
 noto-fonts
 noto-fonts-cjk
@@ -480,8 +487,6 @@ ntfs-3g
 nvidia-open-kernel-modules
 nvme-cli
 oniguruma
-open-iscsi
-open-isns
 openal
 openh264
 openjade
@@ -538,6 +543,7 @@ pulseaudio
 pv
 pycairo
 pycparser
+pycups
 pygments
 pygobject
 pyopenssl
@@ -604,6 +610,7 @@ strace
 sudo
 svt-av1
 swig
+system-config-printer
 systemd
 taglib
 tar

@@ -16,6 +16,7 @@ Changes:
 - Dropped old Xorg input drivers which are replaced by libinput.
 - Split Noto fonts package into normal fonts, CJK fonts and emoji fonts.
 - Added libaom and SVT-AV1 packages for improved AV1 video codec support.
+- Added firewalld and enabled it by default, for enhanced firewall support.
 - Reaplced full OpenLDAP package with only libldap.
 - Replaced pkg-config with pkgconf.
 - Added libc++ and libc++abi alongside the LLVM installation.
@@ -116,6 +117,7 @@ Upgraded software (core):
 - FFmpeg: `5.1.2 --> 7.1`
 - File: `5.43 --> 5.46`
 - Findutils: `4.9.0 --> 4.10.0`
+- firewalld: `(new package) --> 2.3.0`
 - flashrom: `1.2 --> 1.5.1`
 - Flatpak: `1.14.0 --> 1.14.10`
 - flit-core: `(new package) --> 3.10.1`
@@ -247,6 +249,7 @@ Upgraded software (core):
 - libffi: `3.4.3 --> 3.4.6`
 - libfido2: `1.12.0 --> 1.15.0`
 - libfontenc: `1.1.6 --> 1.1.8`
+- libfreeaptx: `(new package) --> 0.1.1`
 - libFS: `1.0.9 --> 1.0.10`
 - libgcrypt: `1.10.1 --> 1.11.0`
 - libglvnd: `1.5.0 --> 1.7.0`
@@ -272,6 +275,8 @@ Upgraded software (core):
 - libmtp: `1.1.20 --> 1.1.22`
 - libndp: `1.8 --> 1.9`
 - libnfs: `4.0.0 --> 5.0.3`
+- libnfnetlink: `(new package) --> 1.0.2`
+- libnftnl: `(new package) --> 1.2.8`
 - libnghttp2: `1.50.0 --> 1.64.0`
 - libnghttp3: `(new package) --> 1.6.0`
 - libnice: `0.1.19 --> 0.1.22`
@@ -357,7 +362,7 @@ Upgraded software (core):
 - libXxf86dga: `1.1.5 --> 1.1.6`
 - libXxf86vm: `1.1.5 --> 1.1.6`
 - libzip: `1.9.2 --> 1.11.2`
-- Linux: `6.0.0 --> 6.12.7`
+- Linux: `6.0.0 --> 6.12.8`
 - Linux-PAM: `1.5.2 --> 1.7.0`
 - LLD: `14.0.6 --> 19.1.6`
 - LLVM: `14.0.6 --> 19.1.6`
@@ -407,6 +412,7 @@ Upgraded software (core):
 - NetworkManager: `1.40.0 --> 1.50.0`
 - NetworkManager-openvpn: `1.10.0 --> 1.12.0`
 - newt: `0.52.21 --> 0.52.24`
+- nftables: `(new package) --> 1.1.1`
 - Ninja: `1.11.1 --> 1.12.1`
 - noto-fonts: `20220920 --> 2024.12.01`
 - noto-fonts-cjk: `20220920 --> 20230817`
@@ -415,11 +421,9 @@ Upgraded software (core):
 - NSPR: `4.35 --> 4.36`
 - NSS: `3.83 --> 3.107`
 - ntfs-3g: `2022.5.17 --> 2022.10.3`
-- NVIDIA-Open-Kernel-Modules: `515.76 --> 565.57.01`
+- NVIDIA-Open-Kernel-Modules: `515.76 --> 565.77`
 - nvme-cli: `(new package) --> 2.11`
 - oniguruma: `6.9.8 --> 6.9.9`
-- open-iscsi: `(new package) --> 2.1.10`
-- open-isns: `(new package) --> 0.103`
 - OpenAL: `1.22.2 --> 1.24.1`
 - OpenH264: `2.3.1 --> 2.5.0`
 - OpenJPEG: `2.5.0 --> 2.5.3`
@@ -466,6 +470,7 @@ Upgraded software (core):
 - pv: `1.6.20 --> 1.9.25`
 - PyCairo: `1.21.0 --> 1.27.0`
 - pycparser: `2.21 --> 2.22`
+- pycups: `(new package) --> 2.0.4`
 - Pygments: `2.13.0 --> 2.18.0`
 - PyGObject: `3.42.2 --> 3.50.0`
 - pyopenssl: `22.1.0 --> 24.3.0`
@@ -513,6 +518,7 @@ Upgraded software (core):
 - Sudo: `1.9.11p3 --> 1.9.16p2`
 - SVT-AV1: `(new package) --> 2.3.0`
 - SWIG: `4.0.2 --> 4.3.0`
+- system-config-printer: `(new package) --> 1.5.18`
 - systemd: `251.5 --> 257.1`
 - Taglib: `1.12 --> 2.0.2`
 - tar: `1.34 --> 1.35`

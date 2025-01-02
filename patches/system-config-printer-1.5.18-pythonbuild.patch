@@ -1,0 +1,16 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -59,11 +59,11 @@
+ 
+ # Use distutils to build the module.
+ all-local: .stamp-distutils-in-builddir config.py cupshelpers/config.py
+-	$(PYTHON) setup.py build
++	pip --disable-pip-version-check wheel --no-build-isolation --no-deps --no-cache-dir -w dist .
+ 
+ # Use distutils to install the module.
+ install-exec-local: .stamp-distutils-in-builddir
+-	$(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix)
++	pip --disable-pip-version-check install --root-user-action ignore --no-cache-dir --no-index --no-user -f dist cupshelpers
+ 
+ # Uninstall the module, crossing our fingers that we know enough
+ # about how distutils works to do this.  Unfortunately, distutils
