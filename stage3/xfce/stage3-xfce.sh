@@ -361,12 +361,11 @@ rm -rf xfce4-mount-plugin-1.1.6
 # xfce4-whiskermenu-plugin.
 tar -xf xfce4-whiskermenu-plugin-2.8.3.tar.bz2
 cd xfce4-whiskermenu-plugin-2.8.3
-mkdir whisker-build; cd whisker-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/xfce4-whiskermenu-plugin -Dm644 ../COPYING
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/xfce4-whiskermenu-plugin -Dm644 COPYING
+cd ..
 rm -rf xfce4-whiskermenu-plugin-2.8.3
 # xfce4-screensaver.
 tar -xf xfce4-screensaver-4.18.4.tar.bz2
@@ -384,7 +383,6 @@ cd xarchiver-0.5.4.23
 make
 make install
 install -t /usr/share/licenses/xarchiver -Dm644 COPYING
-gtk-update-icon-cache -qtf /usr/share/icons/hicolor
 update-desktop-database -q
 cd ..
 rm -rf xarchiver-0.5.4.23
@@ -440,7 +438,6 @@ rm -rf popsicle-1.3.3
 tar -xf mugshot-0.4.3.tar.gz
 cd mugshot-0.4.3
 python setup.py install --optimize=1
-glib-compile-schemas /usr/share/glib-2.0/schemas
 install -t /usr/share/licenses/mugshot -Dm644 COPYING
 cd ..
 rm -rf mugshot-0.4.3
@@ -538,7 +535,7 @@ systemctl enable lightdm
 cd ..
 rm -rf lightdm-gtk-greeter-2.0.9
 # Firefox.
-tar --no-same-owner -xf firefox-133.0.3.tar.bz2 -C /usr/lib
+tar --no-same-owner -xf firefox-134.0.tar.bz2 -C /usr/lib
 mkdir -p /usr/lib/firefox/distribution
 cat > /usr/lib/firefox/distribution/policies.json << END
 {

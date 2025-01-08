@@ -10,6 +10,7 @@ Changes:
 - Switched to osinstallgui in the live CD, a new (currently still in development) GUI installer program to replace the old TUI installer.
 - Moved Live CD creation script to the main MassOS repo (with improvements) and dropped support for "nofirmware" ISOs.
 - Rootfs tarballs will still not contain firmware (only ISOs will), however a new utility will eventually be developed to allow firmware installation to be managed by users at runtime.
+- Added Memtest86+ and UEFI EDK2 Shell to the Live CD as additional tools.
 - Migrated to systemd-sysusers for system user management where possible.
 - Switched default tar back to GNU tar (bsdtar is still present), and removed `set-default-tar` utility from the system.
 - Miscellaneous bug and security fixes/improvements.
@@ -81,6 +82,7 @@ Upgraded software (core):
 - cups-browsed: `(new package) --> 2.1.0`
 - cups-filters: `1.28.16 --> 2.0.1`
 - cups-pdf: `(new package) --> 3.0.1`
+- cups-pk-helper: `(new package) --> 0.2.7`
 - curl: `7.85.0 --> 8.11.1`
 - Cython: `0.29.25 --> 3.0.11`
 - D-Bus: `1.14.2 --> 1.14.10`
@@ -96,6 +98,7 @@ Upgraded software (core):
 - dnspython: `2.2.0 --> 2.7.0`
 - docutils: `0.18.1 --> 0.21.2`
 - dos2unix: `0.4.2 --> 0.5.2`
+- dotconf: `(new package) --> 1.4.1`
 - dracut: `056 --> 105`
 - e2fsprogs: `1.46.5 --> 1.47.1`
 - easy-rsa: `3.1.0 --> 3.2.1`
@@ -109,6 +112,7 @@ Upgraded software (core):
 - exfatprogs: `1.1.3 --> 1.2.6`
 - exiv2: `0.27.5 --> 0.28.3`
 - Expat: `2.4.9 --> 2.6.4`
+- f2fs-tools: `(new package) --> 1.16.0`
 - FAAC: `(new package) --> 1.30`
 - FAAD2: `2.10.0 --> 2.10.1`
 - Fakeroot: `1.29 --> 1.36.2`
@@ -135,6 +139,7 @@ Upgraded software (core):
 - gcab: `1.5 --> 1.6`
 - GCC: `12.2.0 --> 14.2.0`
 - Gcr: `3.41.1 --> 3.41.2`
+- Gcr4: `(new package) --> 4.3.0`
 - GDBM: `1.23 --> 1.24`
 - GDK-Pixbuf: `2.42.9 --> 2.42.12`
 - GeoClue: `2.6.0 --> 2.7.2`
@@ -158,6 +163,7 @@ Upgraded software (core):
 - GNUTLS: `3.7.8 --> 3.8.8`
 - gobject-introspection: `1.74.0 --> 1.82.0`
 - GPGME: `1.18.0 --> 1.24.1`
+- gPlanarity: `(new package) --> 17906`
 - gptfdisk: `1.0.9 --> 1.0.10`
 - Graphviz: `6.0.1 --> 12.2.1`
 - Grep: `3.8 --> 3.11`
@@ -165,12 +171,14 @@ Upgraded software (core):
 - GRUB: `2.06 --> 2.12`
 - gsettings-desktop-schemas: `43.0 --> 47.1`
 - gspell: `1.12.0 --> 1.14.0`
+- gst-editing-services: `(new package) --> 1.24.10`
 - gst-libav: `1.20.3 --> 1.24.10`
 - gst-plugins-bad: `1.20.3 --> 1.24.10`
 - gst-plugins-base: `1.20.3 --> 1.24.10`
 - gst-plugins-good: `1.20.3 --> 1.24.10`
 - gst-plugins-rs: `0.8.4 --> (removed)`
 - gst-plugins-ugly: `1.20.3 --> 1.24.10`
+- gst-python: `(new package) --> 1.24.10`
 - GStreamer: `1.20.3 --> 1.24.10`
 - gstreamer-vaapi: `1.20.3 --> 1.24.10`
 - GTK-Doc: `1.33.2 --> 1.34.0`
@@ -188,7 +196,7 @@ Upgraded software (core):
 - hicolor-icon-theme: `0.17 --> 0.18`
 - HPLIP: `3.22.6 --> 3.24.4`
 - htop: `3.2.1 --> 3.3.0`
-- hwdata: `0.363 --> 0.390`
+- hwdata: `0.363 --> 0.391`
 - hyfetch: `(new package) --> 1.99.0`
 - iana-etc: `20220922 --> 20241127`
 - iceauth: `1.0.9 --> 1.0.10`
@@ -205,7 +213,9 @@ Upgraded software (core):
 - JACK2: `1.9.21 --> 1.9.22`
 - Jansson: `2.13.1 --> 2.14`
 - JasPer: `3.0.6 --> 4.2.4`
+- jfsutils: `(new package) --> 1.1.15`
 - Jinja2: `3.1.1 --> 3.1.4`
+- jp2a: `(new package) --> 1.3.2`
 - jq: `1.6 --> 1.7.1`
 - JSON: `4.09 --> 4.10`
 - JSON-C: `0.16 --> 0.18`
@@ -409,7 +419,7 @@ Upgraded software (core):
 - Nettle: `3.8.1 --> 3.10.1`
 - network-manager-applet: `1.28.0 --> 1.36.0`
 - Neofetch: `7.3.0 --> (removed)`
-- NetworkManager: `1.40.0 --> 1.50.0`
+- NetworkManager: `1.40.0 --> 1.50.1`
 - NetworkManager-openvpn: `1.10.0 --> 1.12.0`
 - newt: `0.52.21 --> 0.52.24`
 - nftables: `(new package) --> 1.1.1`
@@ -483,6 +493,7 @@ Upgraded software (core):
 - Qpdf: `11.1.1 --> 11.9.1`
 - rav1e: `0.5.1 --> 0.7.1`
 - Readline: `8.2 --> 8.2.13`
+- reiserfsprogs: `(new package) --> 3.6.27`
 - requests: `2.28.1 --> 2.32.3`
 - rhash: `1.4.2 --> 1.4.5`
 - rpcsvc-proto: `1.4.3 --> 1.4.4`
@@ -632,7 +643,7 @@ Upgraded software (Xfce):
 - elementary-icon-theme: `(new package) --> 8.1.0`
 - Evince: `43.0 --> 46.3.1`
 - Exo: `4.17.2 --> 4.20.0`
-- Firefox: `105.0.1 --> 133.0.3`
+- Firefox: `105.0.1 --> 134.0`
 - FreeRDP: `2.8.0 --> (removed)`
 - Garcon: `4.17.1 --> 4.20.0`
 - gnome-firmware: `41.0 --> (removed)`

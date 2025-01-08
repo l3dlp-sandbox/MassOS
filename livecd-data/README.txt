@@ -2,7 +2,7 @@ This is the Live CD for MassOS.
 
 If you have just downloaded the ISO file on Windows and are reading this, you
 have probably mounted the image with Windows Explorer. You must write the ISO
-file to a USB flash drive to be able to boot the MassOS live environment.
+file to a USB flash drive to be able to boot into the MassOS live environment.
 
 A guide on how to do this can be found at the following link:
 
@@ -11,6 +11,6 @@ A guide on how to do this can be found at the following link:
 We hope that you enjoy using MassOS.
 
 Copyright and license information about MassOS can be found in the LICENSE.txt
-file. This CD also contains the ISOLINUX and GRUB bootloaders. Their licenses
-can be found at isolinux/LICENSE-ISOLINUX.txt and EFI/BOOT/LICENSE-BOOTX64.txt
-respectively.
+file. This CD also contains several pieces of third party software, the
+licenses of which can each be found in text files within the LICENSES
+directory.

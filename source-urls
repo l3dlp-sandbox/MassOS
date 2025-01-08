@@ -69,6 +69,7 @@ https://github.com/OpenPrinting/cups/releases/download/v2.4.11/cups-2.4.11-sourc
 https://github.com/OpenPrinting/cups-browsed/releases/download/2.1.0/cups-browsed-2.1.0.tar.xz
 https://github.com/OpenPrinting/cups-filters/releases/download/2.0.1/cups-filters-2.0.1.tar.xz
 https://www.cups-pdf.de/src/cups-pdf_3.0.1.tar.gz
+https://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-0.2.7.tar.xz
 https://curl.se/download/curl-8.11.1.tar.xz
 https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-2.1.28/cyrus-sasl-2.1.28.tar.gz
 https://github.com/cython/cython/releases/download/3.0.11-1/cython-3.0.11.tar.gz
@@ -100,6 +101,7 @@ https://github.com/docbook/xslt10-stylesheets/releases/download/release/1.79.2/d
 https://files.pythonhosted.org/packages/source/d/docutils/docutils-0.21.2.tar.gz
 https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.2.tar.gz
 https://github.com/dosfstools/dosfstools/releases/download/v4.2/dosfstools-4.2.tar.gz
+https://github.com/williamh/dotconf/archive/v1.4.1/dotconf-1.4.1.tar.gz
 https://github.com/dracut-ng/dracut-ng/archive/105/dracut-ng-105.tar.gz
 https://duktape.org/duktape-2.7.0.tar.xz
 https://github.com/rbrito/pkg-dvd-rw-tools/archive/upstream%2F7.1/dvd+rw-tools-7.1.tar.gz
@@ -116,6 +118,7 @@ https://github.com/rrthomas/enchant/releases/download/v2.8.2/enchant-2.8.2.tar.g
 https://github.com/exfatprogs/exfatprogs/releases/download/1.2.6/exfatprogs-1.2.6.tar.xz
 https://github.com/Exiv2/exiv2/archive/v0.28.3/exiv2-0.28.3.tar.gz
 https://github.com/libexpat/libexpat/releases/download/R_2_6_4/expat-2.6.4.tar.xz
+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot/f2fs-tools-1.16.0.tar.gz
 https://github.com/knik0/faac/archive/1_30/faac-1_30.tar.gz
 https://github.com/knik0/faad2/archive/2.11.1/faad2-2.11.1.tar.gz
 http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.36.2.orig.tar.gz
@@ -147,6 +150,7 @@ https://mirror.lyrahosting.com/gnu/gawk/gawk-5.3.1.tar.xz
 https://mirrors.dotsrc.org/gnome/sources/gcab/1.6/gcab-1.6.tar.xz
 https://mirror.lyrahosting.com/gnu/gcc/gcc-14.2.0/gcc-14.2.0.tar.xz
 https://mirrors.dotsrc.org/gnome/sources/gcr/3.41/gcr-3.41.2.tar.xz
+https://mirror.dotsrc.org/gnome/sources/gcr/4.3/gcr-4.3.0.tar.xz
 https://mirror.lyrahosting.com/gnu/gdbm/gdbm-1.24.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.12.tar.xz
 https://gitlab.freedesktop.org/geoclue/geoclue/-/archive/2.7.2/geoclue-2.7.2.tar.bz2
@@ -174,6 +178,7 @@ https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.8.tar.xz
 https://mirrors.dotsrc.org/gnome/sources/gobject-introspection/1.82/gobject-introspection-1.82.0.tar.xz
 https://mirror.lyrahosting.com/gnu/gperf/gperf-3.1.tar.gz
 https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.24.1.tar.bz2
+https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/gplanarity/17906-7build3/gplanarity_17906.orig.tar.gz
 https://github.com/telmich/gpm/archive/e82d1a6/gpm-1.20.7-38-ge82d1a6.tar.gz
 https://freefr.dl.sourceforge.net/project/gptfdisk/gptfdisk/1.0.10/gptfdisk-1.0.10.tar.gz
 https://github.com/ebassi/graphene/archive/1.10.8/graphene-1.10.8.tar.gz
@@ -184,13 +189,7 @@ https://mirror.lyrahosting.com/gnu/groff/groff-1.23.0.tar.gz
 https://mirror.lyrahosting.com/gnu/grub/grub-2.12.tar.xz
 https://mirrors.dotsrc.org/gnome/sources/gsettings-desktop-schemas/47/gsettings-desktop-schemas-47.1.tar.xz
 https://mirrors.dotsrc.org/gnome/sources/gspell/1.14/gspell-1.14.0.tar.xz
-https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.24.10.tar.xz
-https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.24.10.tar.xz
-https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.24.10.tar.xz
-https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.24.10.tar.xz
-https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.24.10.tar.xz
-https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.24.10.tar.xz
-https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.24.10.tar.xz
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/archive/1.24.10/gstreamer-1.24.10.tar.bz2
 https://mirrors.dotsrc.org/gnome/sources/gtk-doc/1.34/gtk-doc-1.34.0.tar.xz
 https://github.com/wmww/gtk-layer-shell/archive/v0.9.0/gtk-layer-shell-0.9.0.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/gtk+/2.24/gtk+-2.24.33.tar.xz
@@ -208,7 +207,7 @@ https://mirror.lyrahosting.com/gnu/help2man/help2man-1.49.3.tar.xz
 https://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.18.tar.xz
 https://freefr.dl.sourceforge.net/project/hplip/hplip/3.24.4/hplip-3.24.4.tar.gz
 https://github.com/htop-dev/htop/releases/download/3.3.0/htop-3.3.0.tar.xz
-https://github.com/vcrhonek/hwdata/archive/v0.390/hwdata-0.390.tar.gz
+https://github.com/vcrhonek/hwdata/archive/v0.391/hwdata-0.391.tar.gz
 https://github.com/hykilpikonna/hyfetch/archive/1.99.0/hyfetch-1.99.0.tar.gz
 https://github.com/Mic92/iana-etc/releases/download/20241127/iana-etc-20241127.tar.gz
 https://www.x.org/archive/individual/app/iceauth-1.0.10.tar.xz
@@ -229,7 +228,9 @@ https://files.itstool.org/itstool/itstool-2.0.7.tar.bz2
 https://github.com/jackaudio/jack2/archive/v1.9.22/jack2-1.9.22.tar.gz
 https://github.com/akheron/jansson/releases/download/v2.14/jansson-2.14.tar.bz2
 https://github.com/jasper-software/jasper/releases/download/version-4.2.4/jasper-4.2.4.tar.gz
+https://jfs.sourceforge.net/project/pub/jfsutils-1.1.15.tar.gz
 https://github.com/pallets/jinja/releases/download/3.1.4/jinja2-3.1.4.tar.gz
+https://github.com/Talinx/jp2a/releases/download/v1.3.2/jp2a-1.3.2.tar.bz2
 https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-1.7.1.tar.gz
 https://www.cpan.org/authors/id/I/IS/ISHIGAKI/JSON-4.10.tar.gz
 https://s3.amazonaws.com/json-c_releases/releases/json-c-0.18.tar.gz
@@ -480,7 +481,7 @@ https://github.com/net-snmp/net-snmp/archive/v5.9.4/net-snmp-5.9.4.tar.gz
 https://freefr.dl.sourceforge.net/project/netcat/netcat/0.7.1/netcat-0.7.1.tar.bz2
 https://mirror.lyrahosting.com/gnu/nettle/nettle-3.10.1.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/network-manager-applet/1.36/network-manager-applet-1.36.0.tar.xz
-https://mirrors.dotsrc.org/gnome/sources/NetworkManager/1.50/NetworkManager-1.50.0.tar.xz
+https://github.com/NetworkManager/NetworkManager/archive/1.50.1/NetworkManager-1.50.1.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/NetworkManager-openvpn/1.12/NetworkManager-openvpn-1.12.0.tar.xz
 https://releases.pagure.org/newt/newt-0.52.24.tar.gz
 https://www.netfilter.org/pub/nftables/nftables-1.1.1.tar.xz
@@ -567,6 +568,7 @@ https://github.com/qpdf/qpdf/releases/download/v11.9.1/qpdf-11.9.1.tar.gz
 https://fukuchi.org/works/qrencode/qrencode-4.1.1.tar.bz2
 https://github.com/xiph/rav1e/archive/v0.7.1/rav1e-0.7.1.tar.gz
 https://mirror.lyrahosting.com/gnu/readline/readline-8.2.13.tar.gz
+https://cdn.kernel.org/pub/linux/kernel/people/jeffm/reiserfsprogs/v3.6.27/reiserfsprogs-3.6.27.tar.xz
 https://files.pythonhosted.org/packages/source/r/requests/requests-2.32.3.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/rest/0.8/rest-0.8.1.tar.xz
 https://mirrors.dotsrc.org/gnome/sources/rest/0.9/rest-0.9.1.tar.xz

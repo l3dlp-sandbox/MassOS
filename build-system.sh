@@ -841,8 +841,19 @@ cd autoconf-archive-2023.02.20
 ./configure --prefix=/usr
 make
 make install
+install -t /usr/share/licenses/autoconf-archive -Dm644 COPYING{,.EXCEPTION}
 cd ..
 rm -rf autoconf-archive-2023.02.20
+# dotconf.
+tar -xf dotconf-1.4.1.tar.gz
+cd dotconf-1.4.1
+autoreconf -fi
+./configure --prefix=/usr
+make
+make install
+install -t /usr/share/licenses/dotconf -Dm644 COPYING
+cd ..
+rm -rf dotconf-1.4.1
 # PSmisc.
 tar -xf psmisc-v23.7.tar.bz2
 cd psmisc-v23.7
@@ -1581,12 +1592,11 @@ rm -rf cython-3.0.11
 # gi-docgen.
 tar -xf gi-docgen-2024.1.tar.xz
 cd gi-docgen-2024.1
-mkdir gi-docgen-build; cd gi-docgen-build
-meson setup --prefix=/usr --buildtype=minsize -Ddevelopment_tests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/gi-docgen -Dm644 ../LICENSES/{Apache-2.0.txt,GPL-3.0-or-later.txt}
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Ddevelopment_tests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gi-docgen -Dm644 LICENSES/{Apache-2.0.txt,GPL-3.0-or-later.txt}
+cd ..
 rm -rf gi-docgen-2024.1
 # Locale-gettext.
 tar -xf Locale-gettext-1.07.tar.gz
@@ -1711,7 +1721,6 @@ rm -rf onig-6.9.9
 # jq.
 tar -xf jq-1.7.1.tar.gz
 cd jq-1.7.1
-autoreconf -fi
 ./configure --prefix=/usr --disable-docs --disable-static
 make
 make install
@@ -1784,12 +1793,11 @@ rm -rf zlib-1.3.1
 # libmicrodns.
 tar -xf microdns-0.2.0.tar.xz
 cd microdns-0.2.0
-mkdir mdns-build; cd mdns-build
-meson setup --prefix=/usr --buildtype=minsize -Dexamples=disabled -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/libmicrodns -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dexamples=disabled -Dtests=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libmicrodns -Dm644 COPYING
+cd ..
 rm -rf microdns-0.2.0
 # libsodium.
 tar -xf libsodium-1.0.20.tar.gz
@@ -2179,14 +2187,14 @@ install -t /usr/share/licenses/gnu-efi -Dm644 README.efilib
 cd ..
 rm -rf gnu-efi-3.0.18
 # hwdata.
-tar -xf hwdata-0.390.tar.gz
-cd hwdata-0.390
+tar -xf hwdata-0.391.tar.gz
+cd hwdata-0.391
 ./configure --prefix=/usr --disable-blacklist
 make
 make install
 install -t /usr/share/licenses/hwdata -Dm644 COPYING
 cd ..
-rm -rf hwdata-0.390
+rm -rf hwdata-0.391
 # systemd (initial build; will be rebuilt later to support more features).
 tar -xf systemd-257.1.tar.gz
 cd systemd-257.1
@@ -2398,14 +2406,13 @@ cat >> trust/trust-extract-compat << "END"
 /usr/libexec/make-ca/copy-trust-modifications
 /usr/sbin/make-ca -r
 END
-mkdir p11-build; cd p11-build
-meson setup --prefix=/usr --buildtype=minsize -Dtrust_paths=/etc/pki/anchors ..
-ninja
-ninja install
-ln -sf /usr/libexec/p11-kit/trust-extract-compat /usr/bin/update-ca-certificates
+meson setup build --prefix=/usr --buildtype=minsize -Dtrust_paths=/etc/pki/anchors
+ninja -C build
+ninja -C build install
+ln -sfr /usr/libexec/p11-kit/trust-extract-compat /usr/bin/update-ca-certificates
 ln -sf ./pkcs11/p11-kit-trust.so /usr/lib/libnssckbi.so
-install -t /usr/share/licenses/p11-kit -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/p11-kit -Dm644 COPYING
+cd ..
 rm -rf p11-kit-0.25.5
 # make-ca.
 tar -xf make-ca-1.14.tar.gz
@@ -2474,7 +2481,7 @@ rm -rf inih-r58
 # Userspace-RCU.
 tar -xf userspace-rcu-0.15.0.tar.bz2
 cd userspace-rcu-0.15.0
-./configure --prefix=/usr
+./configure --prefix=/usr --disable-static
 make
 make install
 install -t /usr/share/licenses/userspace-rcu -Dm644 LICENSE.md lgpl-relicensing.md LICENSES/*
@@ -2491,6 +2498,37 @@ rm -f /usr/lib/libhandle.{l,}a
 install -t /usr/share/licenses/xfsprogs -Dm644 debian/copyright
 cd ..
 rm -rf xfsprogs-6.12.0
+# f2fs-tools.
+tar -xf f2fs-tools-1.16.0.tar.gz
+cd f2fs-tools-1.16.0
+./autogen.sh
+./configure --prefix=/usr --disable-static
+make
+make install
+install -t /usr/share/licenses/f2fs-tools -Dm644 COPYING
+cd ..
+rm -rf f2fs-tools-1.16.0
+# jfsutils.
+tar -xf jfsutils-1.1.15.tar.gz
+cd jfsutils-1.1.15
+patch -Np1 -i ../patches/jfsutils-1.1.15-fixes.patch
+./configure --prefix=/usr
+make
+make install
+install -t /usr/share/licenses/jfsutils -Dm644 COPYING
+cd ..
+rm -rf jfsutils-1.1.15
+# reiserfsprogs.
+tar -xf reiserfsprogs-3.6.27.tar.xz
+cd reiserfsprogs-3.6.27
+sed -i '24iAC_USE_SYSTEM_EXTENSIONS' configure.ac
+autoreconf -fi
+./configure --prefix=/usr --disable-static
+make
+make install
+install -t /usr/share/licenses/reiserfsprogs -Dm644 COPYING
+cd ..
+rm -rf reiserfsprogs-3.6.27
 # ntfs-3g.
 tar -xf ntfs-3g-2022.10.3.tar.gz
 cd ntfs-3g-2022.10.3
@@ -2575,22 +2613,20 @@ rm -rf debianutils-5.5
 # seatd.
 tar -xf seatd-0.9.1.tar.gz
 cd seatd-0.9.1
-mkdir seatd-build; cd seatd-build
-meson setup --prefix=/usr --buildtype=minsize -Dlibseat-logind=systemd -Dserver=enabled -Dexamples=disabled -Dman-pages=enabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/seatd -Dm644 ../LICENSE
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dlibseat-logind=systemd -Dserver=enabled -Dexamples=disabled -Dman-pages=enabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/seatd -Dm644 LICENSE
+cd ..
 rm -rf seatd-0.9.1
 # libdisplay-info.
 tar -xf libdisplay-info-0.2.0.tar.bz2
 cd libdisplay-info-0.2.0
-mkdir LDI-build; cd LDI-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libdisplay-info -Dm644 ../LICENSE
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libdisplay-info -Dm644 LICENSE
+cd ..
 rm -rf libdisplay-info-0.2.0
 # libpaper.
 tar -xf libpaper-2.2.5.tar.gz
@@ -2658,12 +2694,11 @@ rm -rf curl-8.11.1
 # jsoncpp.
 tar -xf jsoncpp-1.9.6.tar.gz
 cd jsoncpp-1.9.6
-mkdir jsoncpp-build; cd jsoncpp-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/jsoncpp -Dm644 ../LICENSE
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/jsoncpp -Dm644 LICENSE
+cd ..
 rm -rf jsoncpp-1.9.6
 # rhash.
 tar -xf RHash-1.4.5.tar.gz
@@ -2688,10 +2723,10 @@ rm -rf cmake-3.31.3
 # brotli.
 tar -xf brotli-1.1.0.tar.gz
 cd brotli-1.1.0
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBROTLI_DISABLE_TESTS=TRUE -Wno-dev -G Ninja -B Build -S .
-ninja -C Build
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBROTLI_DISABLE_TESTS=TRUE -Wno-dev -G Ninja -B build -S .
+ninja -C build
 pip --disable-pip-version-check wheel --no-build-isolation --no-cache-dir --no-deps -w dist .
-ninja -C Build install
+ninja -C build install
 pip --disable-pip-version-check install --root-user-action ignore --no-cache-dir --no-index --no-user -f dist Brotli
 install -t /usr/share/licenses/brotli -Dm644 LICENSE
 cd ..
@@ -2699,42 +2734,38 @@ rm -rf brotli-1.1.0
 # c-ares.
 tar -xf c-ares-1.34.4.tar.gz
 cd c-ares-1.34.4
-mkdir c-ares-build; cd c-ares-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/c-ares -Dm644 ../LICENSE.md
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/c-ares -Dm644 LICENSE.md
+cd ..
 rm -rf c-ares-1.34.4
 # utfcpp.
 tar -xf utfcpp-4.0.6.tar.gz
 cd utfcpp-4.0.6
-mkdir utfcpp-build; cd utfcpp-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/license/utfcpp -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/license/utfcpp -Dm644 LICENSE
+cd ..
 rm -rf utfcpp-4.0.6
 # yyjson.
 tar -xf yyjson-0.10.0.tar.gz
 cd yyjson-0.10.0
-mkdir yyjson-build; cd yyjson-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_SHARED_LIBS=ON -DYYJSON_BUILD_TESTS=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/yyjson -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_SHARED_LIBS=ON -DYYJSON_BUILD_TESTS=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/yyjson -Dm644 LICENSE
+cd ..
 rm -rf yyjson-0.10.0
 # JSON-C.
 tar -xf json-c-0.18.tar.gz
 cd json-c-0.18
-mkdir json-c-build; cd json-c-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_STATIC_LIBS=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/json-c -Dm644 ../COPYING
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_STATIC_LIBS=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/json-c -Dm644 COPYING
+cd ..
 rm -rf json-c-0.18
 # cryptsetup.
 tar -xf cryptsetup-2.7.5.tar.xz
@@ -2949,12 +2980,11 @@ rm -rf gnutls-3.8.8
 # libevent.
 tar -xf libevent-2.1.12-stable.tar.gz
 cd libevent-2.1.12-stable
-mkdir EVENT-build; cd EVENT-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DEVENT__LIBRARY_TYPE=SHARED -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/libevent -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DEVENT__LIBRARY_TYPE=SHARED -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libevent -Dm644 LICENSE
+cd ..
 rm -rf libevent-2.1.12-stable
 # libldap.
 tar -xf openldap-2.6.9.tgz
@@ -3181,12 +3211,10 @@ rm -rf wget-1.25.0
 # Audit.
 tar -xf audit-userspace-4.0.2.tar.gz
 cd audit-userspace-4.0.2
-#patch -Np1 -i ../patches/audit-3.0.7-WorkaroundBuildIssue.patch
 ./autogen.sh
-./configure --prefix=/usr --sysconfdir=/etc --enable-gssapi-krb5 --enable-systemd --with-libcap-ng
+./configure --prefix=/usr --sysconfdir=/etc --disable-static --enable-gssapi-krb5 --enable-systemd --with-libcap-ng
 make
 make install
-#sed -i 's|"audit.h"|<linux/audit.h>|' /usr/include/libaudit.h
 install -dm0700 /var/log/audit
 install -dm0750 /etc/audit/rules.d
 cat > /etc/audit/rules.d/default.rules << "END"
@@ -3228,12 +3256,11 @@ rm -rf apparmor-4.0.3
 tar -xf Linux-PAM-1.7.0.tar.xz
 cd Linux-PAM-1.7.0
 sed -e "s/'elinks'/'lynx'/" -e "s/'-no-numbering', '-no-references'/'-force-html', '-nonumbers', '-stdin'/" -i meson.build
-mkdir PAM-build; cd PAM-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/linux-pam -Dm644 ../COPYING ../Copyright
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/linux-pam -Dm644 COPYING Copyright
+cd ..
 rm -rf Linux-PAM-1.7.0
 # Shadow (rebuild to support Audit).
 tar -xf shadow-4.16.0.tar.xz
@@ -3402,14 +3429,13 @@ rm -rf snowball-2.2.0
 # Pahole.
 tar -xf pahole-1.28.tar.gz
 cd pahole-1.28
-mkdir pahole-build; cd pahole-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -D__LIB=lib -DLIBBPF_EMBEDDED=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -D__LIB=lib -DLIBBPF_EMBEDDED=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
 mv /usr/share/dwarves/runtime/python/ostra.py /usr/lib/$(readlink /usr/bin/python3)/ostra.py
 rm -rf /usr/share/dwarves/runtime/python
-install -t /usr/share/licenses/pahole -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/pahole -Dm644 COPYING
+cd ..
 rm -rf pahole-1.28
 # libsmbios.
 tar -xf libsmbios-2.4.3.tar.gz
@@ -3432,12 +3458,11 @@ rm -rf dkms-3.1.4
 # GLib (initial build for circular dependency).
 tar -xf glib-2.82.2.tar.xz
 cd glib-2.82.2
-mkdir glib-build; cd glib-build
-meson setup --prefix=/usr --buildtype=minsize -Dglib_debug=disabled -Dintrospection=disabled -Dman=true -Dtests=false -Dsysprof=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/glib -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dglib_debug=disabled -Dintrospection=disabled -Dman=true -Dtests=false -Dsysprof=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/glib -Dm644 COPYING
+cd ..
 rm -rf glib-2.82.2
 # GTK-Doc.
 tar -xf gtk-doc-1.34.0.tar.xz
@@ -3452,74 +3477,67 @@ rm -rf gtk-doc-1.34.0
 # libsigc++.
 tar -xf libsigc++-2.12.1.tar.xz
 cd libsigc++-2.12.1
-mkdir sigc++-build; cd sigc++-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libsigc++ -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libsigc++ -Dm644 COPYING
+cd ..
 rm -rf libsigc++-2.12.1
 # GLibmm.
 tar -xf glibmm-2.66.7.tar.xz
 cd glibmm-2.66.7
-mkdir glibmm-build; cd glibmm-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/glibmm -Dm644 ../COPYING ../COPYING.tools
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/glibmm -Dm644 COPYING COPYING.tools
+cd ..
 rm -rf glibmm-2.66.7
 # gobject-introspection.
 tar -xf gobject-introspection-1.82.0.tar.xz
 cd gobject-introspection-1.82.0
-mkdir gobj-build; cd gobj-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/gobject-introspection -Dm644 ../COPYING ../COPYING.GPL ../COPYING.LGPL
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gobject-introspection -Dm644 COPYING{,.{GPL,LGPL}}
+cd ..
 rm -rf gobject-introspection-1.82.0
 # GLib (rebuild to support gobject-introspection).
 tar -xf glib-2.82.2.tar.xz
 cd glib-2.82.2
-mkdir glib-build; cd glib-build
-meson setup --prefix=/usr --buildtype=minsize -Dglib_debug=disabled -Dintrospection=enabled -Dman=true -Dtests=false -Dsysprof=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/glib -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dglib_debug=disabled -Dintrospection=enabled -Dman=true -Dtests=false -Dsysprof=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/glib -Dm644 COPYING
+cd ..
 rm -rf glib-2.82.2
 # shared-mime-info.
 tar -xf shared-mime-info-2.4.tar.gz
 cd shared-mime-info-2.4
-mkdir smi-build; cd smi-build
-meson setup --prefix=/usr --buildtype=minsize -Dupdate-mimedb=true ..
-ninja
-ninja install
-install -t /usr/share/licenses/shared-mime-info -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dupdate-mimedb=true
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/shared-mime-info -Dm644 COPYING
+cd ..
 rm -rf shared-mime-info-2.4
 # desktop-file-utils.
 tar -xf desktop-file-utils-0.28.tar.xz
 cd desktop-file-utils-0.28
-mkdir dfu-build; cd dfu-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
 install -dm755 /usr/share/applications
 update-desktop-database /usr/share/applications
-install -t /usr/share/licenses/desktop-file-utils -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/desktop-file-utils -Dm644 COPYING
+cd ..
 rm -rf desktop-file-utils-0.28
 # Graphene.
 tar -xf graphene-1.10.8.tar.gz
 cd graphene-1.10.8
-mkdir graphene-build; cd graphene-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false -Dinstalled_tests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/graphene -Dm644 ../LICENSE.txt
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false -Dinstalled_tests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/graphene -Dm644 LICENSE.txt
+cd ..
 rm -rf graphene-1.10.8
 # LLVM / Clang / LLD / libc++ / libc++abi / compiler-rt.
 tar -xf llvm-19.1.6.src.tar.xz
@@ -3536,9 +3554,9 @@ tar -xf ../libcxxabi-19.1.6.src.tar.xz -C projects/libcxxabi --strip-components=
 tar -xf ../compiler-rt-19.1.6.src.tar.xz -C projects/compiler-rt --strip-components=1
 tar -xf ../runtimes-19.1.6.src.tar.xz -C cmake/modules --strip-components=3 runtimes-19.1.6.src/cmake/Modules/{Handle,Warning}Flags.cmake
 sed -i 's/utility/tool/' utils/FileCheck/CMakeLists.txt
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_DOCDIR=share/doc -DCMAKE_SKIP_INSTALL_RPATH=ON -DLLVM_HOST_TRIPLE=x86_64-pc-linux-gnu -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_ENABLE_FFI=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_ZLIB=ON -DLLVM_ENABLE_ZSTD=ON -DLLVM_INCLUDE_BENCHMARKS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_USE_PERF=ON -DLLVM_TARGETS_TO_BUILD="AMDGPU;BPF;X86" -DENABLE_LINKER_BUILD_ID=ON -DCLANG_CONFIG_FILE_SYSTEM_DIR=/etc/clang -DCLANG_DEFAULT_PIE_ON_LINUX=ON -DLIBCXX_INSTALL_LIBRARY_DIR=/usr/lib -DLIBCXXABI_INSTALL_LIBRARY_DIR=/usr/lib -DLIBCXXABI_USE_LLVM_UNWINDER=OFF -DCOMPILER_RT_USE_LIBCXX=OFF -DLLVM_BUILD_DOCS=ON -DLLVM_ENABLE_SPHINX=ON -DSPHINX_WARNINGS_AS_ERRORS=OFF -Wno-dev -G Ninja -B Build -S .
-ninja -C Build
-ninja -C Build install
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_DOCDIR=share/doc -DCMAKE_SKIP_INSTALL_RPATH=ON -DLLVM_HOST_TRIPLE=x86_64-pc-linux-gnu -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_ENABLE_FFI=ON -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_ZLIB=ON -DLLVM_ENABLE_ZSTD=ON -DLLVM_INCLUDE_BENCHMARKS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_USE_PERF=ON -DLLVM_TARGETS_TO_BUILD="AMDGPU;BPF;X86" -DENABLE_LINKER_BUILD_ID=ON -DCLANG_CONFIG_FILE_SYSTEM_DIR=/etc/clang -DCLANG_DEFAULT_PIE_ON_LINUX=ON -DLIBCXX_INSTALL_LIBRARY_DIR=/usr/lib -DLIBCXXABI_INSTALL_LIBRARY_DIR=/usr/lib -DLIBCXXABI_USE_LLVM_UNWINDER=OFF -DCOMPILER_RT_USE_LIBCXX=OFF -DLLVM_BUILD_DOCS=ON -DLLVM_ENABLE_SPHINX=ON -DSPHINX_WARNINGS_AS_ERRORS=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
 install -dm755 /etc/clang
 echo "-fstack-protector-strong" > /etc/clang/clang.cfg
 echo "-fstack-protector-strong" > /etc/clang/clang++.cfg
@@ -3572,12 +3590,11 @@ rm -rf volume_key-volume_key-0.3.12
 # JSON-GLib.
 tar -xf json-glib-1.10.0.tar.xz
 cd json-glib-1.10.0
-mkdir json-build; cd json-build
-meson setup --prefix=/usr --buildtype=minsize -Dman=true -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/json-glib -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dman=true -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/json-glib -Dm644 COPYING
+cd ..
 rm -rf json-glib-1.10.0
 # mandoc (needed by efivar 38+).
 tar -xf mandoc-1.14.6.tar.gz
@@ -3630,22 +3647,20 @@ rm -rf freetype-2.13.3
 tar -xf graphite2-1.3.14.tgz
 cd graphite2-1.3.14
 sed -i '/cmptest/d' tests/CMakeLists.txt
-mkdir graphite2-build; cd graphite2-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/graphite2 -Dm644 ../COPYING ../LICENSE
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/graphite2 -Dm644 COPYING LICENSE
+cd ..
 rm -rf graphite2-1.3.14
 # HarfBuzz.
 tar -xf harfbuzz-10.1.0.tar.xz
 cd harfbuzz-10.1.0
-mkdir hb-build; cd hb-build
-meson setup --prefix=/usr --buildtype=minsize -Dgraphite2=enabled -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/harfbuzz -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dgraphite2=enabled -Dtests=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/harfbuzz -Dm644 COPYING
+cd ..
 rm -rf harfbuzz-10.1.0
 # FreeType (rebuild to support HarfBuzz).
 tar -xf freetype-2.13.3.tar.xz
@@ -3661,21 +3676,19 @@ rm -rf freetype-2.13.3
 tar -xf graphite2-1.3.14.tgz
 cd graphite2-1.3.14
 sed -i '/cmptest/d' tests/CMakeLists.txt
-mkdir graphite2-build; cd graphite2-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja ..
-ninja
-ninja install
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+cd ..
 rm -rf graphite2-1.3.14
 # Woff2.
 tar -xf woff2-1.0.2.tar.gz
 cd woff2-1.0.2
-mkdir WF2-build; cd WF2-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/woff2 -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/woff2 -Dm644 LICENSE
+cd ..
 rm -rf woff2-1.0.2
 # Unifont.
 install -dm755 /usr/share/fonts/unifont
@@ -3687,14 +3700,13 @@ cd grub-2.12
 echo "depends bli part_gpt" > grub-core/extra_deps.lst
 mkdir build-pc; cd build-pc
 CFLAGS="-O2" CXXFLAGS="-O2" ../configure --prefix=/usr --sysconfdir=/etc --disable-efiemu --enable-grub-mkfont --enable-grub-mount --with-platform=pc --disable-werror
-make
-cd ..
-mkdir build-efi; cd build-efi
+mkdir ../build-efi; cd ../build-efi
 CFLAGS="-O2" CXXFLAGS="-O2" ../configure --prefix=/usr --sysconfdir=/etc --disable-efiemu --enable-grub-mkfont --enable-grub-mount --with-platform=efi --disable-werror
-make
-make bashcompletiondir="/usr/share/bash-completion/completions" install
-cd ../build-pc
-make bashcompletiondir="/usr/share/bash-completion/completions" install
+cd ..
+make -C build-pc
+make -C build-efi
+make -C build-efi bashcompletiondir="/usr/share/bash-completion/completions" install
+make -C build-pc bashcompletiondir="/usr/share/bash-completion/completions" install
 mkdir -p /etc/default
 cat > /usr/share/grub/sbat.csv << "END"
 sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
@@ -3766,15 +3778,13 @@ GRUB_BACKGROUND="/usr/share/backgrounds/MassOS-Futuristic-Dark.png"
 # This is recommended on dual-booted systems.
 GRUB_DISABLE_OS_PROBER="false"
 END
-install -t /usr/share/licenses/grub -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/grub -Dm644 COPYING
+cd ..
 rm -rf grub-2.12
 # os-prober.
 tar -xf os-prober_1.83.tar.xz
 cd work
-sed -i "s:/lib/ld\*\.so\*:/lib*/ld*.so*:g" os-probes/mounted/common/90linux-distro
-rm -f Makefile
-make CFLAGS="$CFLAGS -s" newns
+gcc $CFLAGS newns.c -o newns $LDFLAGS
 install -t /usr/bin -Dm755 os-prober linux-boot-prober
 install -t /usr/lib/os-prober -Dm755 newns
 install -t /usr/share/os-prober -Dm755 common.sh
@@ -3967,22 +3977,20 @@ rm -rf enchant-2.8.2
 # Fontconfig.
 tar -xf fontconfig-2.15.0.tar.bz2
 cd fontconfig-2.15.0
-mkdir FC-build; cd FC-build
-meson setup --prefix=/usr --buildtype=minsize -Ddoc-pdf=disabled -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/fontconfig -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Ddoc-pdf=disabled -Dtests=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/fontconfig -Dm644 COPYING
+cd ..
 rm -rf fontconfig-2.15.0
 # Fribidi.
 tar -xf fribidi-1.0.16.tar.xz
 cd fribidi-1.0.16
-mkdir fribidi-build; cd fribidi-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/fribidi -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/fribidi -Dm644 COPYING
+cd ..
 rm -rf fribidi-1.0.16
 # giflib.
 tar -xf giflib-5.2.2.tar.gz
@@ -4025,12 +4033,11 @@ rm -rf nasm-2.16.03
 # libjpeg-turbo.
 tar -xf libjpeg-turbo-3.1.0.tar.gz
 cd libjpeg-turbo-3.1.0
-mkdir jpeg-build; cd jpeg-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DENABLE_STATIC=FALSE -DCMAKE_INSTALL_DEFAULT_LIBDIR=lib -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/libjpeg-turbo -Dm644 ../{LICENSE.md,README.ijg}
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DENABLE_STATIC=FALSE -DCMAKE_INSTALL_DEFAULT_LIBDIR=lib -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libjpeg-turbo -Dm644 LICENSE.md README.ijg
+cd ..
 rm -rf libjpeg-turbo-3.1.0
 # libgphoto2
 tar -xf libgphoto2-2.5.31.tar.xz
@@ -4044,24 +4051,22 @@ rm -rf libgphoto2-2.5.31
 # Pixman.
 tar -xf pixman-0.44.2.tar.xz
 cd pixman-0.44.2
-mkdir pixman-build; cd pixman-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/pixman -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/pixman -Dm644 COPYING
+cd ..
 rm -rf pixman-0.44.2
 # Qpdf.
 tar -xf qpdf-11.9.1.tar.gz
 cd qpdf-11.9.1
-mkdir qpdf-build; cd qpdf-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_STATIC_LIBS=OFF -DINSTALL_EXAMPLES=OFF -DREQUIRE_CRYPTO_GNUTLS=OFF -DREQUIRE_CRYPTO_OPENSSL=ON -DUSE_IMPLICIT_CRYPTO=OFF -DDEFAULT_CRYPTO=openssl -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/bash-completion/completions -Dm644 ../completions/bash/qpdf
-install -t /usr/share/zsh/site-functions -Dm644 ../completions/zsh/_qpdf
-install -t /usr/share/licenses/qpdf -Dm644 ../{Artistic-2.0,LICENSE.txt,NOTICE.md}
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_STATIC_LIBS=OFF -DINSTALL_EXAMPLES=OFF -DREQUIRE_CRYPTO_GNUTLS=OFF -DREQUIRE_CRYPTO_OPENSSL=ON -DUSE_IMPLICIT_CRYPTO=OFF -DDEFAULT_CRYPTO=openssl -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/bash-completion/completions -Dm644 completions/bash/qpdf
+install -t /usr/share/zsh/site-functions -Dm644 completions/zsh/_qpdf
+install -t /usr/share/licenses/qpdf -Dm644 Artistic-2.0 LICENSE.txt NOTICE.md
+cd ..
 rm -rf qpdf-11.9.1
 # qrencode.
 tar -xf qrencode-4.1.1.tar.bz2
@@ -4252,22 +4257,20 @@ rm -rf wireless_tools.30
 # fmt.
 tar -xf fmt-11.1.1.tar.gz
 cd fmt-11.1.1
-mkdir fmt-build; cd fmt-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DFMT_TEST=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/fmt -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DFMT_TEST=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/fmt -Dm644 LICENSE
+cd ..
 rm -rf fmt-11.1.1
 # libzip.
 tar -xf libzip-1.11.2.tar.xz
 cd libzip-1.11.2
-mkdir libzip-build; cd libzip-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_REGRESS=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/libzip -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_REGRESS=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libzip -Dm644 LICENSE
+cd ..
 rm -rf libzip-1.11.2
 # dmg2img.
 tar -xf dmg2img_1.6.7.orig.tar.gz
@@ -4281,22 +4284,20 @@ rm -rf dmg2img-1.6.7
 # libcbor.
 tar -xf libcbor-0.11.0.tar.gz
 cd libcbor-0.11.0
-mkdir cbor-build; cd cbor-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DWITH_EXAMPLES=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/libcbor -Dm644 ../LICENSE.md
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DWITH_EXAMPLES=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libcbor -Dm644 LICENSE.md
+cd ..
 rm -rf libcbor-0.11.0
 # libfido2.
 tar -xf libfido2-1.15.0.tar.gz
 cd libfido2-1.15.0
-mkdir fido2-build; cd fido2-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_EXAMPLES=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/libfido2 -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_EXAMPLES=OFF -DBUILD_STATIC_LIBS=OFF -DBUILD_TESTS=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libfido2 -Dm644 LICENSE
+cd ..
 rm -rf libfido2-1.15.0
 # util-macros.
 tar -xf util-macros-1.20.2.tar.xz
@@ -4309,12 +4310,11 @@ rm -rf util-macros-1.20.2
 # xorgproto.
 tar -xf xorgproto-2024.1.tar.xz
 cd xorgproto-2024.1
-mkdir xorgproto-build; cd xorgproto-build
-meson setup --prefix=/usr -Dlegacy=true ..
-ninja
-ninja install
-install -t /usr/share/licenses/xorgproto -Dm644 ../COPYING*
-cd ../..
+meson setup build --prefix=/usr -Dlegacy=true
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/xorgproto -Dm644 COPYING*
+cd ..
 rm -rf xorgproto-2024.1
 # libXau.
 tar -xf libXau-1.0.12.tar.xz
@@ -4452,164 +4452,148 @@ rm -rf xcb-util-xrm-1.3
 tar -xf libdrm-2.4.124.tar.xz
 cd libdrm-2.4.124
 patch -Np1 -i ../patches/libdrm-2.4.118-license.patch
-mkdir libdrm-build; cd libdrm-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false -Dudev=true -Dvalgrind=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/libdrm -Dm644 ../LICENSE
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false -Dudev=true -Dvalgrind=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libdrm -Dm644 LICENSE
+cd ..
 rm -rf libdrm-2.4.124
 # DirectX-Headers.
 tar -xf DirectX-Headers-1.614.1.tar.gz
 cd DirectX-Headers-1.614.1
-mkdir DXH-build; cd DXH-build
-meson setup --prefix=/usr --buildtype=minsize -Dbuild-test=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/directx-headers -Dm644 ../LICENSE
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dbuild-test=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/directx-headers -Dm644 LICENSE
+cd ..
 rm -rf DirectX-Headers-1.614.1
 # SPIRV-Headers.
 tar -xf SPIRV-Headers-vulkan-sdk-1.3.296.0.tar.gz
 cd SPIRV-Headers-vulkan-sdk-1.3.296.0
-mkdir SPIRV-Headers-build; cd SPIRV-Headers-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/spirv-headers -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/spirv-headers -Dm644 LICENSE
+cd ..
 rm -rf SPIRV-Headers-vulkan-sdk-1.3.296.0
 # SPIRV-Tools.
 tar -xf SPIRV-Tools-2024.4.rc1.tar.gz
 cd SPIRV-Tools-2024.4.rc1
-mkdir SPIRV-Tools-build; cd SPIRV-Tools-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DSPIRV_TOOLS_BUILD_STATIC=OFF -DSPIRV_WERROR=OFF -DSPIRV-Headers_SOURCE_DIR=/usr -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/spirv-tools -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DSPIRV_TOOLS_BUILD_STATIC=OFF -DSPIRV_WERROR=OFF -DSPIRV-Headers_SOURCE_DIR=/usr -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/spirv-tools -Dm644 LICENSE
+cd ..
 rm -rf SPIRV-Tools-2024.4.rc1
 # SPIRV-LLVM-Translator.
 tar -xf SPIRV-LLVM-Translator-19.1.2.tar.gz
 cd SPIRV-LLVM-Translator-19.1.2
-mkdir SPIRV-LT-build; cd SPIRV-LT-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_INSTALL_RPATH=ON -DBUILD_SHARED_LIBS=ON -DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=/usr -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/spirv-llvm-translator -Dm644 ../LICENSE.TXT
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_INSTALL_RPATH=ON -DBUILD_SHARED_LIBS=ON -DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=/usr -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/spirv-llvm-translator -Dm644 LICENSE.TXT
+cd ..
 rm -rf SPIRV-LLVM-Translator-19.1.2
 # libclc.
 tar -xf libclc-19.1.6.src.tar.xz
 cd libclc-19.1.6.src
-mkdir libclc-build; cd libclc-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/libclc -Dm644 ../LICENSE.TXT
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libclc -Dm644 LICENSE.TXT
+cd ..
 rm -rf libclc-19.1.6.src
 # glslang.
 tar -xf glslang-15.0.0.tar.gz
 cd glslang-15.0.0
-mkdir glslang-build; cd glslang-build
-CXXFLAGS="$CXXFLAGS -ffat-lto-objects" cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DALLOW_EXTERNAL_SPIRV_TOOLS=ON -DGLSLANG_TESTS=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/glslang -Dm644 ../LICENSE.txt
-cd ../..
+CXXFLAGS="$CXXFLAGS -ffat-lto-objects" cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DALLOW_EXTERNAL_SPIRV_TOOLS=ON -DGLSLANG_TESTS=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/glslang -Dm644 LICENSE.txt
+cd ..
 rm -rf glslang-15.0.0
 # Vulkan-Headers.
 tar -xf Vulkan-Headers-1.4.304.tar.gz
 cd Vulkan-Headers-1.4.304
-mkdir VH-build; cd VH-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/vulkan-headers -Dm644 ../LICENSE.md
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/vulkan-headers -Dm644 LICENSE.md
+cd ..
 rm -rf Vulkan-Headers-1.4.304
 # Vulkan-Loader.
 tar -xf Vulkan-Loader-1.4.304.tar.gz
 cd Vulkan-Loader-1.4.304
-mkdir VL-build; cd VL-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DVULKAN_HEADERS_INSTALL_DIR=/usr -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_INSTALL_DATADIR=/share -DCMAKE_SKIP_RPATH=TRUE -DBUILD_TESTS=OFF -DBUILD_WSI_XCB_SUPPORT=ON -DBUILD_WSI_XLIB_SUPPORT=ON -DBUILD_WSI_WAYLAND_SUPPORT=ON -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/vulkan-loader -Dm644 ../LICENSE.txt
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DVULKAN_HEADERS_INSTALL_DIR=/usr -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_SYSCONFDIR=/etc -DCMAKE_INSTALL_DATADIR=/share -DCMAKE_SKIP_RPATH=TRUE -DBUILD_TESTS=OFF -DBUILD_WSI_XCB_SUPPORT=ON -DBUILD_WSI_XLIB_SUPPORT=ON -DBUILD_WSI_WAYLAND_SUPPORT=ON -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/vulkan-loader -Dm644 LICENSE.txt
+cd ..
 rm -rf Vulkan-Loader-1.4.304
 # ORC.
 tar -xf orc-0.4.40.tar.bz2
 cd orc-0.4.40
-mkdir orc-build; cd orc-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
 rm -f /usr/lib/liborc-test-0.4.a
-install -t /usr/share/licenses/orc -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/orc -Dm644 COPYING
+cd ..
 rm -rf orc-0.4.40
 # volk.
 tar -xf volk-3.1.2.tar.gz
 cd volk-3.1.2
-mkdir volk-build; cd volk-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/volk -Dm644 ../COPYING
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/volk -Dm644 COPYING
+cd ..
 rm -rf volk-3.1.2
 # libva (circular dependency; will be rebuilt later to support Mesa).
 tar -xf libva-2.22.0.tar.bz2
 cd libva-2.22.0
-mkdir libva-build; cd libva-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libva -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libva -Dm644 COPYING
+cd ..
 rm -rf libva-2.22.0
 # libvdpau.
 tar -xf libvdpau-1.5.tar.bz2
 cd libvdpau-1.5
-mkdir vdpau-build; cd vdpau-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libvdpau -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libvdpau -Dm644 COPYING
+cd ..
 rm -rf libvdpau-1.5
 # libglvnd.
 tar -xf libglvnd-v1.7.0.tar.bz2
 cd libglvnd-v1.7.0
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
 cat README.md | tail -n211 | head -n22 | sed 's/    //g' > COPYING
-mkdir glvnd-build; cd glvnd-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libglvnd -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/libglvnd -Dm644 COPYING
+cd ..
 rm -rf libglvnd-v1.7.0
 # Mesa.
 tar -xf mesa-24.3.2.tar.xz
 cd mesa-24.3.2
-mkdir mesa-build; cd mesa-build
-meson setup --prefix=/usr --buildtype=minsize -Dplatforms=wayland,x11 -Dgallium-drivers=auto -Dvulkan-drivers=auto -Dvulkan-layers=device-select,intel-nullhw,overlay,screenshot -Dgallium-nine=true -Dgallium-opencl=icd -Dgallium-rusticl=true -Dglx=dri -Dglvnd=enabled -Dintel-clc=enabled -Dintel-rt=enabled -Dosmesa=true -Dvideo-codecs=all -Dvalgrind=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/mesa -Dm644 ../docs/license.rst
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dplatforms=wayland,x11 -Dgallium-drivers=auto -Dvulkan-drivers=auto -Dvulkan-layers=device-select,intel-nullhw,overlay,screenshot -Dgallium-nine=true -Dgallium-opencl=icd -Dgallium-rusticl=true -Dglx=dri -Dglvnd=enabled -Dintel-clc=enabled -Dintel-rt=enabled -Dosmesa=true -Dvideo-codecs=all -Dvalgrind=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/mesa -Dm644 docs/license.rst
+cd ..
 rm -rf mesa-24.3.2
 # libva (rebuild to support Mesa).
 tar -xf libva-2.22.0.tar.bz2
 cd libva-2.22.0
-mkdir libva-build; cd libva-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libva -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libva -Dm644 COPYING
+cd ..
 rm -rf libva-2.22.0
 # xbitmaps.
 tar -xf xbitmaps-1.1.3.tar.xz
@@ -4705,12 +4689,11 @@ fc-cache
 # xkeyboard-confdig.
 tar -xf xkeyboard-config-2.43.tar.xz
 cd xkeyboard-config-2.43
-mkdir xkeyboard-config-build; cd xkeyboard-config-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/xkeyboard-config -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/xkeyboard-config -Dm644 COPYING
+cd ..
 rm -rf xkeyboard-config-2.43
 # libxklavier.
 tar -xf libxklavier-5.4.tar.bz2
@@ -4724,31 +4707,28 @@ rm -rf libxklavier-5.4
 # libxkbcommon.
 tar -xf libxkbcommon-1.7.0.tar.xz
 cd libxkbcommon-1.7.0
-mkdir xkb-build; cd xkb-build
-meson setup --prefix=/usr --buildtype=minsize -Denable-docs=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libxkbcommon -Dm644 ../LICENSE
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Denable-docs=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libxkbcommon -Dm644 LICENSE
+cd ..
 rm -rf libxkbcommon-1.7.0
 # eglexternalplatform.
 tar -xf eglexternalplatform-1.2.tar.gz
 cd eglexternalplatform-1.2
 patch -Np1 -i ../patches/eglexternalplatform-1.2-upstreamfix.patch
-mkdir eep-build; cd eep-build
-meson setup --prefix=/usr --buildtype=minsize --includedir=/usr/include/EGL ..
-ninja
-ninja install
-install -t /usr/share/licenses/eglexternalplatform -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize --includedir=/usr/include/EGL
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/eglexternalplatform -Dm644 COPYING
+cd ..
 rm -rf eglexternalplatform-1.2
 # egl-wayland.
 tar -xf egl-wayland-1.1.17.tar.gz
 cd egl-wayland-1.1.17
-mkdir build; cd build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
 install -dm755 /usr/share/egl/egl_external_platform.d
 cat > /usr/share/egl/egl_external_platform.d/10_nvidia_wayland.json << "END"
 {
@@ -4759,8 +4739,8 @@ cat > /usr/share/egl/egl_external_platform.d/10_nvidia_wayland.json << "END"
 }
 
 END
-install -t /usr/share/licenses/egl-wayland -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/egl-wayland -Dm644 COPYING
+cd ..
 rm -rf egl-wayland-1.1.17
 # systemd (rebuild to support more features).
 tar -xf systemd-257.1.tar.gz
@@ -4811,56 +4791,51 @@ rm -rf alsa-lib-1.2.13
 # libepoxy.
 tar -xf libepoxy-1.5.10.tar.gz
 cd libepoxy-1.5.10
-mkdir epoxy-build; cd epoxy-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libepoxy -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libepoxy -Dm644 COPYING
+cd ..
 rm -rf libepoxy-1.5.10
 # libxcvt.
 tar -xf libxcvt-0.1.3.tar.xz
 cd libxcvt-0.1.3
-mkdir xcvt-build; cd xcvt-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libxcvt -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libxcvt -Dm644 COPYING
+cd ..
 rm -rf libxcvt-0.1.3
 # Xorg-Server.
 tar -xf xorg-server-21.1.15.tar.xz
 cd xorg-server-21.1.15
 patch -Np1 -i ../patches/xorg-server-21.1.2-addxvfbrun.patch
-mkdir XSRV-BUILD; cd XSRV-BUILD
-meson setup --prefix=/usr --buildtype=minsize -Dglamor=true -Dlibunwind=true -Dsuid_wrapper=true -Dxephyr=true -Dxvfb=true -Dxkb_output_dir=/var/lib/xkb ..
-ninja
-ninja install
-install -m755 ../xvfb-run /usr/bin/xvfb-run
-install -m644 ../xvfb-run.1 /usr/share/man/man1/xvfb-run.1
-mkdir -p /etc/X11/xorg.conf.d
-install -t /usr/share/licenses/xorg-server -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dglamor=true -Dlibunwind=true -Dsuid_wrapper=true -Dxephyr=true -Dxvfb=true -Dxkb_output_dir=/var/lib/xkb
+ninja -C build
+ninja -C build install
+install -t /usr/bin -Dm755 xvfb-run
+install -t /usr/share/man/man1 xvfb-run.1
+install -dm755 /etc/X11/xorg.conf.d
+install -t /usr/share/licenses/xorg-server -Dm644 COPYING
+cd ..
 rm -rf xorg-server-21.1.15
 # Xwayland.
 tar -xf xwayland-24.1.4.tar.xz
 cd xwayland-24.1.4
-mkdir XWLD-BUILD; cd XWLD-BUILD
-meson setup --prefix=/usr --buildtype=minsize -Dxvfb=false -Dxkb_output_dir=/var/lib/xkb ..
-ninja
-ninja install
-install -t /usr/share/licenses/xwayland -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dxvfb=false -Dxkb_output_dir=/var/lib/xkb
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/xwayland -Dm644 COPYING
+cd ..
 rm -rf xwayland-24.1.4
 # libinput.
 tar -xf libinput-1.27.0.tar.bz2
 cd libinput-1.27.0
-mkdir libinput-build; cd libinput-build
-meson setup --prefix=/usr --buildtype=minsize -Ddebug-gui=false -Ddocumentation=false -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libinput -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Ddebug-gui=false -Ddocumentation=false -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libinput -Dm644 COPYING
+cd ..
 rm -rf libinput-1.27.0
 # xf86-input-libinput.
 tar -xf xf86-input-libinput-1.5.0.tar.xz
@@ -4874,32 +4849,29 @@ rm -rf xf86-input-libinput-1.5.0
 # intel-gmmlib.
 tar -xf intel-gmmlib-22.5.4.tar.gz
 cd gmmlib-intel-gmmlib-22.5.4
-mkdir iglib-build; cd iglib-build
-CFLAGS="" CXXFLAGS="" LDFLAGS="" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DRUN_TEST_SUITE=OFF -Wno-dev -G Ninja ..
-CFLAGS="" CXXFLAGS="" LDFLAGS="" ninja
-CFLAGS="" CXXFLAGS="" LDFLAGS="" ninja install
-install -t /usr/share/licenses/intel-gmmlib -Dm644 ../LICENSE.md
-cd ../..
+CFLAGS="" CXXFLAGS="" LDFLAGS="" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DRUN_TEST_SUITE=OFF -Wno-dev -G Ninja -B build -S .
+CFLAGS="" CXXFLAGS="" LDFLAGS="" ninja -C build
+CFLAGS="" CXXFLAGS="" LDFLAGS="" ninja -C build install
+install -t /usr/share/licenses/intel-gmmlib -Dm644 LICENSE.md
+cd ..
 rm -rf gmmlib-intel-gmmlib-22.5.4
 # intel-vaapi-driver.
 tar -xf intel-vaapi-driver-2.4.1.tar.bz2
 cd intel-vaapi-driver-2.4.1
-mkdir IVD-build; cd IVD-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/intel-vaapi-driver -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/intel-vaapi-driver -Dm644 COPYING
+cd ..
 rm -rf intel-vaapi-driver-2.4.1
 # intel-media-driver.
 tar -xf intel-media-24.4.4.tar.gz
 cd media-driver-intel-media-24.4.4
-mkdir imd-build; cd imd-build
-CFLAGS="" CXXFLAGS="" LDFLAGS="" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib -DINSTALL_DRIVER_SYSCONF=OFF -DMEDIA_BUILD_FATAL_WARNINGS=OFF -Wno-dev -G Ninja ..
-CFLAGS="" CXXFLAGS="" LDFLAGS="" ninja
-CFLAGS="" CXXFLAGS="" LDFLAGS="" ninja install
-install -t /usr/share/licenses/intel-media-driver -Dm644 ../LICENSE.md
-cd ../..
+CFLAGS="" CXXFLAGS="" LDFLAGS="" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib -DINSTALL_DRIVER_SYSCONF=OFF -DMEDIA_BUILD_FATAL_WARNINGS=OFF -Wno-dev -G Ninja -B build -S .
+CFLAGS="" CXXFLAGS="" LDFLAGS="" ninja -C build
+CFLAGS="" CXXFLAGS="" LDFLAGS="" ninja -C build install
+install -t /usr/share/licenses/intel-media-driver -Dm644 LICENSE.md
+cd ..
 rm -rf media-driver-intel-media-24.4.4
 # xinit.
 tar -xf xinit-1.4.2.tar.xz
@@ -4915,14 +4887,13 @@ rm -rf xinit-1.4.2
 tar -xf cdrkit_1.1.11.orig.tar.gz
 cd cdrkit-1.1.11
 patch -Np1 -i ../patches/cdrkit-1.1.11-gcc10.patch
-mkdir cdrkit-build; cd cdrkit-build
-CFLAGS="$CFLAGS -Wno-implicit-function-declaration" cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja ..
-ninja
-ninja install
+CFLAGS="$CFLAGS -Wno-implicit-function-declaration" cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
 ln -sf genisoimage /usr/bin/mkisofs
 ln -sf genisoimage.1 /usr/share/man/man1/mkisofs.1
-install -t /usr/share/licenses/cdrkit -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/cdrkit -Dm644 COPYING
+cd ..
 rm -rf cdrkit-1.1.11
 # dvd+rw-tools.
 tar -xf dvd+rw-tools-7.1.tar.gz
@@ -4955,7 +4926,7 @@ rm -rf libisofs-1.5.6
 # libisoburn.
 tar -xf libisoburn-1.5.6.tar.gz
 cd libisoburn-1.5.6
-./configure --prefix=/usr
+./configure --prefix=/usr --disable-static
 make
 make install
 install -t /usr/share/licenses/libisoburn -Dm644 COPYING COPYRIGHT
@@ -4984,12 +4955,11 @@ rm -rf hyfetch-1.99.0
 # fastfetch.
 tar -xf fastfetch-2.33.0.tar.gz
 cd fastfetch-2.33.0
-mkdir fastfetch-build; cd fastfetch-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_SYSTEM_YYJSON=ON -DINSTALL_LICENSE=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/fastfetch -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_SYSTEM_YYJSON=ON -DINSTALL_LICENSE=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/fastfetch -Dm644 LICENSE
+cd ..
 rm -rf fastfetch-2.33.0
 # htop.
 tar -xf htop-3.3.0.tar.xz
@@ -5037,15 +5007,13 @@ rm -rf figlet-2.2.5
 # CMatrix.
 tar -xf cmatrix-v2.0-Butterscotch.tar
 cd cmatrix
-mkdir cmatrix-build; cd cmatrix-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja ..
-ninja
-ninja install
-cd ..
-install -Dm644 mtx.pcf /usr/share/fonts/misc/mtx.pcf
-install -Dm644 matrix.fnt /usr/share/kbd/consolefonts/matrix.fnt
-install -Dm644 matrix.psf.gz /usr/share/kbd/consolefonts/matrix.psf.gz
-install -Dm644 cmatrix.1 /usr/share/man/man1/cmatrix.1
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/fonts/misc -Dm644 mtx.pcf
+install -t /usr/share/consolefonts -Dm644 matrix.fnt
+install -t /usr/share/consolefonts -Dm644 matrix.psf.gz
+install -t /usr/share/man/man1 -Dm644 cmatrix.1
 install -t /usr/share/licenses/cmatrix -Dm644 COPYING
 cd ..
 rm -rf cmatrix
@@ -5118,32 +5086,29 @@ rm -rf openssh-9.9p1
 # sshfs.
 tar -xf sshfs-3.7.3.tar.xz
 cd sshfs-3.7.3
-mkdir sshfs-build; cd sshfs-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/sshfs -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/sshfs -Dm644 COPYING
+cd ..
 rm -rf sshfs-3.7.3
 # GLU.
 tar -xf glu-9.0.3.tar.xz
 cd glu-9.0.3
-mkdir glu-build; cd glu-build
-meson setup --prefix=/usr --buildtype=minsize -Dgl_provider=gl ..
-ninja
-ninja install
+meson setup build --prefix=/usr --buildtype=minsize -Dgl_provider=gl
+ninja -C build
+ninja -C build install
 rm -f /usr/lib/libGLU.a
-cd ../..
+cd ..
 rm -rf glu-9.0.3
 # FreeGLUT.
 tar -xf freeglut-3.6.0.tar.gz
 cd freeglut-3.6.0
-mkdir fg-build; cd fg-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DFREEGLUT_BUILD_DEMOS=OFF -DFREEGLUT_BUILD_STATIC_LIBS=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/freeglut -Dm644 ../COPYING
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DFREEGLUT_BUILD_DEMOS=OFF -DFREEGLUT_BUILD_STATIC_LIBS=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/freeglut -Dm644 COPYING
+cd ..
 rm -rf freeglut-3.6.0
 # GLEW.
 tar -xf glew-2.2.0.tgz
@@ -5159,12 +5124,11 @@ rm -rf glew-2.2.0
 # libtiff.
 tar -xf libtiff-v4.7.0.tar.bz2
 cd libtiff-v4.7.0
-mkdir libtiff-build; cd libtiff-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/libtiff -Dm644 ../LICENSE.md
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libtiff -Dm644 LICENSE.md
+cd ..
 rm -rf libtiff-v4.7.0
 # lcms2.
 tar -xf lcms2-2.16.tar.gz
@@ -5178,114 +5142,102 @@ rm -rf lcms2-2.16
 # JasPer.
 tar -xf jasper-4.2.4.tar.gz
 cd jasper-4.2.4
-mkdir jasper-build; cd jasper-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_INSTALL_RPATH=YES -DALLOW_IN_SOURCE_BUILD=YES -DJAS_ENABLE_DOC=NO -DJAS_ENABLE_LIBJPEG=ON -DJAS_ENABLE_OPENGL=ON -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/jasper -Dm644 ../LICENSE.txt
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_INSTALL_RPATH=YES -DALLOW_IN_SOURCE_BUILD=YES -DJAS_ENABLE_DOC=NO -DJAS_ENABLE_LIBJPEG=ON -DJAS_ENABLE_OPENGL=ON -Wno-dev -G Ninja -B build1 -S .
+ninja -C build1
+ninja -C build1 install
+install -t /usr/share/licenses/jasper -Dm644 LICENSE.txt
+cd ..
 rm -rf jasper-4.2.4
 # libsysprof-capture.
 tar -xf sysprof-47.1.tar.xz
 cd sysprof-47.1
-mkdir build; cd build
-meson setup --prefix=/usr --buildtype=minsize -Dexamples=false -Dgtk=false -Dhelp=false -Dlibsysprof=false -Dsysprofd=none -Dtests=false -Dtools=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libsysprof-capture -Dm644 ../COPYING ../COPYING.gpl-2
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dexamples=false -Dgtk=false -Dhelp=false -Dlibsysprof=false -Dsysprofd=none -Dtests=false -Dtools=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libsysprof-capture -Dm644 COPYING{,.gpl-2}
+cd ..
 rm -rf sysprof-47.1
 # at-spi2-core (now provides ATK and at-spi2-atk).
 tar -xf at-spi2-core-2.54.0.tar.xz
 cd at-spi2-core-2.54.0
-mkdir spi2-build; cd spi2-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/at-spi2-core -Dm644 ../COPYING
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/at-spi2-core -Dm644 COPYING
 ln -sf at-spi2-core /usr/share/licenses/at-spi2-atk
 ln -sf at-spi2-core /usr/share/licenses/atk
-cd ../..
+cd ..
 rm -rf at-spi2-core-2.54.0
 # Atkmm.
 tar -xf atkmm-2.28.4.tar.xz
 cd atkmm-2.28.4
-mkdir atkmm-build; cd atkmm-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/atkmm -Dm644 ../COPYING ../COPYING.tools
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/atkmm -Dm644 COPYING{,.tools}
+cd ..
 rm -rf atkmm-2.28.4
 # GDK-Pixbuf.
 tar -xf gdk-pixbuf-2.42.12.tar.xz
 cd gdk-pixbuf-2.42.12
-mkdir pixbuf-build; cd pixbuf-build
-meson setup --prefix=/usr --buildtype=minsize -Dinstalled_tests=false ..
-ninja
-ninja install
-gdk-pixbuf-query-loaders --update-cache
-install -t /usr/share/licenses/gdk-pixbuf -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dinstalled_tests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gdk-pixbuf -Dm644 COPYING
+cd ..
 rm -rf gdk-pixbuf-2.42.12
 # Cairo.
 tar -xf cairo-1.18.2.tar.bz2
 cd cairo-1.18.2
-mkdir cairo-build; cd cairo-build
-meson setup --prefix=/usr --buildtype=minsize -Dtee=enabled -Dtests=disabled -Dxlib-xcb=enabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/cairo -Dm644 ../COPYING ../COPYING-LGPL-2.1
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtee=enabled -Dtests=disabled -Dxlib-xcb=enabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/cairo -Dm644 COPYING{,-LGPL-2.1}
+cd ..
 rm -rf cairo-1.18.2
 # Cairomm.
 tar -xf cairomm-1.14.5.tar.bz2
 cd cairomm-1.14.5
-mkdir cmm-build; cd cmm-build
-meson setup --prefix=/usr --buildtype=minsize -Dbuild-examples=false -Dbuild-tests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/cairomm -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dbuild-examples=false -Dbuild-tests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/cairomm -Dm644 COPYING
+cd ..
 rm -rf cairomm-1.14.5
 # HarfBuzz (rebuild to support Cairo).
 tar -xf harfbuzz-10.1.0.tar.xz
 cd harfbuzz-10.1.0
-mkdir hb-build; cd hb-build
-meson setup --prefix=/usr --buildtype=minsize -Dgraphite2=enabled -Dtests=disabled ..
-ninja
-ninja install
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dgraphite2=enabled -Dtests=disabled
+ninja -C build
+ninja -C build install
+cd ..
 rm -rf harfbuzz-10.1.0
 # Pango.
 tar -xf pango-1.55.5.tar.gz
 cd pango-1.55.5
-mkdir pango-build; cd pango-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/pango -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/pango -Dm644 COPYING
+cd ..
 rm -rf pango-1.55.5
 # Pangomm.
 tar -xf pangomm-2.46.4.tar.xz
 cd pangomm-2.46.4
-mkdir pmm-build; cd pmm-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/pangomm -Dm644 ../COPYING ../COPYING.tools
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/pangomm -Dm644 COPYING{,.tools}
+cd ..
 rm -rf pangomm-2.46.4
 # hicolor-icon-theme.
 tar -xf hicolor-icon-theme-0.18.tar.xz
 cd hicolor-icon-theme-0.18
-mkdir hicolor-build; cd hicolor-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/hicolor-icon-theme -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/hicolor-icon-theme -Dm644 COPYING
+cd ..
 rm -rf hicolor-icon-theme-0.18
 # sound-theme-freedesktop.
 tar -xf sound-theme-freedesktop-0.8.tar.bz2
@@ -5303,20 +5255,27 @@ sed -e 's#l \(gtk-.*\).sgml#& -o \1#' -i docs/{faq,tutorial}/Makefile.in
 CFLAGS="$CFLAGS -Wno-implicit-int -Wno-incompatible-pointer-types" ./configure --prefix=/usr --sysconfdir=/etc
 make
 make install
-gtk-query-immodules-2.0 --update-cache
 install -t /usr/share/licenses/gtk2 -Dm644 COPYING
 cd ..
 rm -rf gtk+-2.24.33
 # libwebp.
 tar -xf libwebp-1.5.0.tar.gz
 cd libwebp-1.5.0
-mkdir webp-build; cd webp-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_INSTALL_RPATH=ON -DBUILD_SHARED_LIBS=ON -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/libwebp -Dm644 ../COPYING
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_INSTALL_RPATH=ON -DBUILD_SHARED_LIBS=ON -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libwebp -Dm644 COPYING
+cd ..
 rm -rf libwebp-1.5.0
+# jp2a.
+tar -xf jp2a-1.3.2.tar.bz2
+cd jp2a-1.3.2
+./configure --prefix=/usr
+make
+make install
+install -t /usr/share/licenses/jp2a -Dm644 COPYING LICENSES
+cd ..
+rm -rf jp2a-1.3.2
 # libglade.
 tar -xf libglade-2.6.4.tar.bz2
 cd libglade-2.6.4
@@ -5351,33 +5310,29 @@ rm -rf vala-0.56.17
 # libgusb.
 tar -xf libgusb-0.4.9.tar.xz
 cd libgusb-0.4.9
-mkdir GUSB-build; cd GUSB-build
-meson setup --prefix=/usr --buildtype=minsize -Ddocs=false -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libgusb -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Ddocs=false -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libgusb -Dm644 COPYING
+cd ..
 rm -rf libgusb-0.4.9
 # librsvg.
 tar -xf librsvg-2.59.2.tar.xz
 cd librsvg-2.59.2
-mkdir librsvg-build; cd librsvg-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-gdk-pixbuf-query-loaders --update-cache
-install -t /usr/share/licenses/librsvg -Dm644 ../COPYING.LIB
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/librsvg -Dm644 COPYING.LIB
+cd ..
 rm -rf librsvg-2.59.2
 # adwaita-icon-theme.
 tar -xf adwaita-icon-theme-47.0.tar.xz
 cd adwaita-icon-theme-47.0
-mkdir ait-build; cd ait-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/adwaita-icon-theme -Dm644 ../COPYING{,_CCBYSA3,_LGPL}
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/adwaita-icon-theme -Dm644 COPYING{,_CCBYSA3,_LGPL}
+cd ..
 rm -rf adwaita-icon-theme-47.0
 # Colord.
 tar -xf colord-1.4.7.tar.xz
@@ -5386,12 +5341,11 @@ patch -Np1 -i ../patches/colord-1.4.7-upstreamfixes.patch
 sed -i '/class="manual"/i<refmiscinfo class="source">colord</refmiscinfo>' man/*.xml
 echo 'u colord - "Color Daemon Owner" /var/lib/colord' > /usr/lib/sysusers.d/colord.conf
 systemd-sysusers
-mkdir colord-build; cd colord-build
-meson setup --prefix=/usr --buildtype=minsize -Ddaemon_user=colord -Dvapi=true -Dsystemd=true -Dlibcolordcompat=true -Dargyllcms_sensor=false -Dman=false -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/colord -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Ddaemon_user=colord -Dvapi=true -Dsystemd=true -Dlibcolordcompat=true -Dargyllcms_sensor=false -Dman=false -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/colord -Dm644 COPYING
+cd ..
 rm -rf colord-1.4.7
 # CUPS.
 tar -xf cups-2.4.11-source.tar.gz
@@ -5410,7 +5364,6 @@ make
 make install
 echo "ServerName /run/cups/cups.sock" > /etc/cups/client.conf
 sed -e "s|#User 420|User 420|" -e "s|#Group 420|Group 420|" -i /etc/cups/cups-files.conf{,.default}
-gtk-update-icon-cache -qtf /usr/share/icons/hicolor
 cat > /etc/pam.d/cups << "END"
 auth    include system-auth
 account include system-account
@@ -5420,57 +5373,59 @@ systemctl enable cups
 install -t /usr/share/licenses/cups -Dm644 LICENSE NOTICE
 cd ..
 rm -rf cups-2.4.11
+# cups-pk-helper.
+tar -xf cups-pk-helper-0.2.7.tar.xz
+cd cups-pk-helper-0.2.7
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/cups-pk-helper -Dm644 COPYING
+cd ..
+rm -rf cups-pk-helper-0.2.7
 # GTK3.
 tar -xf gtk+-3.24.43.tar.xz
 cd gtk+-3.24.43
-mkdir gtk3-build; cd gtk3-build
-meson setup --prefix=/usr --buildtype=minsize -Dbroadway_backend=true -Dcolord=yes -Dexamples=false -Dman=true -Dprint_backends=cups,file,lpr -Dtests=false ..
-ninja
-ninja install
-gtk-query-immodules-3.0 --update-cache
-glib-compile-schemas /usr/share/glib-2.0/schemas
-install -t /usr/share/licenses/gtk3 -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dbroadway_backend=true -Dcolord=yes -Dexamples=false -Dman=true -Dprint_backends=cups,file,lpr -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gtk3 -Dm644 COPYING
+cd ..
 rm -rf gtk+-3.24.43
 # Gtkmm3.
 tar -xf gtkmm-3.24.9.tar.xz
 cd gtkmm-3.24.9
-mkdir gmm-build; cd gmm-build
-meson setup --prefix=/usr --buildtype=minsize -Dbuild-demos=false -Dbuild-tests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/gtkmm3 -Dm644 ../COPYING ../COPYING.tools
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dbuild-demos=false -Dbuild-tests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gtkmm3 -Dm644 COPYING{,.tools}
+cd ..
 rm -rf gtkmm-3.24.9
 # libhandy.
 tar -xf libhandy-1.8.3.tar.xz
 cd libhandy-1.8.3
-mkdir handy-build; cd handy-build
-meson setup --prefix=/usr --buildtype=minsize -Dexamples=false -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libhandy -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dexamples=false -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libhandy -Dm644 COPYING
+cd ..
 rm -rf libhandy-1.8.3
 # libdecor.
 tar -xf libdecor-0.2.2.tar.gz
 cd libdecor-0.2.2
-mkdir decor-build; cd decor-build
-meson setup --prefix=/usr --buildtype=minsize -Ddemo=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libdecor -Dm644 ../LICENSE
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Ddemo=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libdecor -Dm644 LICENSE
+cd ..
 rm -rf libdecor-0.2.2
 # mesa-utils.
 tar -xf mesa-demos-9.0.0.tar.xz
 cd mesa-demos-9.0.0
-mkdir build; cd build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-install -t /usr/bin -Dm755 src/{egl/opengl/eglinfo,xdemos/glx{info,gears}}
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+install -t /usr/bin -Dm755 build/src/{egl/opengl/eglinfo,xdemos/glx{info,gears}}
 install -t /usr/share/licenses/mesa-utils -Dm644 /usr/share/licenses/mesa/license.rst
-cd ../..
+cd ..
 rm -rf mesa-demos-9.0.0
 # gnome-themes-extra (for accessibility - provides high contrast theme).
 tar -xf gnome-themes-extra-3.28.tar.xz
@@ -5484,44 +5439,39 @@ rm -rf gnome-themes-extra-3.28
 # webp-pixbuf-loader.
 tar -xf webp-pixbuf-loader-0.2.7.tar.gz
 cd webp-pixbuf-loader-0.2.7
-mkdir wpl-build; cd wpl-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-gdk-pixbuf-query-loaders --update-cache
-install -t /usr/share/licenses/webp-pixbuf-loader -Dm644 ../LICENSE.LGPL-2
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/webp-pixbuf-loader -Dm644 LICENSE.LGPL-2
+cd ..
 rm -rf webp-pixbuf-loader-0.2.7
 # gtk-layer-shell.
 tar -xf gtk-layer-shell-0.9.0.tar.gz
 cd gtk-layer-shell-0.9.0
-mkdir gls-build; cd gls-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/gtk-layer-shell -Dm644 ../LICENSE_{GPL,LGPL,MIT}.txt
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gtk-layer-shell -Dm644 LICENSE_{GPL,LGPL,MIT}.txt
+cd ..
 rm -rf gtk-layer-shell-0.9.0
 # VTE.
 tar -xf vte-0.78.2.tar.gz
 cd vte-0.78.2
-mkdir vte-build; cd vte-build
-meson setup --prefix=/usr --buildtype=minsize -Dgtk4=false ..
-ninja
-ninja install
+meson setup build --prefix=/usr --buildtype=minsize -Dgtk4=false
+ninja -C build
+ninja -C build install
 rm -f /etc/profile.d/vte.*
-install -t /usr/share/licenses/vte -Dm644 ../COPYING.CC-BY-4-0 ../COPYING.GPL3 ../COPYING.LGPL3 ../COPYING.XTERM
-cd ../..
+install -t /usr/share/licenses/vte -Dm644 COPYING.{CC-BY-4-0,GPL3,LGPL3,XTERM}
+cd ..
 rm -rf vte-0.78.2
 # gcab.
 tar -xf gcab-1.6.tar.xz
 cd gcab-1.6
-mkdir gcab-build; cd gcab-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/gcab -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gcab -Dm644 COPYING
+cd ..
 rm -rf gcab-1.6
 # keybinder.
 tar -xf keybinder-3.0-0.3.2.tar.gz
@@ -5544,12 +5494,11 @@ rm -rf libgee-0.20.6
 # exiv2.
 tar -xf exiv2-0.28.3.tar.gz
 cd exiv2-0.28.3
-mkdir exiv2-build; cd exiv2-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DEXIV2_ENABLE_CURL=YES -DEXIV2_ENABLE_NLS=YES -DEXIV2_ENABLE_VIDEO=YES -DEXIV2_ENABLE_WEBREADY=YES -DEXIV2_BUILD_SAMPLES=NO -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/exiv2 -Dm644 ../COPYING
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DEXIV2_ENABLE_CURL=YES -DEXIV2_ENABLE_NLS=YES -DEXIV2_ENABLE_VIDEO=YES -DEXIV2_ENABLE_WEBREADY=YES -DEXIV2_BUILD_SAMPLES=NO -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/exiv2 -Dm644 COPYING
+cd ..
 rm -rf exiv2-0.28.3
 # meson-python.
 tar -xf meson_python-0.16.0.tar.gz
@@ -5562,22 +5511,20 @@ rm -rf meson_python-0.16.0
 # PyCairo.
 tar -xf pycairo-1.27.0.tar.gz
 cd pycairo-1.27.0
-mkdir pycairo-build; cd pycairo-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/pycairo -Dm644 ../COPYING ../COPYING-LGPL-2.1 ../COPYING-MPL-1.1
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/pycairo -Dm644 COPYING{,-LGPL-2.1,-MPL-1.1}
+cd ..
 rm -rf pycairo-1.27.0
 # PyGObject.
 tar -xf pygobject-3.50.0.tar.xz
 cd pygobject-3.50.0
-mkdir pygo-build; cd pygo-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/pygobject -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/pygobject -Dm644 COPYING
+cd ..
 rm -rf pygobject-3.50.0
 # dbus-python.
 tar -xf dbus-python-1.3.2.tar.gz
@@ -5617,42 +5564,38 @@ rm -rf firewalld-2.3.0
 # gexiv2.
 tar -xf gexiv2-0.14.3.tar.xz
 cd gexiv2-0.14.3
-mkdir gexiv2-build; cd gexiv2-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/gexiv2 -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gexiv2 -Dm644 COPYING
+cd ..
 rm -rf gexiv2-0.14.3
 # libpeas.
 tar -xf libpeas-1.36.0.tar.xz
 cd libpeas-1.36.0
-mkdir libpeas-build; cd libpeas-build
-meson setup --prefix=/usr --buildtype=minsize -Ddemos=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libpeas -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Ddemos=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libpeas -Dm644 COPYING
+cd ..
 rm -rf libpeas-1.36.0
 # libjcat.
 tar -xf libjcat-0.2.2.tar.xz
 cd libjcat-0.2.2
-mkdir jcat-build; cd jcat-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libjcat -Dm644 ../LICENSE
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libjcat -Dm644 LICENSE
+cd ..
 rm -rf libjcat-0.2.2
 # libgxps.
 tar -xf libgxps-0.3.2.tar.xz
 cd libgxps-0.3.2
-mkdir gxps-build; cd gxps-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libgxps -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libgxps -Dm644 COPYING
+cd ..
 rm -rf libgxps-0.3.2
 # djvulibre.
 tar -xf djvulibre-3.5.28.tar.gz
@@ -5732,12 +5675,11 @@ rm -rf opus-1.3.1
 # FLAC.
 tar -xf flac-1.4.3.tar.xz
 cd flac-1.4.3
-mkdir FLAC-build; cd FLAC-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/flac -Dm644 ../COPYING.{FDL,GPL,LGPL,Xiph}
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/flac -Dm644 COPYING.{FDL,GPL,LGPL,Xiph}
+cd ..
 rm -rf flac-1.4.3
 # libsndfile (will be rebuilt later with LAME/mpg123 for MPEG support).
 tar -xf libsndfile-1.2.2.tar.xz
@@ -5779,12 +5721,11 @@ rm -rf sbc-2.0
 # ldac.
 tar -xf ldacBT-2.0.2.3.tar.gz
 cd ldacBT
-mkdir ldac-build; cd ldac-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/ldac -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/ldac -Dm644 LICENSE
+cd ..
 rm -rf ldacBT
 # libfreeaptx.
 tar -xf libfreeaptx-0.1.1.tar.gz
@@ -5806,12 +5747,11 @@ rm -rf liblc3-1.1.1
 # libical.
 tar -xf libical-3.0.19.tar.gz
 cd libical-3.0.19
-mkdir ical-build; cd ical-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DGOBJECT_INTROSPECTION=ON -DICAL_BUILD_DOCS=OFF -DLIBICAL_BUILD_TESTING=OFF -DICAL_GLIB_VAPI=ON -DSHARED_ONLY=ON -Wno-dev -G Ninja ..
-ninja -j1
-ninja -j1 install
-install -t /usr/share/licenses/libical -Dm644 ../COPYING ../LICENSE ../LICENSE.LGPL21.txt
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DGOBJECT_INTROSPECTION=ON -DICAL_BUILD_DOCS=OFF -DLIBICAL_BUILD_TESTING=OFF -DICAL_GLIB_VAPI=ON -DSHARED_ONLY=ON -Wno-dev -G Ninja -B build -S .
+ninja -C build -j1
+ninja -C build install
+install -t /usr/share/licenses/libical -Dm644 COPYING LICENSE LICENSE.LGPL21.txt
+cd ..
 rm -rf libical-3.0.19
 # BlueZ.
 tar -xf bluez-5.79.tar.xz
@@ -5844,13 +5784,12 @@ rm -rf avahi-0.8
 # PulseAudio.
 tar -xf pulseaudio-17.0.tar.xz
 cd pulseaudio-17.0
-mkdir pulse-build; cd pulse-build
-meson setup --prefix=/usr --buildtype=minsize -Ddatabase=gdbm -Ddoxygen=false -Dtests=false ..
-ninja
-ninja install
+meson setup build --prefix=/usr --buildtype=minsize -Ddatabase=gdbm -Ddoxygen=false -Dtests=false
+ninja -C build
+ninja -C build install
 rm -f /etc/dbus-1/system.d/pulseaudio-system.conf
-install -t /usr/share/licenses/pulseaudio -Dm644 ../LICENSE ../GPL ../LGPL
-cd ../..
+install -t /usr/share/licenses/pulseaudio -Dm644 LICENSE GPL LGPL
+cd ..
 rm -rf pulseaudio-17.0
 # SDL.
 tar -xf SDL-1.2.15.tar.gz
@@ -5864,12 +5803,11 @@ rm -rf SDL-1.2.15
 # SDL2.
 tar -xf SDL2-2.30.10.tar.gz
 cd SDL2-2.30.10
-mkdir SDL2-build; cd SDL2-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DSDL_HIDAPI_LIBUSB=ON -DSDL_RPATH=OFF -DSDL_STATIC=OFF -DSDL_TEST=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/sdl2 -Dm644 ../LICENSE.txt
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DSDL_HIDAPI_LIBUSB=ON -DSDL_RPATH=OFF -DSDL_STATIC=OFF -DSDL_TEST=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/sdl2 -Dm644 LICENSE.txt
+cd ..
 rm -rf SDL2-2.30.10
 # biosdevname.
 tar -xf biosdevname-0.7.3.tar.gz
@@ -5900,14 +5838,13 @@ rm -rf laptop-detect-0.16
 # flashrom.
 tar -xf flashrom-v1.5.1.tar.xz
 cd flashrom-v1.5.1
-mkdir flashrom-build; cd flashrom-build
-meson setup --prefix=/usr --buildtype=minsize -Dprogrammer=all -Dtests=disabled ..
-ninja
-ninja install
-sed -i 's|GROUP="plugdev"|TAG+="uaccess"|g' ../util/flashrom_udev.rules
-install -Dm644 ../util/flashrom_udev.rules /usr/lib/udev/rules.d/70-flashrom.rules
-install -t /usr/share/licenses/flashrom -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dprogrammer=all -Dtests=disabled
+ninja -C build
+ninja -C build install
+rm -f /usr/lib/libflashrom.a
+sed 's|GROUP="plugdev"|TAG+="uaccess"|g' util/flashrom_udev.rules > /usr/lib/udev/rules.d/70-flashrom.rules
+install -t /usr/share/licenses/flashrom -Dm644 COPYING
+cd ..
 rm -rf flashrom-v1.5.1
 # rrdtool.
 tar -xf rrdtool-1.9.0.tar.gz
@@ -6001,45 +5938,50 @@ rm -rf vim-9.1.0950
 # libwpe.
 tar -xf libwpe-1.16.0.tar.xz
 cd libwpe-1.16.0
-mkdir wpe-build; cd wpe-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libwpe -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libwpe -Dm644 COPYING
+cd ..
 rm -rf libwpe-1.16.0
 # OpenJPEG.
 tar -xf openjpeg-2.5.3.tar.gz
 cd openjpeg-2.5.3
-mkdir ojpg-build; cd ojpg-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_STATIC_LIBS=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-cd ../doc
-for man in man/man?/*; do install -v -D -m 644 $man /usr/share/$man; done
-install -t /usr/share/licenses/openjpeg -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_STATIC_LIBS=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+cp -r doc/man /usr/share
+install -t /usr/share/licenses/openjpeg -Dm644 LICENSE
+cd ..
 rm -rf openjpeg-2.5.3
 # libsecret.
 tar -xf libsecret-0.21.4.tar.xz
 cd libsecret-0.21.4
-mkdir secret-build; cd secret-build
-meson setup --prefix=/usr --buildtype=minsize -Dgtk_doc=true ..
-ninja
-ninja install
-install -t /usr/share/licenses/libsecret -Dm644 ../COPYING ../COPYING.TESTS
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dgtk_doc=true
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libsecret -Dm644 COPYING{,.TESTS}
+cd ..
 rm -rf libsecret-0.21.4
 # Gcr.
 tar -xf gcr-3.41.2.tar.xz
 cd gcr-3.41.2
-mkdir gcr-build; cd gcr-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/gcr -Dm644 ../COPYING
-cd ../..
+sed -i 's|"/desktop|"/org|' schema/*.xml
+meson setup build --prefix=/usr --buildtype=minsize -Dssh_agent=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gcr -Dm644 COPYING
+cd ..
 rm -rf gcr-3.41.2
+# Gcr4.
+tar -xf gcr-4.3.0.tar.xz
+cd gcr-4.3.0
+meson setup build --prefix=/usr --buildtype=minsize -Dgtk4=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gcr4 -Dm644 COPYING
+cd ..
+rm -rf gcr-4.3.0
 # pinentry.
 tar -xf pinentry-1.3.1.tar.bz2
 cd pinentry-1.3.1
@@ -6053,12 +5995,11 @@ rm -rf pinentry-1.3.1
 tar -xf accountsservice-23.13.9.tar.xz
 cd accountsservice-23.13.9
 sed -i '/sys.exit(77)/d' tests/test-daemon.py
-mkdir as-build; cd as-build
-CFLAGS="$CFLAGS -Wno-implicit-function-declaration" meson setup --prefix=/usr --buildtype=minsize -Dadmin_group=wheel ..
-ninja
-ninja install
-install -t /usr/share/licenses/accountsservice -Dm644 ../COPYING
-cd ../..
+CFLAGS="$CFLAGS -Wno-implicit-function-declaration" meson setup build --prefix=/usr --buildtype=minsize -Dadmin_group=wheel
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/accountsservice -Dm644 COPYING
+cd ..
 rm -rf accountsservice-23.13.9
 # polkit-gnome.
 tar -xf polkit-gnome-0.105.tar.xz
@@ -6096,12 +6037,11 @@ rm -rf gnome-keyring-46.2
 # Poppler.
 tar -xf poppler-24.12.0.tar.xz
 cd poppler-24.12.0
-mkdir poppler-build; cd poppler-build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_CPP_TESTS=OFF -DBUILD_GTK_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF -DENABLE_QT5=OFF -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_ZLIB_UNCOMPRESS=ON -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/poppler -Dm644 ../COPYING{,3}
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_CPP_TESTS=OFF -DBUILD_GTK_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF -DENABLE_QT5=OFF -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_ZLIB_UNCOMPRESS=ON -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/poppler -Dm644 COPYING{,3}
+cd ..
 rm -rf poppler-24.12.0
 # poppler-data.
 tar -xf poppler-data-0.4.12.tar.gz
@@ -6471,60 +6411,55 @@ rm -rf newt-0.52.24
 # UPower.
 tar -xf upower-v1.90.6.tar.bz2
 cd upower-v1.90.6
-mkdir upower-build; cd upower-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/upower -Dm644 ../COPYING
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/upower -Dm644 COPYING
 systemctl enable upower
-cd ../..
+cd ..
 rm -rf upower-v1.90.6
 # power-profiles-daemon.
 tar -xf power-profiles-daemon-0.23.tar.bz2
 cd power-profiles-daemon-0.23
-mkdir build; cd build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/power-profiles-daemon -Dm644 ../COPYING
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/power-profiles-daemon -Dm644 COPYING
 systemctl enable power-profiles-daemon
-cd ../..
+cd ..
 rm -rf power-profiles-daemon-0.23
 # NetworkManager.
-tar -xf NetworkManager-1.50.0.tar.xz
-cd NetworkManager-1.50.0
-mkdir NM-build; cd NM-build
-meson setup --prefix=/usr --buildtype=minsize -Dnmtui=true -Dqt=false -Dselinux=false -Dsession_tracking=systemd -Dtests=no ..
-ninja
-ninja install
+tar -xf NetworkManager-1.50.1.tar.gz
+cd NetworkManager-1.50.1
+meson setup build --prefix=/usr --buildtype=minsize -Dnmtui=true -Dqt=false -Dselinux=false -Dsession_tracking=systemd -Dtests=no
+ninja -C build
+ninja -C build install
 cat >> /etc/NetworkManager/NetworkManager.conf << "END"
 # Put your custom configuration files in '/etc/NetworkManager/conf.d/'.
 [main]
 plugins=keyfile
 END
-install -t /usr/share/licenses/networkmanager -Dm644 ../COPYING{,.{GFD,LGP}L}
+install -t /usr/share/licenses/networkmanager -Dm644 COPYING{,.{GFD,LGP}L}
 systemctl enable NetworkManager
-cd ../..
-rm -rf NetworkManager-1.50.0
+cd ..
+rm -rf NetworkManager-1.50.1
 # libnma.
 tar -xf libnma-1.10.6.tar.xz
 cd libnma-1.10.6
-mkdir nma-build; cd nma-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libnma -Dm644 ../COPYING ../COPYING.LGPL
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libnma -Dm644 COPYING{,.LGPL}
+cd ..
 rm -rf libnma-1.10.6
 # libnotify.
 tar -xf libnotify-0.8.3.tar.xz
 cd libnotify-0.8.3
-mkdir notify-build; cd notify-build
-meson setup --prefix=/usr --buildtype=minsize -Dman=false -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libnotify -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dman=false -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libnotify -Dm644 COPYING
+cd ..
 rm -rf libnotify-0.8.3
 # startup-notification.
 tar -xf startup-notification-0.12.tar.gz
@@ -6538,22 +6473,20 @@ rm -rf startup-notification-0.12
 # libwnck.
 tar -xf libwnck-43.1.tar.xz
 cd libwnck-43.1
-mkdir wnck-build; cd wnck-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libwnck -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libwnck -Dm644 COPYING
+cd ..
 rm -rf libwnck-43.1
 # network-manager-applet.
 tar -xf network-manager-applet-1.36.0.tar.xz
 cd network-manager-applet-1.36.0
-mkdir nma-build; cd nma-build
-meson setup --prefix=/usr --buildtype=minsize -Dappindicator=no -Dselinux=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/network-manager-applet -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dappindicator=no -Dselinux=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/network-manager-applet -Dm644 COPYING
+cd ..
 rm -rf network-manager-applet-1.36.0
 # NetworkManager-openvpn.
 tar -xf NetworkManager-openvpn-1.12.0.tar.xz
@@ -6579,53 +6512,47 @@ rm -rf udisks-2.10.1
 tar -xf gsettings-desktop-schemas-47.1.tar.xz
 cd gsettings-desktop-schemas-47.1
 sed -i -r 's|"(/system)|"/org/gnome\1|g' schemas/*.in
-mkdir gds-build; cd gds-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-glib-compile-schemas /usr/share/glib-2.0/schemas
-install -t /usr/share/licenses/gsettings-desktop-schemas -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gsettings-desktop-schemas -Dm644 COPYING
+cd ..
 rm -rf gsettings-desktop-schemas-47.1
 # libproxy.
 tar -xf libproxy-0.5.9.tar.gz
 cd libproxy-0.5.9
-mkdir libproxy-build; cd libproxy-build
-meson setup --prefix=/usr --buildtype=minsize -Drelease=true -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libproxy -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Drelease=true -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libproxy -Dm644 COPYING
+cd ..
 rm -rf libproxy-0.5.9
 # glib-networking.
 tar -xf glib-networking-2.80.0.tar.xz
 cd glib-networking-2.80.0
-mkdir glibnet-build; cd glibnet-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/glib-networking -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/glib-networking -Dm644 COPYING
+cd ..
 rm -rf glib-networking-2.80.0
 # libsoup.
 tar -xf libsoup-2.74.3.tar.xz
 cd libsoup-2.74.3
-mkdir soup-build; cd soup-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false -Dvapi=enabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/libsoup -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false -Dvapi=enabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libsoup -Dm644 COPYING
+cd ..
 rm -rf libsoup-2.74.3
 # libsoup3.
 tar -xf libsoup-3.6.0.tar.xz
 cd libsoup-3.6.0
-mkdir soup3-build; cd soup3-build
-meson setup --prefix=/usr --buildtype=minsize -Dpkcs11_tests=disabled -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libsoup3 -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dpkcs11_tests=disabled -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libsoup3 -Dm644 COPYING
+cd ..
 rm -rf libsoup-3.6.0
 # ostree.
 tar -xf libostree-2024.10.tar.xz
@@ -6640,64 +6567,58 @@ rm -rf libostree-2024.10
 # libxmlb.
 tar -xf libxmlb-0.3.21.tar.xz
 cd libxmlb-0.3.21
-mkdir xmlb-build; cd xmlb-build
-meson setup --prefix=/usr --buildtype=minsize -Dstemmer=true -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libxmlb -Dm644 ../LICENSE
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dstemmer=true -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libxmlb -Dm644 LICENSE
+cd ..
 rm -rf libxmlb-0.3.21
 # AppStream.
 tar -xf AppStream-1.0.4.tar.xz
 cd AppStream-1.0.4
-mkdir appstream-build; cd appstream-build
-meson setup --prefix=/usr --buildtype=minsize -Dvapi=true -Dcompose=true ..
-ninja
-ninja install
-install -t /usr/share/licenses/appstream -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dvapi=true -Dcompose=true
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/appstream -Dm644 COPYING
+cd ..
 rm -rf AppStream-1.0.4
 # appstream-glib.
 tar -xf appstream_glib_0_8_3.tar.gz
 cd appstream-glib-appstream_glib_0_8_3
-mkdir appstream-glib-build; cd appstream-glib-build
-meson setup --prefix=/usr --buildtype=minsize -Drpm=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/appstream-glib -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Drpm=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/appstream-glib -Dm644 COPYING
+cd ..
 rm -rf appstream-glib-appstream_glib_0_8_3
 # Bubblewrap.
 tar -xf bubblewrap-0.11.0.tar.xz
 cd bubblewrap-0.11.0
-mkdir bwrap-build; cd bwrap-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/bubblewrap -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/bubblewrap -Dm644 COPYING
+cd ..
 rm -rf bubblewrap-0.11.0
 # xdg-dbus-proxy.
 tar -xf xdg-dbus-proxy-0.1.6.tar.xz
 cd xdg-dbus-proxy-0.1.6
-mkdir xdp-build; cd xdp-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/xdg-dbus-proxy -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/xdg-dbus-proxy -Dm644 COPYING
+cd ..
 rm -rf xdg-dbus-proxy-0.1.6
 # Malcontent (circular dependency; initial build without malcontent-ui).
 tar -xf malcontent-0.10.5.tar.xz
 cd malcontent-0.10.5
 tar -xf ../libglib-testing-0.1.1.tar.xz -C subprojects
 mv subprojects/libglib-testing{-0.1.1,}
-mkdir malcontent-build; cd malcontent-build
-meson setup --prefix=/usr --buildtype=minsize -Dui=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/malcontent -Dm644 ../COPYING ../COPYING-DOCS
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dui=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/malcontent -Dm644 COPYING{,-DOCS}
+cd ..
 rm -rf malcontent-0.10.5
 # Flatpak.
 tar -xf flatpak-1.14.10.tar.xz
@@ -6728,47 +6649,42 @@ tar -xf malcontent-0.10.5.tar.xz
 cd malcontent-0.10.5
 tar -xf ../libglib-testing-0.1.1.tar.xz -C subprojects
 mv subprojects/libglib-testing{-0.1.1,}
-mkdir malcontent-build; cd malcontent-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/malcontent -Dm644 ../COPYING ../COPYING-DOCS
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/malcontent -Dm644 COPYING{,-DOCS}
+cd ..
 rm -rf malcontent-0.10.5
 # libportal / libportal-gtk3.
 tar -xf libportal-0.9.0.tar.xz
 cd libportal-0.9.0
-mkdir portal-build; cd portal-build
-meson setup --prefix=/usr --buildtype=minsize -Dbackend-gtk3=enabled -Dbackend-gtk4=disabled -Dbackend-qt5=disabled -Ddocs=false -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libportal -Dm644 ../COPYING
-install -t /usr/share/licenses/libportal-gtk3 -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dbackend-gtk3=enabled -Dbackend-gtk4=disabled -Dbackend-qt5=disabled -Ddocs=false -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libportal -Dm644 COPYING
+install -t /usr/share/licenses/libportal-gtk3 -Dm644 COPYING
+cd ..
 rm -rf libportal-0.9.0
 # geocode-glib.
 tar -xf geocode-glib-3.26.4.tar.xz
 cd geocode-glib-3.26.4
-mkdir build-1.0; cd build-1.0
-meson setup --prefix=/usr --buildtype=minsize -Denable-installed-tests=false ..
-ninja
-ninja install
-mkdir ../build-2.0; cd ../build-2.0
-meson setup --prefix=/usr --buildtype=minsize -Denable-installed-tests=false -Dsoup2=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/geocode-glib -Dm644 ../COPYING.LIB
-cd ../..
+meson setup build1 --prefix=/usr --buildtype=minsize -Denable-installed-tests=false
+meson setup build2 --prefix=/usr --buildtype=minsize -Denable-installed-tests=false -Dsoup2=false
+ninja -C build1
+ninja -C build2
+ninja -C build1 install
+ninja -C build2 install
+install -t /usr/share/licenses/geocode-glib -Dm644 COPYING.LIB
+cd ..
 rm -rf geocode-glib-3.26.4
 # GeoClue.
 tar -xf geoclue-2.7.2.tar.bz2
 cd geoclue-2.7.2
-mkdir geoclue-build; cd geoclue-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/geoclue -Dm644 ../COPYING ../COPYING.LIB
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/geoclue -Dm644 COPYING{,.LIB}
+cd ..
 rm -rf geoclue-2.7.2
 # pefile.
 tar -xf pefile-2024.8.26.tar.gz
@@ -6835,22 +6751,20 @@ rm -rf rest-0.8.1
 tar -xf rest-0.9.1.tar.xz
 cd rest-0.9.1
 patch -Np1 -i ../patches/rest-0.9.1-upstreamfix.patch
-mkdir rest-build; cd rest-build
-meson setup --prefix=/usr --buildtype=minsize -Dexamples=false -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/rest -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dexamples=false -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/rest -Dm644 COPYING
+cd ..
 rm -rf rest-0.9.1
 # wpebackend-fdo.
 tar -xf wpebackend-fdo-1.14.3.tar.xz
 cd wpebackend-fdo-1.14.3
-mkdir fdo-build; cd fdo-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/wpebackend-fdo -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/wpebackend-fdo -Dm644 COPYING
+cd ..
 rm -rf wpebackend-fdo-1.14.3
 # libass.
 tar -xf libass-0.17.3.tar.xz
@@ -6864,12 +6778,11 @@ rm -rf libass-0.17.3
 # OpenH264.
 tar -xf openh264-2.5.0.tar.gz
 cd openh264-2.5.0
-mkdir H264-build; cd H264-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/openh264 -Dm644 ../LICENSE
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/openh264 -Dm644 LICENSE
+cd ..
 rm -rf openh264-2.5.0
 # libde265.
 tar -xf libde265-1.0.15.tar.gz
@@ -6941,12 +6854,11 @@ rm -rf twolame-0.4.0
 # Taglib.
 tar -xf taglib-2.0.2.tar.gz
 cd taglib-2.0.2
-mkdir taglib-build; cd taglib-build
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_SHARED_LIBS=ON -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/taglib -Dm644 ../COPYING.LGPL ../COPYING.MPL
-cd ../..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_SHARED_LIBS=ON -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/taglib -Dm644 COPYING.{LGPL,MPL}
+cd ..
 rm -rf taglib-2.0.2
 # SoundTouch.
 tar -xf soundtouch-2.3.3.tar.gz
@@ -7031,13 +6943,12 @@ rm -rf x264-da14df5535fd46776fb1c9da3130973295c87aca
 # x265.
 tar -xf x265_4.1.tar.gz
 cd x265_4.1
-mkdir x265-build; cd x265-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DGIT_ARCHETYPE=1 -Wno-dev -G Ninja ../source
-ninja
-ninja install
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DGIT_ARCHETYPE=1 -Wno-dev -G Ninja -B build -S source
+ninja -C build
+ninja -C build install
 rm -f /usr/lib/libx265.a
-install -t /usr/share/licenses/x265 -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/x265 -Dm644 COPYING
+cd ..
 rm -rf x265_4.1
 # libraw1394.
 tar -xf libraw1394-2.1.2.tar.xz
@@ -7069,12 +6980,11 @@ rm -rf libiec61883-1.2.0
 # libnice.
 tar -xf libnice-0.1.22.tar.gz
 cd libnice-0.1.22
-mkdir nice-build; cd nice-build
-meson setup --prefix=/usr --buildtype=minsize -Dexamples=disabled -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/libnice -Dm644 ../COPYING.LGPL
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dexamples=disabled -Dtests=disabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libnice -Dm644 COPYING.LGPL
+cd ..
 rm -rf libnice-0.1.22
 # libbs2b.
 tar -xf libbs2b-3.1.0.tar.bz2
@@ -7109,33 +7019,30 @@ rm -rf xvidcore
 # libaom.
 tar -xf libaom-3.11.0.tar.gz
 cd libaom-3.11.0
-mkdir libaom-build; cd libaom-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=1 -DENABLE_DOCS=0 -DENABLE_TESTS=0 -Wno-dev -G Ninja ..
-ninja
-ninja install
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=1 -DENABLE_DOCS=0 -DENABLE_TESTS=0 -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
 rm -f /usr/lib/libaom.a
-install -t /usr/share/licenses/libaom -Dm644 ../LICENSE ../PATENTS
-cd ../..
+install -t /usr/share/licenses/libaom -Dm644 LICENSE PATENTS
+cd ..
 rm -rf libaom-3.11.0
 # SVT-AV1.
 tar -xf SVT-AV1-v2.3.0.tar.bz2
 cd SVT-AV1-v2.3.0
-mkdir SVT-AV1-build; cd SVT-AV1-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=1 -DNATIVE=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/svt-av1 -Dm644 ../{LICENSE,LICENSE-BSD2,PATENTS}.md
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=1 -DNATIVE=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/svt-av1 -Dm644 {LICENSE{,-BSD2},PATENTS}.md
+cd ..
 rm -rf SVT-AV1-v2.3.0
 # dav1d.
 tar -xf dav1d-1.5.0.tar.xz
 cd dav1d-1.5.0
-mkdir dav1d-build; cd dav1d-build
-meson setup --prefix=/usr --buildtype=minsize -Denable_tests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/dav1d -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Denable_tests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/dav1d -Dm644 COPYING
+cd ..
 rm -rf dav1d-1.5.0
 # rav1e.
 tar -xf rav1e-0.7.1.tar.gz
@@ -7150,7 +7057,7 @@ install -Dm755 target/x86_64-unknown-linux-gnu/release/librav1e.so /usr/lib/libr
 ln -sf librav1e.so.0.7.1 /usr/lib/librav1e.so.0
 ln -sf librav1e.so.0.7.1 /usr/lib/librav1e.so
 ldconfig
-install -t /usr/share/licenses/rav1e -Dm644 LICENSE
+install -t /usr/share/licenses/rav1e -Dm644 LICENSE PATENTS
 cd ..
 rm -rf rav1e-0.7.1
 # wavpack.
@@ -7193,22 +7100,20 @@ rm -rf libmpeg2-upstream-0.5.1
 # libheif.
 tar -xf libheif-1.19.5.tar.gz
 cd libheif-1.19.5
-mkdir libheif-build; cd libheif-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_TESTING=OFF -DWITH_AOM_DECODER=ON -DWITH_AOM_ENCODER=ON -DWITH_DAV1D=ON -DWITH_JPEG_DECODER=ON -DWITH_JPEG_ENCODER=ON -DWITH_LIBDE265=ON -DWITH_OpenJPEG_DECODER=ON -DWITH_OpenJPEG_ENCODER=ON -DWITH_RAV1E=ON -DWITH_SvtEnc=ON -DWITH_X265=ON -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/libheif -Dm644 ../COPYING
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_TESTING=OFF -DWITH_AOM_DECODER=ON -DWITH_AOM_ENCODER=ON -DWITH_DAV1D=ON -DWITH_JPEG_DECODER=ON -DWITH_JPEG_ENCODER=ON -DWITH_LIBDE265=ON -DWITH_OpenJPEG_DECODER=ON -DWITH_OpenJPEG_ENCODER=ON -DWITH_RAV1E=ON -DWITH_SvtEnc=ON -DWITH_X265=ON -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libheif -Dm644 COPYING
+cd ..
 rm -rf libheif-1.19.5
 # libavif.
 tar -xf libavif-1.1.1.tar.gz
 cd libavif-1.1.1
-mkdir libavif-build; cd libavif-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DAVIF_BUILD_APPS=ON -DAVIF_BUILD_GDK_PIXBUF=ON -DAVIF_CODEC_AOM=SYSTEM -DAVIF_CODEC_SVT=SYSTEM -DAVIF_CODEC_DAV1D=SYSTEM -DAVIF_CODEC_RAV1E=SYSTEM -DAVIF_LIBYUV=LOCAL -DAVIF_ENABLE_WERROR=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/libavif -Dm644 ../LICENSE
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DAVIF_BUILD_APPS=ON -DAVIF_BUILD_GDK_PIXBUF=ON -DAVIF_CODEC_AOM=SYSTEM -DAVIF_CODEC_SVT=SYSTEM -DAVIF_CODEC_DAV1D=SYSTEM -DAVIF_CODEC_RAV1E=SYSTEM -DAVIF_LIBYUV=LOCAL -DAVIF_ENABLE_WERROR=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libavif -Dm644 LICENSE
+cd ..
 rm -rf libavif-1.1.1
 # chafa.
 tar -xf chafa-1.14.5.tar.xz
@@ -7219,6 +7124,14 @@ make install
 install -t /usr/share/licenses/chafa -Dm644 COPYING{,.LESSER}
 cd ..
 rm -rf chafa-1.14.5
+# HarfBuzz (rebuild again to support chafa).
+tar -xf harfbuzz-10.1.0.tar.xz
+cd harfbuzz-10.1.0
+meson setup build --prefix=/usr --buildtype=minsize -Dgraphite2=enabled -Dtests=disabled
+ninja -C build
+ninja -C build install
+cd ..
+rm -rf harfbuzz-10.1.0
 # FAAC.
 tar -xf faac-1_30.tar.gz
 cd faac-1_30
@@ -7233,12 +7146,11 @@ rm -rf faac-1_30
 # FAAD2.
 tar -xf faad2-2.11.1.tar.gz
 cd faad2-2.11.1
-mkdir faad2-build; cd faad2-build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/faad2 -Dm644 ../COPYING
-cd ../..
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/faad2 -Dm644 COPYING
+cd ..
 rm -rf faad2-2.11.1
 # FFmpeg.
 tar -xf ffmpeg-7.1.tar.xz
@@ -7247,140 +7159,84 @@ patch -Np1 -i ../patches/ffmpeg-7.1-chromium.patch
 sed -i 's/X265_BUILD >= 210/(&) \&\& (X265_BUILD < 213)/' libavcodec/libx265.c
 ./configure --prefix=/usr --disable-debug --disable-htmlpages --disable-nonfree --disable-static --enable-alsa --enable-bzlib --enable-gmp --enable-gpl --enable-iconv --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcdio --enable-libdav1d --enable-libdrm --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libiec61883 --enable-libjack --enable-libmodplug --enable-libmp3lame --enable-libopenh264 --enable-libopenjpeg --enable-libopus --enable-libpulse --enable-librav1e --enable-librsvg --enable-librtmp --enable-libspeex --enable-libsvtav1 --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxcb --enable-libxcb-shape --enable-libxcb-shm --enable-libxcb-xfixes --enable-libxml2 --enable-libxvid --enable-manpages --enable-opengl --enable-openssl --enable-optimizations --enable-sdl2 --enable-shared --enable-small --enable-stripping --enable-vaapi --enable-vdpau --enable-version3 --enable-vulkan --enable-xlib --enable-zlib
 make
-gcc $CFLAGS tools/qt-faststart.c -o tools/qt-faststart
+gcc $CFLAGS tools/qt-faststart.c -o tools/qt-faststart $LDFLAGS
 make install
-install -m755 tools/qt-faststart /usr/bin
+install -t /usr/bin -Dm755 tools/qt-faststart
 install -t /usr/share/licenses/ffmpeg -Dm644 COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1 COPYING.LGPLv3 LICENSE.md
 cd ..
 rm -rf ffmpeg-7.1
 # OpenAL.
 tar -xf openal-soft-1.24.1.tar.gz
-cd openal-soft-1.24.1/build
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DALSOFT_EXAMPLES=OFF -Wno-dev -G Ninja ..
-ninja
-ninja install
-install -t /usr/share/licenses/openal -Dm644 ../COPYING ../BSD-3Clause
-cd ../..
+cd openal-soft-1.24.1
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DALSOFT_EXAMPLES=OFF -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/openal -Dm644 COPYING BSD-3Clause
+cd ..
 rm -rf openal-soft-1.24.1
-# GStreamer.
-tar -xf gstreamer-1.24.10.tar.xz
+# GStreamer / gst-plugins-{base,good,bad,ugly} / gst-libav / gstreamer-vaapi / gst-editing-services / gst-python
+tar -xf gstreamer-1.24.10.tar.bz2
 cd gstreamer-1.24.10
-mkdir gstreamer-build; cd gstreamer-build
-CFLAGS="-O2" CXXFLAGS="-O2" meson setup --prefix=/usr --buildtype=plain -Dbenchmarks=disabled -Dexamples=disabled -Dgst_debug=false -Dpackage-name="MassOS GStreamer 1.24.10" -Dpackage-origin="https://massos.org" -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/gstreamer -Dm644 ../COPYING
-cd ../..
-rm -rf gstreamer-1.24.10
-# gst-plugins-base.
-tar -xf gst-plugins-base-1.24.10.tar.xz
-cd gst-plugins-base-1.24.10
-mkdir base-build; cd base-build
-CFLAGS="-O2" CXXFLAGS="-O2" meson setup --prefix=/usr --buildtype=plain -Dexamples=disabled -Dpackage-name="MassOS GStreamer 1.24.10 (base plugins)" -Dpackage-origin="https://massos.org" -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/gst-plugins-base -Dm644 ../COPYING
-cd ../..
-rm -rf gst-plugins-base-1.24.10
-# gst-plugins-good.
-tar -xf gst-plugins-good-1.24.10.tar.xz
-cd gst-plugins-good-1.24.10
-mkdir good-build; cd good-build
-CFLAGS="-O2" CXXFLAGS="-O2" meson setup --prefix=/usr --buildtype=plain -Dexamples=disabled -Dpackage-name="MassOS GStreamer 1.24.10 (good plugins)" -Dpackage-origin="https://massos.org" -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/gst-plugins-good -Dm644 ../COPYING
-cd ../..
-rm -rf gst-plugins-good-1.24.10
-# gst-plugins-bad.
-tar -xf gst-plugins-bad-1.24.10.tar.xz
-cd gst-plugins-bad-1.24.10
-mkdir bad-build; cd bad-build
-CFLAGS="-O2" CXXFLAGS="-O2" meson setup --prefix=/usr --buildtype=plain -Dexamples=disabled -Dgpl=enabled -Dpackage-name="MassOS GStreamer 1.24.10 (bad plugins)" -Dpackage-origin="https://massos.org" -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/gst-plugins-bad -Dm644 ../COPYING
-cd ../..
-rm -rf gst-plugins-bad-1.24.10
-# gst-plugins-ugly.
-tar -xf gst-plugins-ugly-1.24.10.tar.xz
-cd gst-plugins-ugly-1.24.10
-mkdir ugly-build; cd ugly-build
-CFLAGS="-O2" CXXFLAGS="-O2" meson setup --prefix=/usr --buildtype=plain -Dgpl=enabled -Dpackage-name="MassOS GStreamer 1.24.10 (ugly plugins)" -Dpackage-origin="https://massos.org" -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/gst-plugins-ugly -Dm644 ../COPYING
-cd ../..
-rm -rf gst-plugins-ugly-1.24.10
-# gst-libav.
-tar -xf gst-libav-1.24.10.tar.xz
-cd gst-libav-1.24.10
-mkdir gst-libav-build; cd gst-libav-build
-CFLAGS="-O2" CXXFLAGS="-O2" meson setup --prefix=/usr --buildtype=plain -Dpackage-name="MassOS GStreamer 1.24.10 (libav plugin)" -Dpackage-origin="https://massos.org" -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/gst-libav -Dm644 ../COPYING
-cd ../..
-rm -rf gst-libav-1.24.10
-# gstreamer-vaapi.
-tar -xf gstreamer-vaapi-1.24.10.tar.xz
-cd gstreamer-vaapi-1.24.10
-mkdir gstreamer-vaapi-build; cd gstreamer-vaapi-build
-CFLAGS="-O2" CXXFLAGS="-O2" meson setup --prefix=/usr --buildtype=plain -Dexamples=disabled -Dpackage-origin="https://massos.org" -Dtests=disabled ..
-ninja
-ninja install
-install -t /usr/share/licenses/gstreamer-vaapi -Dm644 ../COPYING.LIB
-cd ../..
-rm -rf gstreamer-vaapi-1.24.10
+meson setup build --prefix=/usr --buildtype=minsize -Ddevtools=disabled -Dexamples=disabled -Dglib-asserts=disabled -Dglib-checks=disabled -Dgobject-cast-checks=disabled -Dgpl=enabled -Dgst-examples=disabled -Dlibnice=disabled -Dorc-source=system -Dpackage-name="MassOS GStreamer 1.24.10" -Dpackage-origin="https://massos.org" -Drtsp_server=disabled -Dtests=disabled -Dvaapi=enabled -Dgst-plugins-bad:aja=disabled -Dgst-plugins-bad:avtp=disabled -Dgst-plugins-bad:fdkaac=disabled -Dgst-plugins-bad:gpl=enabled -Dgst-plugins-bad:iqa=disabled -Dgst-plugins-bad:srtp=disabled -Dgst-plugins-bad:tinyalsa=disabled -Dgst-plugins-ugly:gpl=enabled
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gstreamer -Dm644 LICENSE
+install -t /usr/share/licenses/gst-plugins-base -Dm644 subprojects/gst-plugins-base/COPYING
+install -t /usr/share/licenses/gst-plugins-good -Dm644 subprojects/gst-plugins-good/COPYING
+install -t /usr/share/licenses/gst-plugins-bad -Dm644 subprojects/gst-plugins-bad/COPYING
+install -t /usr/share/licenses/gst-plugins-ugly -Dm644 subprojects/gst-plugins-ugly/COPYING
+install -t /usr/share/licenses/gst-libav -Dm644 subprojects/gst-libav/COPYING
+install -t /usr/share/licenses/gstreamer-vaapi -Dm644 subprojects/gstreamer-vaapi/COPYING.LIB
+install -t /usr/share/licenses/gst-editing-services -Dm644 subprojects/gst-editing-services/COPYING{,.LIB}
+install -t /usr/share/licenses/gst-python -Dm644 subprojects/gst-python/COPYING
+cd ..
+rm -rf gstreamer-1.24.10.tar.bz2
 # PipeWire + WirePlumber.
 tar -xf pipewire-1.2.7.tar.bz2
 cd pipewire-1.2.7
 mkdir -p subprojects/wireplumber
 tar -xf ../wireplumber-0.5.7.tar.bz2 -C subprojects/wireplumber --strip-components=1
-mkdir pipewire-build; cd pipewire-build
-meson setup --prefix=/usr --buildtype=minsize -Dbluez5-backend-native-mm=enabled -Dexamples=disabled -Dffmpeg=enabled -Dpw-cat-ffmpeg=enabled -Dtests=disabled -Dvulkan=enabled -Dsession-managers=wireplumber -Dwireplumber:system-lua=true -Dwireplumber:tests=false ..
-ninja
-ninja install
+meson setup build --prefix=/usr --buildtype=minsize -Dbluez5-backend-native-mm=enabled -Dexamples=disabled -Dffmpeg=enabled -Dpw-cat-ffmpeg=enabled -Dtests=disabled -Dvulkan=enabled -Dsession-managers=wireplumber -Dwireplumber:system-lua=true -Dwireplumber:tests=false
+ninja -C build
+ninja -C build install
 systemctl --global enable pipewire.socket pipewire-pulse.socket
 systemctl --global enable wireplumber
 echo "autospawn = no" >> /etc/pulse/client.conf
-install -t /usr/share/licenses/pipewire -Dm644 ../COPYING
-install -t /usr/share/licenses/wireplumber -Dm644 ../subprojects/wireplumber/LICENSE
-cd ../..
+install -t /usr/share/licenses/pipewire -Dm644 COPYING
+install -t /usr/share/licenses/wireplumber -Dm644 subprojects/wireplumber/LICENSE
+cd ..
 rm -rf pipewire-1.2.7
 # xdg-desktop-portal.
 tar -xf xdg-desktop-portal-1.18.4.tar.xz
 cd xdg-desktop-portal-1.18.4
-mkdir xdp-build; cd xdp-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/xdg-desktop-portal -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/xdg-desktop-portal -Dm644 COPYING
+cd ..
 rm -rf xdg-desktop-portal-1.18,4
 # xdg-desktop-portal-gtk.
 tar -xf xdg-desktop-portal-gtk-1.15.1.tar.xz
 cd xdg-desktop-portal-gtk-1.15.1
-mkdir xdpg-build; cd xdpg-build
-meson setup --prefix=/usr --buildtype=minsize -Dappchooser=enabled -Dlockdown=enabled -Dsettings=enabled -Dwallpaper=disabled ..
-ninja
-ninja install
+meson setup build --prefix=/usr --buildtype=minsize -Dappchooser=enabled -Dlockdown=enabled -Dsettings=enabled -Dwallpaper=disabled
+ninja -C build
+ninja -C build install
 cat > /etc/xdg/autostart/xdg-desktop-portal-gtk.desktop << "END"
 [Desktop Entry]
 Type=Application
 Name=Portal service (GTK/GNOME implementation)
 Exec=/bin/bash -c "dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY; systemctl start --user xdg-desktop-portal-gtk.service"
 END
-install -t /usr/share/licenses/xdg-desktop-portal-gtk -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/xdg-desktop-portal-gtk -Dm644 COPYING
+cd ..
 rm -rf xdg-desktop-portal-gtk-1.15.1
 # WebKitGTK.
 tar -xf webkitgtk-2.46.5.tar.xz
 cd webkitgtk-2.46.5
 sed -i '/U_SHOW_CPLUSPLUS_API/a#define U_SHOW_CPLUSPLUS_HEADER_API 0' Source/WTF/wtf/Platform.h
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_RPATH=ON -DPORT=GTK -DLIB_INSTALL_DIR=/usr/lib -DENABLE_BUBBLEWRAP_SANDBOX=ON -DENABLE_GAMEPAD=OFF -DENABLE_MINIBROWSER=ON -DUSE_AVIF=ON -DUSE_GTK4=OFF -DUSE_JPEGXL=OFF -DUSE_LIBBACKTRACE=OFF -DUSE_LIBHYPHEN=OFF -DUSE_WOFF2=ON -Wno-dev -G Ninja -B Build -S .
-ninja -C Build
-ninja -C Build install
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_RPATH=ON -DPORT=GTK -DLIB_INSTALL_DIR=/usr/lib -DENABLE_BUBBLEWRAP_SANDBOX=ON -DENABLE_GAMEPAD=OFF -DENABLE_MINIBROWSER=ON -DUSE_AVIF=ON -DUSE_GTK4=OFF -DUSE_JPEGXL=OFF -DUSE_LIBBACKTRACE=OFF -DUSE_LIBHYPHEN=OFF -DUSE_WOFF2=ON -Wno-dev -G Ninja -B build -S .
+ninja -C build
+ninja -C build install
 install -dm755 /usr/share/licenses/webkitgtk
 find Source -name 'COPYING*' -or -name 'LICENSE*' -print0 | sort -z | while IFS= read -d $'\0' -r _f; do echo "### $_f ###"; cat "$_f"; echo; done > /usr/share/licenses/webkitgtk/LICENSE
 cd ..
@@ -7424,42 +7280,38 @@ rm -rf clutter-gst-3.0.27
 # libchamplain.
 tar -xf libchamplain-0.12.21.tar.xz
 cd libchamplain-0.12.21
-mkdir champlain-build; cd champlain-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/libchamplain -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libchamplain -Dm644 COPYING
+cd ..
 rm -rf libchamplain-0.12.21
 # gspell.
 tar -xf gspell-1.14.0.tar.xz
 cd gspell-1.14.0
-mkdir gspell-build; cd gspell-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/gspell -Dm644 ../LICENSES/LGPL-2.1-or-later.txt
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gspell -Dm644 LICENSES/LGPL-2.1-or-later.txt
+cd ..
 rm -rf gspell-1.14.0
 # gnome-online-accounts.
 tar -xf gnome-online-accounts-3.48.3.tar.xz
 cd gnome-online-accounts-3.48.3
-mkdir goa-build; cd goa-build
-meson setup --prefix=/usr --buildtype=minsize -Dfedora=false -Dman=true -Dmedia_server=true ..
-ninja
-ninja install
-install -t /usr/share/licenses/gnome-online-accounts -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dfedora=false -Dman=true -Dmedia_server=true
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gnome-online-accounts -Dm644 COPYING
+cd ..
 rm -rf gnome-online-accounts-3.48.3
 # libgdata.
 tar -xf libgdata-0.18.1.tar.xz
 cd libgdata-0.18.1
-mkdir gdata-build; cd gdata-build
-meson setup --prefix=/usr --buildtype=minsize -Dalways_build_tests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/libgdata -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dalways_build_tests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libgdata -Dm644 COPYING
+cd ..
 rm -rf libgdata-0.18.1
 # gtksourceview3.
 tar -xf gtksourceview-3.24.11-28-g73e57b5.tar.gz
@@ -7474,12 +7326,11 @@ rm -rf gtksourceview-73e57b5787ac60776c57032e05a4cc32207f9cf6
 # gtksourceview4.
 tar -xf gtksourceview-4.8.4.tar.xz
 cd gtksourceview-4.8.4
-mkdir GTKSV4-build; cd GTKSV4-build
-meson setup --prefix=/usr --buildtype=minsize ..
-ninja
-ninja install
-install -t /usr/share/licenses/gtksourceview4 -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gtksourceview4 -Dm644 COPYING
+cd ..
 rm -rf gtksourceview-4.8.4
 # yad.
 tar -xf yad-14.1.tar.xz
@@ -7493,37 +7344,42 @@ rm -rf yad-14.1
 # msgraph.
 tar -xf msgraph-0.2.3.tar.gz
 cd msgraph-0.2.3
-mkdir MSGRAPH-build; cd MSGRAPH-build
-meson setup --prefix=/usr --buildtype=minsize -Dtests=false ..
-ninja
-ninja install
-install -t /usr/share/licenses/msgraph -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dtests=false
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/msgraph -Dm644 COPYING
+cd ..
 rm -rf msgraph-0.2.3
 # GVFS.
 tar -xf gvfs-1.56.1.tar.xz
 cd gvfs-1.56.1
-mkdir gvfs-build; cd gvfs-build
-meson setup --prefix=/usr --buildtype=minsize -Dgcr=false -Dman=true ..
-ninja
-ninja install
-glib-compile-schemas /usr/share/glib-2.0/schemas
-install -t /usr/share/licenses/gvfs -Dm644 ../COPYING
-cd ../..
+meson setup build --prefix=/usr --buildtype=minsize -Dman=true
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/gvfs -Dm644 COPYING
+cd ..
 rm -rf gvfs-1.56.1
+# gPlanarity.
+tar -xf gplanarity_17906.orig.tar.gz
+cd gplanarity-17906
+patch -Np1 -i ../patches/gplanarity-17906-fixes.patch
+make
+make PREFIX=/usr install
+install -t /usr/share/licenses/gplanarity -Dm644 COPYING
+cd ..
+rm -rf gplanarity-17906
 # Plymouth.
 tar -xf plymouth-24.004.60.tar.bz2
 cd plymouth-24.004.60
-mkdir plymouth-build; cd plymouth-build
-meson setup --prefix=/usr --buildtype=minsize -Dlogo=/usr/share/massos/massos-logo-sidetext.png -Drelease-file=/etc/os-release ..
-ninja
-ninja install
+meson setup build --prefix=/usr --buildtype=minsize -Dlogo=/usr/share/massos/massos-logo-sidetext.png -Drelease-file=/etc/os-release
+ninja -C build
+ninja -C build install
 sed -i 's/dracut -f/mkinitramfs/' /usr/libexec/plymouth/plymouth-update-initrd
 sed -i 's/WatermarkVerticalAlignment=.96/WatermarkVerticalAlignment=.5/' /usr/share/plymouth/themes/spinner/spinner.plymouth
 cp /usr/share/massos/massos-logo-sidetext.png /usr/share/plymouth/themes/spinner/watermark.png
 plymouth-set-default-theme bgrt
-install -t /usr/share/licenses/plymouth -Dm644 ../COPYING
-cd ../..
+install -t /usr/share/licenses/plymouth -Dm644 COPYING
+cd ..
 rm -rf plymouth-24.004.60
 # Busybox.
 tar -xf busybox-1.37.0.tar.bz2

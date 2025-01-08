@@ -64,6 +64,7 @@ cups
 cups-browsed
 cups-filters
 cups-pdf
+cups-pk-helper
 curl
 cyrus-sasl
 cython
@@ -91,6 +92,7 @@ docbook-xsl-nons
 docutils
 dos2unix
 dosfstools
+dotconf
 dracut
 duktape
 dvd+rw-tools
@@ -107,6 +109,7 @@ enchant
 exfatprogs
 exiv2
 expat
+f2fs-tools
 faac
 faad2
 fakeroot
@@ -138,6 +141,7 @@ gawk
 gcab
 gcc
 gcr
+gcr4
 gdbm
 gdk-pixbuf
 geoclue
@@ -164,8 +168,9 @@ gnupg
 gnutls
 gobject-introspection
 gperf
-gpm
 gpgme
+gplanarity
+gpm
 gptfdisk
 graphene
 graphite2
@@ -175,11 +180,13 @@ groff
 grub
 gsettings-desktop-schemas
 gspell
+gst-editing-services
 gst-libav
 gst-plugins-bad
 gst-plugins-base
 gst-plugins-good
 gst-plugins-ugly
+gst-python
 gstreamer
 gstreamer-vaapi
 gtk-doc
@@ -218,7 +225,9 @@ itstool
 jack2
 jansson
 jasper
+jfsutils
 jinja2
+jp2a
 jq
 json
 json-c
@@ -558,6 +567,7 @@ qpdf
 qrencode
 rav1e
 readline
+reiserfsprogs
 requests
 rest
 rhash
