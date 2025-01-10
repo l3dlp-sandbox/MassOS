@@ -175,6 +175,7 @@ https://mirrors.dotsrc.org/gnome/sources/gnome-themes-extra/3.28/gnome-themes-ex
 https://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi-3.0.18.tar.bz2
 https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-2.5.1.tar.bz2
 https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.8.tar.xz
+https://dl.google.com/go/go1.23.4.linux-amd64.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/gobject-introspection/1.82/gobject-introspection-1.82.0.tar.xz
 https://mirror.lyrahosting.com/gnu/gperf/gperf-3.1.tar.gz
 https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.24.1.tar.bz2
@@ -424,7 +425,7 @@ https://www.x.org/archive/individual/lib/libXvMC-1.0.14.tar.xz
 https://www.x.org/archive/individual/lib/libXxf86dga-1.1.6.tar.xz
 https://www.x.org/archive/individual/lib/libXxf86vm-1.1.6.tar.xz
 https://github.com/nih-at/libzip/releases/download/v1.11.2/libzip-1.11.2.tar.xz
-https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.8.tar.xz
+https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.9.tar.xz
 https://github.com/linux-pam/linux-pam/releases/download/v1.6.1/Linux-PAM-1.6.1.tar.xz
 https://github.com/linux-pam/linux-pam/releases/download/v1.7.0/Linux-PAM-1.7.0.tar.xz
 https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.6/lld-19.1.6.src.tar.xz
@@ -554,6 +555,7 @@ https://codeberg.org/a-j-wood/pv/releases/download/v1.9.25/pv-1.9.25.tar.gz
 https://github.com/pygobject/pycairo/releases/download/v1.27.0/pycairo-1.27.0.tar.gz
 https://github.com/eliben/pycparser/archive/release_v2.22/pycparser-release_v2.22.tar.gz
 https://github.com/OpenPrinting/pycups/releases/download/v2.0.4/pycups-2.0.4.tar.gz
+https://github.com/eliben/pyelftools/archive/v0.31/pyelftools-0.31.tar.gz
 https://files.pythonhosted.org/packages/source/P/Pygments/pygments-2.18.0.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/pygobject/3.50/pygobject-3.50.0.tar.xz
 https://github.com/pyca/pyopenssl/archive/24.3.0/pyopenssl-24.3.0.tar.gz
@@ -625,7 +627,7 @@ https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v2.3.0/SVT-AV1-v2.3.0.tar.bz2
 https://github.com/swig/swig/archive/v4.3.0/swig-4.3.0.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/sysprof/47/sysprof-47.1.tar.xz
 https://github.com/OpenPrinting/system-config-printer/releases/download/v1.5.18/system-config-printer-1.5.18.tar.xz
-https://github.com/systemd/systemd/archive/v257.1/systemd-257.1.tar.gz
+https://github.com/systemd/systemd/archive/v257.2/systemd-257.2.tar.gz
 https://taglib.org/releases/taglib-2.0.2.tar.gz
 https://mirror.lyrahosting.com/gnu/tar/tar-1.35.tar.xz
 https://freefr.dl.sourceforge.net/project/tcl/Tcl/8.6.15/tcl8.6.15-src.tar.gz
@@ -740,6 +742,7 @@ https://github.com/Cyan4973/xxHash/archive/v0.8.3/xxHash-0.8.3.tar.gz
 https://freefr.dl.sourceforge.net/project/lzmautils/xz-5.6.3.tar.xz
 https://github.com/v1cont/yad/releases/download/v14.1/yad-14.1.tar.xz
 https://github.com/yaml/libyaml/releases/download/0.2.5/yaml-0.2.5.tar.gz
+https://github.com/mikefarah/yq/archive/v4.44.6/yq-4.44.6.tar.gz
 https://github.com/Yeraze/ytnef/archive/v2.1.2/ytnef-2.1.2.tar.gz
 https://github.com/ibireme/yyjson/archive/0.10.0/yyjson-0.10.0.tar.gz
 https://freefr.dl.sourceforge.net/project/infozip/Zip%203.x%20%28latest%29/3.0/zip30.tar.gz

@@ -372,7 +372,7 @@ Upgraded software (core):
 - libXxf86dga: `1.1.5 --> 1.1.6`
 - libXxf86vm: `1.1.5 --> 1.1.6`
 - libzip: `1.9.2 --> 1.11.2`
-- Linux: `6.0.0 --> 6.12.8`
+- Linux: `6.0.0 --> 6.12.9`
 - Linux-PAM: `1.5.2 --> 1.7.0`
 - LLD: `14.0.6 --> 19.1.6`
 - LLVM: `14.0.6 --> 19.1.6`
@@ -481,6 +481,7 @@ Upgraded software (core):
 - PyCairo: `1.21.0 --> 1.27.0`
 - pycparser: `2.21 --> 2.22`
 - pycups: `(new package) --> 2.0.4`
+- pyelftools: `(new package) --> 0.31`
 - Pygments: `2.13.0 --> 2.18.0`
 - PyGObject: `3.42.2 --> 3.50.0`
 - pyopenssl: `22.1.0 --> 24.3.0`
@@ -530,7 +531,7 @@ Upgraded software (core):
 - SVT-AV1: `(new package) --> 2.3.0`
 - SWIG: `4.0.2 --> 4.3.0`
 - system-config-printer: `(new package) --> 1.5.18`
-- systemd: `251.5 --> 257.1`
+- systemd: `251.5 --> 257.2`
 - Taglib: `1.12 --> 2.0.2`
 - tar: `1.34 --> 1.35`
 - Tcl: `8.6.12 --> 8.6.15`
@@ -629,6 +630,7 @@ Upgraded software (core):
 - xxhash: `0.8.1 --> 0.8.3`
 - xz: `5.2.7 --> 5.6.3`
 - yad: `(new package) --> 14.1`
+- yq: `(new package) --> 4.44.6`
 - ytnef: `2.0 --> 2.1.2`
 - yyjson: `(new package) --> 0.10.0`
 - zipp: `3.7.0 --> 3.21.0`

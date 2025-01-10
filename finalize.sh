@@ -15,6 +15,7 @@ fi
 zman /usr/share/man
 # Remove leftover junk in /root.
 rm -rf /root/.{cache,cargo,cmake}
+rm -rf /root/go
 # Remove Debian stuff.
 rm -rf /etc/kernel
 # Move any misplaced files.

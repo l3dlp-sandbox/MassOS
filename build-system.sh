@@ -58,7 +58,7 @@ for i in /usr/share/massos/*.png; do ln -sfr $i /usr/share/pixmaps; done
 # Set the locale correctly.
 mkdir -p /usr/lib/locale
 mklocales 2>/dev/null
-# Install Rust to a temporary directory to support building some packages.
+# Install Rust and Go to temporary directories for building some packages.
 tar -xf rust-1.83.0-x86_64-unknown-linux-gnu.tar.gz
 cd rust-1.83.0-x86_64-unknown-linux-gnu
 ./install.sh --prefix=/sources/rust --without=rust-docs
@@ -67,6 +67,7 @@ tar -xf ../bindgen-cli-x86_64-unknown-linux-gnu.tar.xz -C /sources/rust/bin --st
 install -t /sources/rust/bin -Dm755 ../cbindgen
 cd ..
 rm -rf rust-1.83.0-x86_64-unknown-linux-gnu
+tar -xf go1.23.4.linux-amd64.tar.gz
 # Bison (circular deps; rebuilt later).
 tar -xf bison-3.8.2.tar.xz
 cd bison-3.8.2
@@ -1460,6 +1461,22 @@ pip --disable-pip-version-check install --root-user-action ignore --no-cache-dir
 install -t /usr/share/licenses/mako -Dm644 LICENSE
 cd ..
 rm -rf mako-rel_1_3_7
+# pefile.
+tar -xf pefile-2024.8.26.tar.gz
+cd pefile-2024.8.26
+pip --disable-pip-version-check wheel --no-build-isolation --no-cache-dir --no-deps -w dist .
+pip --disable-pip-version-check install --root-user-action ignore --no-cache-dir --no-index --no-user -f dist pefile
+install -t /usr/share/licenses/pefile -Dm644 LICENSE
+cd ..
+rm -rf pefile-2024.8.26
+# pyelftools.
+tar -xf pyelftools-0.31.tar.gz
+cd pyelftools-0.31
+pip --disable-pip-version-check wheel --no-build-isolation --no-cache-dir --no-deps -w dist .
+pip --disable-pip-version-check install --root-user-action ignore --no-cache-dir --no-index --no-user -f dist pyelftools
+install -t /usr/share/licenses/pyelftools -Dm644 LICENSE
+cd ..
+rm -rf pyelftools-0.31
 # Pygments.
 tar -xf pygments-2.18.0.tar.gz
 cd pygments-2.18.0
@@ -2196,9 +2213,9 @@ install -t /usr/share/licenses/hwdata -Dm644 COPYING
 cd ..
 rm -rf hwdata-0.391
 # systemd (initial build; will be rebuilt later to support more features).
-tar -xf systemd-257.1.tar.gz
-cd systemd-257.1
-meson setup build --prefix=/usr --sysconfdir=/etc --localstatedir=/var --buildtype=minsize -Dmode=release -Dversion-tag=257.1-massos -Dshared-lib-tag=257.1-massos -Dbpf-framework=false -Dcryptolib=openssl -Ddefault-compression=xz -Ddefault-dnssec=no -Ddev-kvm-mode=0660 -Ddns-over-tls=openssl -Dfallback-hostname=massos -Dhomed=false -Dinitrd=true -Dinstall-tests=false -Dman=true -Dpamconfdir=/etc/pam.d -Drpmmacrosdir=no -Dsysupdate=disabled -Dsysusers=true -Dtests=false -Dtpm=true -Dukify=disabled -Duserdb=false
+tar -xf systemd-257.2.tar.gz
+cd systemd-257.2
+meson setup build --prefix=/usr --sysconfdir=/etc --localstatedir=/var --buildtype=minsize -Dmode=release -Dversion-tag=257.2-massos -Dshared-lib-tag=257.2-massos -Dbpf-framework=disabled -Dcryptolib=openssl -Ddefault-compression=xz -Ddefault-dnssec=no -Ddev-kvm-mode=0660 -Ddns-over-tls=openssl -Dfallback-hostname=massos -Dhomed=disabled -Dinitrd=true -Dinstall-tests=false -Dman=enabled -Dpamconfdir=/etc/pam.d -Drpmmacrosdir=no -Dsysupdate=disabled -Dsysusers=true -Dtests=false -Dtpm=true -Dukify=disabled -Duserdb=false
 ninja -C build
 ninja -C build install
 systemd-machine-id-setup
@@ -2226,7 +2243,7 @@ install -t /usr/lib/systemd/system -Dm644 ../systemd-units/*
 systemctl enable gpm
 install -t /usr/share/licenses/systemd -Dm644 LICENSE.{GPL2,LGPL2.1} LICENSES/*
 cd ..
-rm -rf systemd-257.1
+rm -rf systemd-257.2
 # D-Bus (initial build; will be rebuilt later for X and libaudit support).
 tar -xf dbus-1.14.10.tar.xz
 cd dbus-1.14.10
@@ -4743,9 +4760,9 @@ install -t /usr/share/licenses/egl-wayland -Dm644 COPYING
 cd ..
 rm -rf egl-wayland-1.1.17
 # systemd (rebuild to support more features).
-tar -xf systemd-257.1.tar.gz
-cd systemd-257.1
-meson setup build --prefix=/usr --sysconfdir=/etc --localstatedir=/var --buildtype=minsize -Dmode=release -Dversion-tag=257.1-massos -Dshared-lib-tag=257.1-massos -Dbpf-framework=true -Dcryptolib=openssl -Ddefault-compression=xz -Ddefault-dnssec=no -Ddev-kvm-mode=0660 -Ddns-over-tls=openssl -Dfallback-hostname=massos -Dhomed=true -Dinitrd=true -Dinstall-tests=false -Dman=true -Dpamconfdir=/etc/pam.d -Drpmmacrosdir=no -Dsysupdate=disabled -Dsysusers=true -Dtests=false -Dtpm=true -Dukify=disabled -Duserdb=true
+tar -xf systemd-257.2.tar.gz
+cd systemd-257.2
+meson setup build --prefix=/usr --sysconfdir=/etc --localstatedir=/var --buildtype=minsize -Dmode=release -Dversion-tag=257.2-massos -Dshared-lib-tag=257.2-massos -Dbpf-framework=enabled -Dcryptolib=openssl -Ddefault-compression=xz -Ddefault-dnssec=no -Ddev-kvm-mode=0660 -Ddns-over-tls=openssl -Dfallback-hostname=massos -Dhomed=disabled -Dinitrd=true -Dinstall-tests=false -Dman=enabled -Dpamconfdir=/etc/pam.d -Drpmmacrosdir=no -Dsysupdate=disabled -Dsysusers=true -Dtests=false -Dtpm=true -Dukify=disabled -Duserdb=true
 ninja -C build
 ninja -C build install
 cat > /etc/pam.d/systemd-user << "END"
@@ -4761,7 +4778,7 @@ auth     required pam_deny.so
 password required pam_deny.so
 END
 cd ..
-rm -rf systemd-257.1
+rm -rf systemd-257.2
 # D-Bus (rebuild for X and libaudit support).
 tar -xf dbus-1.14.10.tar.xz
 cd dbus-1.14.10
@@ -4932,6 +4949,20 @@ make install
 install -t /usr/share/licenses/libisoburn -Dm644 COPYING COPYRIGHT
 cd ..
 rm -rf libisoburn-1.5.6
+# yq.
+tar -xf yq-4.44.6.tar.gz
+cd yq-4.44.6
+go build -trimpath -buildmode=pie -ldflags="-linkmode=external"
+install -t /usr/bin -Dm755 yq
+install -dm755 /usr/share/bash-completion/completions
+install -dm755 /usr/share/zsh/site-functions
+install -dm755 /usr/share/fish/vendor_completions.d
+yq completion bash > /usr/share/bash-completion/completions/yq
+yq completion zsh > /usr/share/zsh/site-functions/_yq
+yq completion fish > /usr/share/fish/vendor_completions.d/yq.fish
+install -t /usr/share/licenses/yq -Dm644 LICENSE
+cd ..
+rm -rf yq-4.44.6
 # tldr (we use the Rust version called 'tealdeer' for faster runtime).
 tar -xf tealdeer-1.7.1.tar.gz
 cd tealdeer-1.7.1
@@ -6630,13 +6661,14 @@ make install
 cat >> /etc/profile.d/flatpak.sh << "END"
 # Ensure PATH includes Flatpak directories.
 if [ -n "$XDG_DATA_HOME" ] && [ -d "$XDG_DATA_HOME/flatpak/exports/bin" ]; then
-  pathappend "$XDG_DATA_HOME/flatpak/exports/bin"
+  PATH="$PATH:$XDG_DATA_HOME/flatpak/exports/bin"
 elif [ -n "$HOME" ] && [ -d "$HOME/.local/share/flatpak/exports/bin" ]; then
-  pathappend "$HOME/.local/share/flatpak/exports/bin"
+  PATH="$PATH:$HOME/.local/share/flatpak/exports/bin"
 fi
 if [ -d /var/lib/flatpak/exports/bin ]; then
-  pathappend /var/lib/flatpak/exports/bin
+  PATH="$PATH:/var/lib/flatpak/exports/bin"
 fi
+export PATH
 END
 sed -i 's|"Flatpak system helper" -|"Flatpak system helper" /var/lib/flatpak|' /usr/lib/sysusers.d/flatpak.conf
 systemd-sysusers
@@ -6686,14 +6718,6 @@ ninja -C build install
 install -t /usr/share/licenses/geoclue -Dm644 COPYING{,.LIB}
 cd ..
 rm -rf geoclue-2.7.2
-# pefile.
-tar -xf pefile-2024.8.26.tar.gz
-cd pefile-2024.8.26
-pip --disable-pip-version-check wheel --no-build-isolation --no-cache-dir --no-deps -w dist .
-pip --disable-pip-version-check install --root-user-action ignore --no-cache-dir --no-index --no-user -f dist pefile
-install -t /usr/share/licenses/pefile -Dm644 LICENSE
-cd ..
-rm -rf pefile-2024.8.26
 # passim.
 tar -xf passim-0.1.8.tar.xz
 cd passim-0.1.8
@@ -7392,8 +7416,8 @@ install -t /usr/share/licenses/busybox -Dm644 LICENSE
 cd ..
 rm -rf busybox-1.37.0
 # Linux Kernel.
-tar -xf linux-6.12.8.tar.xz
-cd linux-6.12.8
+tar -xf linux-6.12.9.tar.xz
+cd linux-6.12.9
 make mrproper
 cp ../kernel-config .config
 make olddefconfig
@@ -7430,7 +7454,7 @@ find "$builddir" -type f -name '*.o' -delete
 ln -sr "$builddir" "/usr/src/linux"
 install -t /usr/share/licenses/linux -Dm644 COPYING LICENSES/exceptions/* LICENSES/preferred/*
 cd ..
-rm -rf linux-6.12.8
+rm -rf linux-6.12.9
 unset builddir
 # NVIDIA Open Kernel Modules.
 tar -xf open-gpu-kernel-modules-565.77.tar.gz
@@ -7450,7 +7474,7 @@ unset KREL
 gcc $CFLAGS massos-release.c -o massos-release
 install -t /usr/bin -Dm755 massos-release
 # Determine the version of osinstallgui that should be used by the Live CD.
-echo "0.2.0" > /usr/share/massos/.osinstallguiver
+echo "0.2.1" > /usr/share/massos/.osinstallguiver
 # Determine firmware versions that should be installed.
 cat > /usr/share/massos/firmwareversions << "END"
 # This file defines the firmware versions corresponding to this MassOS build.
@@ -7464,6 +7488,22 @@ cat > /usr/share/massos/firmwareversions << "END"
 linux-firmware: 20241110
 intel-microcode: 20241112
 sof-firmware: 2024.09.2
+END
+# snapd version, for when the snapd installation program is finally written.
+cat > /usr/share/massos/snapdversion << "END"
+# This file defines the version of snapd corresponding to this MassOS build.
+# snapd is not installed by default due to its controversy.
+# But we still want to offer it, as it provides some packages not in Flatpak.
+
+# Eventually, a utility called 'massos-snapd' will be created, to allow
+# installing snapd and uninstalling it. It will need to reference to this file
+# to know which version of snapd to install.
+
+# The snapd version, see <https://github.com/canonical/snapd/releases>.
+version: 2.66.1
+
+# Whether or not snapd is installed ('massos-snapd' sets this automatically).
+installed: no
 END
 # Clean sources directory and self destruct.
 cd ..

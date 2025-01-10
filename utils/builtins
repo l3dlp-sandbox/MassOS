@@ -553,6 +553,7 @@ pv
 pycairo
 pycparser
 pycups
+pyelftools
 pygments
 pygobject
 pyopenssl
@@ -733,6 +734,7 @@ xwud
 xxhash
 xz
 yad
+yq
 ytnef
 yyjson
 zip
