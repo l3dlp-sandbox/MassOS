@@ -25,8 +25,13 @@ ninja -C build install
 install -t /usr/share/licenses/elementary-icon-theme -Dm644 COPYING
 cd ..
 rm -rf icons-8.1.0
-# Arc Theme for Xfce.
-tar --no-same-owner -xf arc-theme-20220102.tar.xz -C / --strip-components=1
+# arc-theme.
+tar --no-same-owner -xf arc-theme-20220102.tar.xz
+tar --no-same-owner -xf arc-theme-openbox.tar.gz -C arc-theme-20220102/usr/share/themes --strip-components=1
+rm -rf arc-theme-20220102/usr/share/themes/{README.md,screens,*.obt}
+install -dm755 arc-theme-20220102/usr/share/licenses/arc-theme
+mv arc-theme-20220102/usr/share/{themes,licenses/arc-theme}/LICENSE
+cp -r arc-theme-20220102/usr /
 gtk-update-icon-cache /usr/share/icons/Arc
 mkdir -p /etc/gtk-2.0
 cat > /etc/gtk-2.0/gtkrc << "END"
@@ -50,6 +55,7 @@ gtk-xft-rgba = rgb
 gtk-cursor-theme-name = Adwaita
 END
 flatpak install -y runtime/org.gtk.Gtk3theme.Arc{,-Dark}/x86_64/3.22
+rm -rf arc-theme-20220102
 # xfce4-dev-tools.
 tar -xf xfce4-dev-tools-4.20.0.tar.bz2
 cd xfce4-dev-tools-4.20.0
@@ -203,6 +209,18 @@ sed -i 's/Default/Arc-Dark/' /usr/share/xfwm4/defaults
 install -t /usr/share/licenses/xfwm4 -Dm644 COPYING
 cd ..
 rm -rf xfwm4-4.20.0
+# LabWC.
+tar -xf labwc-0.8.2.tar.gz
+cd labwc-0.8.2
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+rm -f /usr/include/sfdo-{basedir,common,desktop,desktop-file,icon}.h
+rm -f /usr/lib/libsfdo-{basedir,desktop,desktop-file,icon}.a
+rm -f /usr/lib/pkgconfig/libsfdo-{basedir,desktop,desktop-file,icon}.pc
+install -t /usr/share/licenses/labwc -Dm644 LICENSE
+cd ..
+rm -rf labwc-0.8.2
 # xfce4-session.
 tar -xf xfce4-session-4.20.0.tar.bz2
 cd xfce4-session-4.20.0
@@ -468,10 +486,25 @@ ninja -C build install
 install -t /usr/share/licenses/baobab -Dm644 COPYING{,.docs}
 cd ..
 rm -rf baobab-41.0
-# GNOME Software.
+# GNOME-Firmware.
+tar -xf gnome-firmware-41.0.tar.bz2
+cd gnome-firmware-41.0
+sed -i 's/master/1.9.27/' subprojects/fwupd.wrap
+CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion" LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/lib/gnome-firmware" meson setup build --prefix=/usr --buildtype=minsize --force-fallback-for=fwupd -Dfwupd:build=library -Dfwupd:docs=disabled -Dfwupd:introspection=false -Dfwupd:tests=false
+ninja -C build
+DESTDIR="$PWD"/dest ninja -C build install
+mkdir -p dest/usr/lib/gnome-firmware
+mv dest/usr/lib/libfwupd.so.2.0.0 dest/usr/lib/gnome-firmware/libfwupd.so.2
+rm -rf dest/usr/include dest/usr/lib/{libfwupd.so{,.2},pkgconfig} dest/usr/share/polkit-1
+cp -ar dest/* /
+install -t /usr/share/licenses/gnome-firmware -Dm644 COPYING
+cd ..
+rm -rf gnome-firmware-41.0
+# GNOME-Software.
 tar -xf gnome-software-41.5.tar.xz
 cd gnome-software-41.5
-CFLAGS="$CFLAGS -Wno-error=nested-externs -Wno-implicit-function-declaration -Wno-int-conversion" meson setup build --prefix=/usr --buildtype=minsize --force-fallback-for=appstream -Dexternal_appstream=false -Dfwupd=false -Dpackagekit=false -Dtests=false -Dvalgrind=false
+patch -Np1 -i ../patches/gnome-software-41.5-fwupd200.patch
+CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=nested-externs" LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/lib/gnome-software" meson setup build --prefix=/usr --buildtype=minsize --force-fallback-for=appstream -Dexternal_appstream=false -Dpackagekit=false -Dtests=false -Dvalgrind=false
 ninja -C build
 DESTDIR="$PWD"/dest ninja -C build install
 mv dest/usr/lib/libappstream.so.0.14.1 dest/usr/lib/gnome-software/libappstream.so.4
@@ -482,7 +515,7 @@ cp -ar dest/* /
 install -t /usr/share/licenses/gnome-software -Dm644 COPYING
 cd ..
 rm -rf gnome-software-41.5
-# MassOS Welcome (modified version of Gnome Tour).
+# MassOS-Welcome (modified version of Gnome Tour).
 tar -xf massos-welcome-cc649f83e04f0daa880edf1df8e4d5165b79787c.tar.gz
 cd massos-welcome-cc649f83e04f0daa880edf1df8e4d5165b79787c
 meson setup build --prefix=/usr --buildtype=minsize

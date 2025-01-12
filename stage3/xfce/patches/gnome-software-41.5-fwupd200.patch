@@ -1,0 +1,128 @@
+This patch hopefully fixes the fwupd plugin in gnome-software 41.5 to allow it
+to build and run properly with fwupd >= 2.0.0, which is the version used in
+the new builds of MassOS.
+
+Some of these changes are backported from the latest upstream commits, others
+are manually done by us, because only us non-GNOME-desktop-environment users
+would have the audacity to keep using the last GTK3 version of gnome-software,
+and refuse to "upgrade" to the libadwaita version under any circumstance.
+
+diff '--color=auto' -aruN a/plugins/fwupd/gs-fwupd-app.c b/plugins/fwupd/gs-fwupd-app.c
+--- a/plugins/fwupd/gs-fwupd-app.c	2022-03-18 08:09:27.912578600 +0000
++++ b/plugins/fwupd/gs-fwupd-app.c	2025-01-12 19:05:13.341807013 +0000
+@@ -62,11 +62,6 @@
+ 	if (fwupd_device_has_flag (dev, FWUPD_DEVICE_FLAG_UPDATABLE))
+ 		gs_app_set_state (app, GS_APP_STATE_UPDATABLE_LIVE);
+ 
+-	/* only can be applied in systemd-offline */
+-	if (fwupd_device_has_flag (dev, FWUPD_DEVICE_FLAG_ONLY_OFFLINE))
+-		gs_app_set_metadata (app, "fwupd::OnlyOffline", "");
+-
+-
+ 	/* reboot required to apply update */
+ 	if (fwupd_device_has_flag (dev, FWUPD_DEVICE_FLAG_NEEDS_REBOOT))
+ 		gs_app_add_quirk (app, GS_APP_QUIRK_NEEDS_REBOOT);
+@@ -106,12 +101,6 @@
+ 	}
+ 	if (fwupd_device_get_created (dev) != 0)
+ 		gs_app_set_install_date (app, fwupd_device_get_created (dev));
+-	if (fwupd_device_get_description (dev) != NULL) {
+-		g_autofree gchar *tmp = NULL;
+-		tmp = as_markup_convert_simple (fwupd_device_get_description (dev), NULL);
+-		if (tmp != NULL)
+-			gs_app_set_description (app, GS_APP_QUALITY_NORMAL, tmp);
+-	}
+ 
+ 	/* needs action */
+ 	if (fwupd_device_has_flag (dev, FWUPD_DEVICE_FLAG_NEEDS_BOOTLOADER))
+diff '--color=auto' -aruN a/plugins/fwupd/gs-plugin-fwupd.c b/plugins/fwupd/gs-plugin-fwupd.c
+--- a/plugins/fwupd/gs-plugin-fwupd.c	2022-03-18 08:09:27.912578600 +0000
++++ b/plugins/fwupd/gs-plugin-fwupd.c	2025-01-12 19:06:02.695263404 +0000
+@@ -350,7 +350,6 @@
+ 	gs_app_set_version (app, fwupd_device_get_version (device));
+ 	gs_app_set_name (app, GS_APP_QUALITY_LOWEST, fwupd_device_get_name (device));
+ 	gs_app_set_summary (app, GS_APP_QUALITY_LOWEST, fwupd_device_get_summary (device));
+-	gs_app_set_description (app, GS_APP_QUALITY_LOWEST, fwupd_device_get_description (device));
+ 	gs_app_set_origin (app, fwupd_device_get_vendor (device));
+ 	gs_fwupd_app_set_device_id (app, fwupd_device_get_id (device));
+ 	gs_app_set_management_plugin (app, "fwupd");
+@@ -662,7 +661,7 @@
+ 	}
+ 
+ 	/* download new content */
+-	if (!fwupd_client_refresh_remote (priv->client, remote, cancellable, error)) {
++	if (!fwupd_client_refresh_remote (priv->client, remote, FWUPD_CLIENT_DOWNLOAD_FLAG_NONE, cancellable, error)) {
+ 		gs_plugin_fwupd_error_convert (error);
+ 		return FALSE;
+ 	}
+@@ -801,7 +800,7 @@
+ 	}
+ 	for (guint i = 0; i < remotes->len; i++) {
+ 		FwupdRemote *remote = g_ptr_array_index (remotes, i);
+-		if (!fwupd_remote_get_enabled (remote))
++		if (!fwupd_remote_has_flag (remote, FWUPD_REMOTE_FLAG_ENABLED))
+ 			continue;
+ 		if (fwupd_remote_get_kind (remote) == FWUPD_REMOTE_KIND_LOCAL)
+ 			continue;
+@@ -870,10 +869,6 @@
+ 	/* set the last object */
+ 	g_set_object (&priv->app_current, app);
+ 
+-	/* only offline supported */
+-	if (gs_app_get_metadata_item (app, "fwupd::OnlyOffline") != NULL)
+-		install_flags |= FWUPD_INSTALL_FLAG_OFFLINE;
+-
+ 	gs_app_set_state (app, GS_APP_STATE_INSTALLING);
+ 	if (!fwupd_client_install (priv->client, device_id,
+ 				   filename, install_flags,
+@@ -900,27 +895,21 @@
+ 		 * in a too-new-to-depend-on fwupd version */
+ 		g_debug ("failed to find device after install: %s", error_local->message);
+ 	} else {
+-		if (fwupd_device_get_update_message (dev) != NULL) {
++		gchar *update_message = NULL;
++		g_object_get(dev, "update-message", &update_message, NULL);
++		if (update_message != NULL) {
+ 			g_autoptr(AsScreenshot) ss = as_screenshot_new ();
+ 
+-#if FWUPD_CHECK_VERSION(1,4,5)
+-			/* image is optional */
+-			if (fwupd_device_get_update_image (dev) != NULL) {
+-				g_autoptr(AsImage) im = as_image_new ();
+-				as_image_set_kind (im, AS_IMAGE_KIND_SOURCE);
+-				as_image_set_url (im, fwupd_device_get_update_image (dev));
+-				as_screenshot_add_image (ss, im);
+-			}
+-#endif
+ 
+ 			/* caption is required */
+ 			as_screenshot_set_kind (ss, AS_SCREENSHOT_KIND_DEFAULT);
+-			as_screenshot_set_caption (ss, NULL, fwupd_device_get_update_message (dev));
++			as_screenshot_set_caption (ss, NULL, update_message);
+ 			gs_app_set_action_screenshot (app, ss);
+ 
+ 			/* require the dialog */
+ 			gs_app_add_quirk (app, GS_APP_QUIRK_NEEDS_USER_ACTION);
+ 		}
++		g_free(update_message);
+ 	}
+ 
+ 	/* success */
+@@ -1162,7 +1151,7 @@
+ 		app = gs_app_new (id);
+ 		gs_app_set_kind (app, AS_COMPONENT_KIND_REPOSITORY);
+ 		gs_app_set_scope (app, AS_COMPONENT_SCOPE_SYSTEM);
+-		gs_app_set_state (app, fwupd_remote_get_enabled (remote) ?
++		gs_app_set_state (app, fwupd_remote_has_flag (remote, FWUPD_REMOTE_FLAG_ENABLED) ?
+ 				  GS_APP_STATE_INSTALLED : GS_APP_STATE_AVAILABLE);
+ 		gs_app_add_quirk (app, GS_APP_QUIRK_NOT_LAUNCHABLE);
+ 		gs_app_set_name (app, GS_APP_QUALITY_LOWEST,
+@@ -1212,7 +1201,7 @@
+ 	for (guint i = 0; i < remotes->len; i++) {
+ 		FwupdRemote *remote = g_ptr_array_index (remotes, i);
+ 		if (g_strcmp0 (remote_id, fwupd_remote_get_id (remote)) == 0) {
+-			if (fwupd_remote_get_enabled (remote) &&
++			if (fwupd_remote_has_flag (remote, FWUPD_REMOTE_FLAG_ENABLED) &&
+ 			    fwupd_remote_get_kind (remote) != FWUPD_REMOTE_KIND_LOCAL &&
+ 			    !gs_plugin_fwupd_refresh_remote (plugin, remote, cache_age, cancellable, error))
+ 				return FALSE;

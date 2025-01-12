@@ -66,7 +66,7 @@ https://github.com/cracklib/cracklib/releases/download/v2.10.3/cracklib-words-2.
 https://github.com/pyca/cryptography/archive/44.0.0/cryptography-44.0.0.tar.gz
 https://cdn.kernel.org/pub/linux/utils/cryptsetup/v2.7/cryptsetup-2.7.5.tar.xz
 https://github.com/OpenPrinting/cups/releases/download/v2.4.11/cups-2.4.11-source.tar.gz
-https://github.com/OpenPrinting/cups-browsed/releases/download/2.1.0/cups-browsed-2.1.0.tar.xz
+https://github.com/OpenPrinting/cups-browsed/releases/download/2.1.1/cups-browsed-2.1.1.tar.xz
 https://github.com/OpenPrinting/cups-filters/releases/download/2.0.1/cups-filters-2.0.1.tar.xz
 https://www.cups-pdf.de/src/cups-pdf_3.0.1.tar.gz
 https://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-0.2.7.tar.xz
@@ -107,7 +107,7 @@ https://duktape.org/duktape-2.7.0.tar.xz
 https://github.com/rbrito/pkg-dvd-rw-tools/archive/upstream%2F7.1/dvd+rw-tools-7.1.tar.gz
 https://cdn.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.1/e2fsprogs-1.47.1.tar.xz
 https://github.com/OpenVPN/easy-rsa/releases/download/v3.2.1/EasyRSA-3.2.1.tgz
-https://mirror.lyrahosting.com/gnu/ed/ed-1.20.2.tar.lz
+https://mirror.lyrahosting.com/gnu/ed/ed-1.21.tar.lz
 https://files.pythonhosted.org/packages/source/e/editables/editables-0.5.tar.gz
 https://github.com/rhboot/efibootmgr/releases/download/18/efibootmgr-18.tar.bz2
 https://github.com/rhboot/efivar/archive/39/efivar-39.tar.gz
@@ -160,10 +160,10 @@ https://mirrors.dotsrc.org/gnome/sources/gexiv2/0.14/gexiv2-0.14.3.tar.xz
 https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10040/ghostscript-10.04.0.tar.xz
 https://mirrors.dotsrc.org/gnome/sources/gi-docgen/2024/gi-docgen-2024.1.tar.xz
 https://freefr.dl.sourceforge.net/project/giflib/giflib-5.2.2.tar.gz
-https://cdn.kernel.org/pub/software/scm/git/git-2.47.1.tar.xz
+https://cdn.kernel.org/pub/software/scm/git/git-2.48.0.tar.xz
 https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.tgz
 https://mirrors.dotsrc.org/gnome/sources/glib/2.82/glib-2.82.2.tar.xz
-https://mirrors.dotsrc.org/gnome/sources/glib-networking/2.80/glib-networking-2.80.0.tar.xz
+https://github.com/GNOME/glib-networking/archive/2.80.1/glib-networking-2.80.1.tar.gz
 https://mirror.lyrahosting.com/gnu/glibc/glibc-2.40.tar.xz
 https://mirrors.dotsrc.org/gnome/sources/glibmm/2.66/glibmm-2.66.7.tar.xz
 https://github.com/KhronosGroup/glslang/archive/15.0.0/glslang-15.0.0.tar.gz
@@ -190,7 +190,7 @@ https://mirror.lyrahosting.com/gnu/groff/groff-1.23.0.tar.gz
 https://mirror.lyrahosting.com/gnu/grub/grub-2.12.tar.xz
 https://mirrors.dotsrc.org/gnome/sources/gsettings-desktop-schemas/47/gsettings-desktop-schemas-47.1.tar.xz
 https://mirrors.dotsrc.org/gnome/sources/gspell/1.14/gspell-1.14.0.tar.xz
-https://gitlab.freedesktop.org/gstreamer/gstreamer/-/archive/1.24.10/gstreamer-1.24.10.tar.bz2
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/archive/1.24.11/gstreamer-1.24.11.tar.bz2
 https://mirrors.dotsrc.org/gnome/sources/gtk-doc/1.34/gtk-doc-1.34.0.tar.xz
 https://github.com/wmww/gtk-layer-shell/archive/v0.9.0/gtk-layer-shell-0.9.0.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/gtk+/2.24/gtk+-2.24.33.tar.xz
@@ -313,13 +313,14 @@ https://cdn.kernel.org/pub/linux/libs/ieee1394/libiec61883-1.2.0.tar.xz
 https://github.com/twaugh/libieee1284/archive/0663326/libieee1284-0.2.11-12-g0663326.tar.gz
 https://github.com/libimobiledevice/libimobiledevice/archive/1ec2c2c/libimobiledevice-1.3.0-217-g1ec2c2c.tar.gz
 https://github.com/libimobiledevice/libimobiledevice-glue/releases/download/1.3.1/libimobiledevice-glue-1.3.1.tar.bz2
-https://gitlab.freedesktop.org/libinput/libinput/-/archive/1.27.0/libinput-1.27.0.tar.bz2
+https://gitlab.freedesktop.org/libinput/libinput/-/archive/1.27.1/libinput-1.27.1.tar.bz2
 https://files.libburnia-project.org/releases/libisoburn-1.5.6.tar.gz
 https://files.libburnia-project.org/releases/libisofs-1.5.6.tar.gz
 https://github.com/hughsie/libjcat/releases/download/0.2.2/libjcat-0.2.2.tar.xz
 https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.1.0/libjpeg-turbo-3.1.0.tar.gz
 https://www.gnupg.org/ftp/gcrypt/libksba/libksba-1.6.7.tar.bz2
 https://github.com/google/liblc3/archive/v1.1.1/liblc3-1.1.1.tar.gz
+https://gitlab.freedesktop.org/emersion/libliftoff/-/archive/v0.5.0/libliftoff-v0.5.0.tar.bz2
 https://github.com/linux-mobile-broadband/libmbim/archive/1.30.0/libmbim-1.30.0.tar.gz
 https://launchpad.net/libmetalink/trunk/libmetalink-0.1.3/+download/libmetalink-0.1.3.tar.bz2
 https://www.netfilter.org/pub/libmnl/libmnl-1.0.5.tar.bz2
@@ -542,7 +543,7 @@ https://gitlab.freedesktop.org/plymouth/plymouth/-/archive/24.004.60/plymouth-24
 https://github.com/python-poetry/poetry-core/releases/download/1.9.1/poetry_core-1.9.1.tar.gz
 https://github.com/polkit-org/polkit/archive/125/polkit-125.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/polkit-gnome/0.105/polkit-gnome-0.105.tar.xz
-https://poppler.freedesktop.org/poppler-24.12.0.tar.xz
+https://poppler.freedesktop.org/poppler-25.01.0.tar.xz
 https://poppler.freedesktop.org/poppler-data-0.4.12.tar.gz
 https://github.com/rpm-software-management/popt/archive/popt-1.19-release/popt-popt-1.19-release.tar.gz
 https://gitlab.freedesktop.org/upower/power-profiles-daemon/-/archive/0.23/power-profiles-daemon-0.23.tar.bz2
@@ -556,7 +557,7 @@ https://github.com/pygobject/pycairo/releases/download/v1.27.0/pycairo-1.27.0.ta
 https://github.com/eliben/pycparser/archive/release_v2.22/pycparser-release_v2.22.tar.gz
 https://github.com/OpenPrinting/pycups/releases/download/v2.0.4/pycups-2.0.4.tar.gz
 https://github.com/eliben/pyelftools/archive/v0.31/pyelftools-0.31.tar.gz
-https://files.pythonhosted.org/packages/source/P/Pygments/pygments-2.18.0.tar.gz
+https://files.pythonhosted.org/packages/source/P/Pygments/pygments-2.19.1.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/pygobject/3.50/pygobject-3.50.0.tar.xz
 https://github.com/pyca/pyopenssl/archive/24.3.0/pyopenssl-24.3.0.tar.gz
 https://github.com/pyparsing/pyparsing/releases/download/3.2.0/pyparsing-3.2.0.tar.gz
@@ -651,7 +652,7 @@ https://unifoundry.com/pub/unifont/unifont-16.0.01/font-builds/unifont-16.0.01.p
 https://gitlab.com/OldManProgrammer/unix-tree/-/archive/2.2.1/unix-tree-2.2.1.tar.bz2
 https://freefr.dl.sourceforge.net/project/infozip/UnZip%206.x%20%28latest%29/UnZip%206.0/unzip60.tar.gz
 https://github.com/MassOS-Linux/upgrade-toolset/releases/download/20221015/upgrade-toolset-20221015-x86_64.tar.xz
-https://gitlab.freedesktop.org/upower/upower/-/archive/v1.90.6/upower-v1.90.6.tar.bz2
+https://gitlab.freedesktop.org/upower/upower/-/archive/v1.90.7/upower-v1.90.7.tar.bz2
 https://files.pythonhosted.org/packages/source/u/urllib3/urllib3-2.2.2.tar.gz
 https://cdn.kernel.org/pub/linux/utils/usb/usbutils/usbutils-018.tar.xz
 https://lttng.org/files/urcu/userspace-rcu-0.15.0.tar.bz2
@@ -678,6 +679,7 @@ https://github.com/rfc1036/whois/archive/v5.5.23/whois-5.5.23.tar.gz
 https://hewlettpackard.github.io/wireless-tools/wireless_tools.30.pre9.tar.gz
 https://gitlab.freedesktop.org/pipewire/wireplumber/-/archive/0.5.7/wireplumber-0.5.7.tar.bz2
 https://gitlab.freedesktop.org/wlroots/wlr-protocols/-/archive/ffb89ac/wlr-protocols-107.tar.gz
+https://gitlab.freedesktop.org/wlroots/wlroots/-/archive/0.18.2/wlroots-0.18.2.tar.bz2
 https://github.com/google/woff2/archive/v1.0.2/woff2-1.0.2.tar.gz
 https://w1.fi/releases/wpa_supplicant-2.11.tar.gz
 https://wpewebkit.org/releases/wpebackend-fdo-1.14.3.tar.xz
@@ -690,6 +692,7 @@ https://www.x.org/archive/individual/data/xbitmaps-1.1.3.tar.xz
 https://www.x.org/archive/individual/xcb/xcb-proto-1.17.0.tar.xz
 https://www.x.org/archive/individual/xcb/xcb-util-0.4.1.tar.xz
 https://www.x.org/archive/individual/xcb/xcb-util-cursor-0.1.5.tar.xz
+https://www.x.org/archive/individual/xcb/xcb-util-errors-1.0.1.tar.xz
 https://www.x.org/archive/individual/xcb/xcb-util-image-0.4.1.tar.xz
 https://www.x.org/archive/individual/xcb/xcb-util-keysyms-0.4.1.tar.xz
 https://www.x.org/archive/individual/xcb/xcb-util-renderutil-0.3.10.tar.xz
@@ -709,7 +712,7 @@ https://www.x.org/archive/individual/driver/xf86-input-libinput-1.5.0.tar.xz
 https://cdn.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-6.12.0.tar.xz
 https://www.x.org/archive/individual/app/xgamma-1.0.7.tar.xz
 https://www.x.org/archive/individual/app/xhost-1.0.9.tar.xz
-https://www.x.org/archive/individual/app/xinit-1.4.2.tar.xz
+https://www.x.org/archive/individual/app/xinit-1.4.3.tar.xz
 https://www.x.org/archive/individual/app/xinput-1.6.4.tar.xz
 https://www.x.org/archive/individual/app/xkbcomp-1.4.7.tar.xz
 https://www.x.org/archive/individual/app/xkbevd-1.1.6.tar.xz

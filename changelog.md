@@ -25,8 +25,10 @@ Changes:
 - Added `verify-sources.sh` script to the build system to allow verifying SHA256 checksums of downloaded sources before building MassOS.
 - Numerous build system and packaging improvements.
 - Removed deprecated static documentation from the MassOS repo, in favour of the GitHub wiki.
-- [Xfce] Upgraded to Xfce 4.20 with initial (experimental) Wayland support; removed Weston program.
-- [Xfce] Added elementary icon theme for some missing icons not provided by Adwaita or Arc.
+- [Xfce] Upgraded to Xfce 4.20 with initial (experimental) Wayland support.
+- [Xfce] Removed Weston and replaced it with LabWC, as required by the Xfce Wayland session.
+- [Xfce] Added openbox compatibility to Arc theme, for LabWC theme support.
+- [Xfce] Added elementary icon theme, for some missing icons not provided by Adwaita or Arc.
 
 Upgraded software (core):
 
@@ -79,7 +81,7 @@ Upgraded software (core):
 - cryptography: `37.0.1 --> 44.0.0`
 - cryptsetup: `2.5.0 --> 2.7.5`
 - CUPS: `2.4.2 --> 2.4.11`
-- cups-browsed: `(new package) --> 2.1.0`
+- cups-browsed: `(new package) --> 2.1.1`
 - cups-filters: `1.28.16 --> 2.0.1`
 - cups-pdf: `(new package) --> 3.0.1`
 - cups-pk-helper: `(new package) --> 0.2.7`
@@ -102,7 +104,7 @@ Upgraded software (core):
 - dracut: `056 --> 105`
 - e2fsprogs: `1.46.5 --> 1.47.1`
 - easy-rsa: `3.1.0 --> 3.2.1`
-- Ed: `1.18 --> 1.20.2`
+- Ed: `1.18 --> 1.21`
 - editables: `(new package) --> 0.5`
 - efivar: `38 --> 39`
 - egl-wayland: `1.1.11 --> 1.1.17`
@@ -148,9 +150,9 @@ Upgraded software (core):
 - GhostScript: `10.0.0 --> 10.04.0`
 - gi-docgen: `2022.1 --> 2024.1`
 - giflib: `5.2.1 --> 5.2.2`
-- Git: `2.38.0 --> 2.47.1`
+- Git: `2.38.0 --> 2.48.0`
 - GLib: `2.74.0 --> 2.82.2`
-- glib-networking: `2.74.0 --> 2.80.0`
+- glib-networking: `2.74.0 --> 2.80.1`
 - Glibc: `2.36 --> 2.40`
 - GLibmm: `2.66.5 --> 2.66.7`
 - glslang: `11.11.0 --> 15.0.0`
@@ -171,16 +173,16 @@ Upgraded software (core):
 - GRUB: `2.06 --> 2.12`
 - gsettings-desktop-schemas: `43.0 --> 47.1`
 - gspell: `1.12.0 --> 1.14.0`
-- gst-editing-services: `(new package) --> 1.24.10`
-- gst-libav: `1.20.3 --> 1.24.10`
-- gst-plugins-bad: `1.20.3 --> 1.24.10`
-- gst-plugins-base: `1.20.3 --> 1.24.10`
-- gst-plugins-good: `1.20.3 --> 1.24.10`
+- gst-editing-services: `(new package) --> 1.24.11`
+- gst-libav: `1.20.3 --> 1.24.11`
+- gst-plugins-bad: `1.20.3 --> 1.24.11`
+- gst-plugins-base: `1.20.3 --> 1.24.11`
+- gst-plugins-good: `1.20.3 --> 1.24.11`
 - gst-plugins-rs: `0.8.4 --> (removed)`
-- gst-plugins-ugly: `1.20.3 --> 1.24.10`
-- gst-python: `(new package) --> 1.24.10`
-- GStreamer: `1.20.3 --> 1.24.10`
-- gstreamer-vaapi: `1.20.3 --> 1.24.10`
+- gst-plugins-ugly: `1.20.3 --> 1.24.11`
+- gst-python: `(new package) --> 1.24.11`
+- GStreamer: `1.20.3 --> 1.24.11`
+- gstreamer-vaapi: `1.20.3 --> 1.24.11`
 - GTK-Doc: `1.33.2 --> 1.34.0`
 - gtk-layer-shell: `(new package) --> 0.9.0`
 - GTK3: `3.24.34 --> 3.24.43`
@@ -274,7 +276,7 @@ Upgraded software (core):
 - libidn2: `2.3.3 --> 2.3.7`
 - libimobiledevice: `1.3.0 --> 1.3.0-217-g1ec2c2c`
 - libimobiledevice-glue: `(new package) --> 1.3.1`
-- libinput: `1.21.0 --> 1.27.0`
+- libinput: `1.21.0 --> 1.27.1`
 - libisoburn: `1.5.4 --> 1.5.6`
 - libisofs: `1.5.4 --> 1.5.6`
 - libjcat: `0.1.11 --> 0.2.2`
@@ -470,7 +472,7 @@ Upgraded software (core):
 - Plymouth: `22.02.122 --> 24.004.60`
 - poetry-core: `(new package) --> 1.9.1`
 - Polkit: `121 --> 125`
-- Poppler: `22.09.0 --> 24.12.0`
+- Poppler: `22.09.0 --> 25.01.0`
 - poppler-data: `0.4.11 --> 0.4.12`
 - power-profiles-daemon: `0.12 --> 0.23`
 - ppp: `2.4.9 --> 2.5.1`
@@ -482,7 +484,7 @@ Upgraded software (core):
 - pycparser: `2.21 --> 2.22`
 - pycups: `(new package) --> 2.0.4`
 - pyelftools: `(new package) --> 0.31`
-- Pygments: `2.13.0 --> 2.18.0`
+- Pygments: `2.13.0 --> 2.19.1`
 - PyGObject: `3.42.2 --> 3.50.0`
 - pyopenssl: `22.1.0 --> 24.3.0`
 - PyParsing: `3.0.7 --> 3.2.0`
@@ -549,7 +551,7 @@ Upgraded software (core):
 - UFW: `0.36.1 --> 0.36.2`
 - unifdef: `(new package) --> 2.12`
 - Unifont: `15.0.01 --> 16.0.01`
-- UPower: `1.90.0 --> 1.90.6`
+- UPower: `1.90.0 --> 1.90.7`
 - urllib3: `1.26.11 --> 2.2.2`
 - usbutils: `014 --> 018`
 - Userspace-RCU: `0.13.2 --> 0.15.0`
@@ -584,6 +586,7 @@ Upgraded software (core):
 - xcb-proto: `1.15.2 --> 1.17.0`
 - xcb-util: `0.4.0 --> 0.4.1`
 - xcb-util-cursor: `0.1.3 --> 0.1.5`
+- xcb-util-errors: `(new package) --> 1.0.1`
 - xcb-util-image: `0.4.0 --> 0.4.1`
 - xcb-util-keysyms: `0.4.0 --> 0.4.1`
 - xcb-util-renderutil: `0.3.9 --> 0.3.10`
@@ -600,7 +603,7 @@ Upgraded software (core):
 - xfsprogs: `5.19.0 --> 6.12.0`
 - xgamma: `1.0.6 --> 1.0.7`
 - xhost: `1.0.8 --> 1.0.9`
-- xinit: `1.4.1 --> 1.4.2`
+- xinit: `1.4.1 --> 1.4.3`
 - xinput: `1.6.3 --> 1.6.4`
 - xkbcomp: `1.4.5 --> 1.4.7`
 - xkbevd: `1.1.4 --> 1.1.6`
@@ -648,9 +651,9 @@ Upgraded software (Xfce):
 - Firefox: `105.0.1 --> 134.0`
 - FreeRDP: `2.8.0 --> (removed)`
 - Garcon: `4.17.1 --> 4.20.0`
-- gnome-firmware: `41.0 --> (removed)`
 - GParted: `1.4.0 --> 1.6.0`
 - gtksourceview4: `4.8.3 --> (removed)`
+- LabWC: `(new package) --> 0.8.2`
 - libetpan: `1.9.4 --> (removed)`
 - libxfce4ui: `4.17.6 --> 4.20.0`
 - libxfce4util: `4.17.2 --> 4.20.0`

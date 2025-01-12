@@ -1384,14 +1384,14 @@ install -t /usr/share/licenses/make -Dm644 COPYING
 cd ..
 rm -rf make-4.4.1
 # Ed.
-tar -xf ed-1.20.2.tar.lz
-cd ed-1.20.2
+tar -xf ed-1.21.tar.lz
+cd ed-1.21
 ./configure --prefix=/usr
 make
 make install
 install -t /usr/share/licenses/ed -Dm644 COPYING
 cd ..
-rm -rf ed-1.20.2
+rm -rf ed-1.21
 # Patch.
 tar -xf patch-2.7.6.tar.xz
 cd patch-2.7.6
@@ -1478,13 +1478,13 @@ install -t /usr/share/licenses/pyelftools -Dm644 LICENSE
 cd ..
 rm -rf pyelftools-0.31
 # Pygments.
-tar -xf pygments-2.18.0.tar.gz
-cd pygments-2.18.0
+tar -xf pygments-2.19.1.tar.gz
+cd pygments-2.19.1
 pip --disable-pip-version-check wheel --no-build-isolation --no-cache-dir --no-deps -w dist .
 pip --disable-pip-version-check install --root-user-action ignore --no-cache-dir --no-index --no-user -f dist Pygments
 install -t /usr/share/licenses/pygments -Dm644 LICENSE
 cd ..
-rm -rf pygments-2.18.0
+rm -rf pygments-2.19.1
 # toml.
 tar -xf toml-0.10.2.tar.gz
 cd toml-0.10.2
@@ -3421,14 +3421,14 @@ install -t /usr/share/licenses/nss -Dm644 COPYING
 cd ../..
 rm -rf nss-3.107
 # Git.
-tar -xf git-2.47.1.tar.xz
-cd git-2.47.1
+tar -xf git-2.48.0.tar.xz
+cd git-2.48.0
 ./configure --prefix=/usr --with-gitconfig=/etc/gitconfig --with-libpcre2
 make all man
 make perllibdir=/usr/lib/perl5/5.40/site_perl install install-man
 install -t /usr/share/licenses/git -Dm644 COPYING LGPL-2.1
 cd ..
-rm -rf git-2.47.1
+rm -rf git-2.48.0
 # snowball.
 tar -xf snowball-2.2.0.tar.gz
 cd snowball-2.2.0
@@ -4405,7 +4405,7 @@ rm -rf libpciaccess-0.18.1
 # xcb-util.
 tar -xf xcb-util-0.4.1.tar.xz
 cd xcb-util-0.4.1
-./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static
+./configure --prefix=/usr --disable-static
 make
 make install
 install -t /usr/share/licenses/xcb-util -Dm644 COPYING
@@ -4414,7 +4414,7 @@ rm -rf xcb-util-0.4.1
 # xcb-util-image.
 tar -xf xcb-util-image-0.4.1.tar.xz
 cd xcb-util-image-0.4.1
-./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static
+./configure --prefix=/usr --disable-static
 make
 make install
 install -t /usr/share/licenses/xcb-util-image -Dm644 COPYING
@@ -4423,7 +4423,7 @@ rm -rf xcb-util-image-0.4.1
 # xcb-util-keysyms.
 tar -xf xcb-util-keysyms-0.4.1.tar.xz
 cd xcb-util-keysyms-0.4.1
-./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static
+./configure --prefix=/usr --disable-static
 make
 make install
 install -t /usr/share/licenses/xcb-util-keysyms -Dm644 COPYING
@@ -4432,7 +4432,7 @@ rm -rf xcb-util-keysyms-0.4.1
 # xcb-util-renderutil.
 tar -xf xcb-util-renderutil-0.3.10.tar.xz
 cd xcb-util-renderutil-0.3.10
-./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static
+./configure --prefix=/usr --disable-static
 make
 make install
 install -t /usr/share/licenses/xcb-util-renderutil -Dm644 COPYING
@@ -4441,7 +4441,7 @@ rm -rf xcb-util-renderutil-0.3.10
 # xcb-util-wm.
 tar -xf xcb-util-wm-0.4.2.tar.xz
 cd xcb-util-wm-0.4.2
-./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static
+./configure --prefix=/usr --disable-static
 make
 make install
 install -t /usr/share/licenses/xcb-util-wm -Dm644 COPYING
@@ -4450,7 +4450,7 @@ rm -rf xcb-util-wm-0.4.2
 # xcb-util-cursor.
 tar -xf xcb-util-cursor-0.1.5.tar.xz
 cd xcb-util-cursor-0.1.5
-./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static
+./configure --prefix=/usr --disable-static
 make
 make install
 install -t /usr/share/licenses/xcb-util-cursor -Dm644 COPYING
@@ -4459,12 +4459,21 @@ rm -rf xcb-util-cursor-0.1.5
 # xcb-util-xrm.
 tar -xf xcb-util-xrm-1.3.tar.bz2
 cd xcb-util-xrm-1.3
-./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static
+./configure --prefix=/usr --disable-static
 make
 make install
 install -t /usr/share/licenses/xcb-util-xrm -Dm644 COPYING
 cd ..
 rm -rf xcb-util-xrm-1.3
+# xcb-util-errors.
+tar -xf xcb-util-errors-1.0.1.tar.xz
+cd xcb-util-errors-1.0.1
+./configure --prefix=/usr --disable-static
+make
+make install
+install -t /usr/share/licenses/xcb-util-errors -Dm644 COPYING
+cd ..
+rm -rf xcb-util-errors-1.0.1
 # libdrm.
 tar -xf libdrm-2.4.124.tar.xz
 cd libdrm-2.4.124
@@ -4846,14 +4855,14 @@ install -t /usr/share/licenses/xwayland -Dm644 COPYING
 cd ..
 rm -rf xwayland-24.1.4
 # libinput.
-tar -xf libinput-1.27.0.tar.bz2
-cd libinput-1.27.0
+tar -xf libinput-1.27.1.tar.bz2
+cd libinput-1.27.1
 meson setup build --prefix=/usr --buildtype=minsize -Ddebug-gui=false -Ddocumentation=false -Dtests=false
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/libinput -Dm644 COPYING
 cd ..
-rm -rf libinput-1.27.0
+rm -rf libinput-1.27.1
 # xf86-input-libinput.
 tar -xf xf86-input-libinput-1.5.0.tar.xz
 cd xf86-input-libinput-1.5.0
@@ -4891,15 +4900,15 @@ install -t /usr/share/licenses/intel-media-driver -Dm644 LICENSE.md
 cd ..
 rm -rf media-driver-intel-media-24.4.4
 # xinit.
-tar -xf xinit-1.4.2.tar.xz
-cd xinit-1.4.2
+tar -xf xinit-1.4.3.tar.xz
+cd xinit-1.4.3
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static --with-xinitdir=/etc/X11/app-defaults
 make
 make install
 ldconfig
 install -t /usr/share/licenses/xinit -Dm644 COPYING
 cd ..
-rm -rf xinit-1.4.2
+rm -rf xinit-1.4.3
 # cdrkit.
 tar -xf cdrkit_1.1.11.orig.tar.gz
 cd cdrkit-1.1.11
@@ -5179,6 +5188,24 @@ ninja -C build1 install
 install -t /usr/share/licenses/jasper -Dm644 LICENSE.txt
 cd ..
 rm -rf jasper-4.2.4
+# libliftoff.
+tar -xf libliftoff-v0.5.0.tar.bz2
+cd libliftoff-v0.5.0
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/libliftoff -Dm644 LICENSE
+cd ..
+rm -rf libliftoff-v0.5.0
+# wlroots.
+tar -xf wlroots-0.18.2.tar.bz2
+cd wlroots-0.18.2
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/wlroots -Dm644 LICENSE
+cd ..
+rm -rf wlroots-0.18.2
 # libsysprof-capture.
 tar -xf sysprof-47.1.tar.xz
 cd sysprof-47.1
@@ -6066,14 +6093,14 @@ install -t /usr/share/licenses/gnome-keyring -Dm644 COPYING COPYING.LIB
 cd ..
 rm -rf gnome-keyring-46.2
 # Poppler.
-tar -xf poppler-24.12.0.tar.xz
-cd poppler-24.12.0
+tar -xf poppler-25.01.0.tar.xz
+cd poppler-25.01.0
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_CPP_TESTS=OFF -DBUILD_GTK_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF -DENABLE_QT5=OFF -DENABLE_QT6=OFF -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_ZLIB_UNCOMPRESS=ON -Wno-dev -G Ninja -B build -S .
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/poppler -Dm644 COPYING{,3}
 cd ..
-rm -rf poppler-24.12.0
+rm -rf poppler-25.01.0
 # poppler-data.
 tar -xf poppler-data-0.4.12.tar.gz
 cd poppler-data-0.4.12
@@ -6113,8 +6140,8 @@ install -t /usr/share/licenses/libppd -Dm644 LICENSE
 cd ..
 rm -rf libppd-2.1.0
 # cups-browsed.
-tar -xf cups-browsed-2.1.0.tar.xz
-cd cups-browsed-2.1.0
+tar -xf cups-browsed-2.1.1.tar.xz
+cd cups-browsed-2.1.1
 ./configure --prefix=/usr --with-cups-rundir=/run/cups --disable-static --without-rcdir
 make
 make install
@@ -6122,7 +6149,7 @@ install -t /usr/lib/systemd/system -Dm644 daemon/cups-browsed.service
 systemctl enable cups-browsed
 install -t /usr/share/licenses/cups-browsed -Dm644 COPYING LICENSE
 cd ..
-rm -rf cups-browsed-2.1.0
+rm -rf cups-browsed-2.1.1
 # cups-filters.
 tar -xf cups-filters-2.0.1.tar.xz
 cd cups-filters-2.0.1
@@ -6440,15 +6467,15 @@ install -t /usr/share/licenses/newt -Dm644 COPYING
 cd ..
 rm -rf newt-0.52.24
 # UPower.
-tar -xf upower-v1.90.6.tar.bz2
-cd upower-v1.90.6
+tar -xf upower-v1.90.7.tar.bz2
+cd upower-v1.90.7
 meson setup build --prefix=/usr --buildtype=minsize
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/upower -Dm644 COPYING
 systemctl enable upower
 cd ..
-rm -rf upower-v1.90.6
+rm -rf upower-v1.90.7
 # power-profiles-daemon.
 tar -xf power-profiles-daemon-0.23.tar.bz2
 cd power-profiles-daemon-0.23
@@ -6559,14 +6586,14 @@ install -t /usr/share/licenses/libproxy -Dm644 COPYING
 cd ..
 rm -rf libproxy-0.5.9
 # glib-networking.
-tar -xf glib-networking-2.80.0.tar.xz
-cd glib-networking-2.80.0
+tar -xf glib-networking-2.80.1.tar.gz
+cd glib-networking-2.80.1
 meson setup build --prefix=/usr --buildtype=minsize
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/glib-networking -Dm644 COPYING
 cd ..
-rm -rf glib-networking-2.80.0
+rm -rf glib-networking-2.80.1
 # libsoup.
 tar -xf libsoup-2.74.3.tar.xz
 cd libsoup-2.74.3
@@ -7199,9 +7226,9 @@ install -t /usr/share/licenses/openal -Dm644 COPYING BSD-3Clause
 cd ..
 rm -rf openal-soft-1.24.1
 # GStreamer / gst-plugins-{base,good,bad,ugly} / gst-libav / gstreamer-vaapi / gst-editing-services / gst-python
-tar -xf gstreamer-1.24.10.tar.bz2
-cd gstreamer-1.24.10
-meson setup build --prefix=/usr --buildtype=minsize -Ddevtools=disabled -Dexamples=disabled -Dglib-asserts=disabled -Dglib-checks=disabled -Dgobject-cast-checks=disabled -Dgpl=enabled -Dgst-examples=disabled -Dlibnice=disabled -Dorc-source=system -Dpackage-name="MassOS GStreamer 1.24.10" -Dpackage-origin="https://massos.org" -Drtsp_server=disabled -Dtests=disabled -Dvaapi=enabled -Dgst-plugins-bad:aja=disabled -Dgst-plugins-bad:avtp=disabled -Dgst-plugins-bad:fdkaac=disabled -Dgst-plugins-bad:gpl=enabled -Dgst-plugins-bad:iqa=disabled -Dgst-plugins-bad:srtp=disabled -Dgst-plugins-bad:tinyalsa=disabled -Dgst-plugins-ugly:gpl=enabled
+tar -xf gstreamer-1.24.11.tar.bz2
+cd gstreamer-1.24.11
+meson setup build --prefix=/usr --buildtype=minsize -Ddevtools=disabled -Dexamples=disabled -Dglib-asserts=disabled -Dglib-checks=disabled -Dgobject-cast-checks=disabled -Dgpl=enabled -Dgst-examples=disabled -Dlibnice=disabled -Dorc-source=system -Dpackage-name="MassOS GStreamer 1.24.11" -Dpackage-origin="https://massos.org" -Drtsp_server=disabled -Dtests=disabled -Dvaapi=enabled -Dgst-plugins-bad:aja=disabled -Dgst-plugins-bad:avtp=disabled -Dgst-plugins-bad:fdkaac=disabled -Dgst-plugins-bad:gpl=enabled -Dgst-plugins-bad:iqa=disabled -Dgst-plugins-bad:srtp=disabled -Dgst-plugins-bad:tinyalsa=disabled -Dgst-plugins-ugly:gpl=enabled
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/gstreamer -Dm644 LICENSE
@@ -7214,7 +7241,7 @@ install -t /usr/share/licenses/gstreamer-vaapi -Dm644 subprojects/gstreamer-vaap
 install -t /usr/share/licenses/gst-editing-services -Dm644 subprojects/gst-editing-services/COPYING{,.LIB}
 install -t /usr/share/licenses/gst-python -Dm644 subprojects/gst-python/COPYING
 cd ..
-rm -rf gstreamer-1.24.10.tar.bz2
+rm -rf gstreamer-1.24.11.tar.bz2
 # PipeWire + WirePlumber.
 tar -xf pipewire-1.2.7.tar.bz2
 cd pipewire-1.2.7
