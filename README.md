@@ -25,6 +25,6 @@ A detailed description of how the MassOS build system works can be found at [Bui
 
 This repository contains the source and build system for the core MassOS system (stage 1 and stage 2), as well as Xfce (stage 3). The GNOME port is submoduled at `stage3/gnome`, and any further desktop environments which become supported in the future will also be submoduled. The GNOME port is maintained at the [MassOS-GNOME](https://github.com/MassOS-Linux/MassOS-GNOME) repository.
 
-This repo also does not contain the MassOS Installation Program found in the live CD, or the scripts used to build live ISO images for MassOS. Those can be found in the [livecd-installer](https://github.com/MassOS-Linux/livecd-installer) repository.
+This repository now also contains the script and data used to create a live CD ISO image from a MassOS build. It should be noted that the files in the [livecd-installer](https://github.com/MassOS-Linux/livecd-installer) repository are deprecated; MassOS now uses [osinstallgui](https://github.com/DanielMYT/osinstallgui) as its installation program.
 
 All repositories for the MassOS project can be found [here](https://github.com/orgs/MassOS-Linux/repositories).

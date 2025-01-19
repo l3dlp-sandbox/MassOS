@@ -1,0 +1,64 @@
+# Configuration file for GRUB bootloader.
+
+# Basic options.
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="MassOS"
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_CMDLINE_LINUX=""
+
+# Ensure modules for both GPT and MBR disks are preloaded.
+GRUB_PRELOAD_MODULES="part_gpt part_msdos"
+
+# Uncomment to enable booting from LUKS encrypted devices.
+#GRUB_ENABLE_CRYPTODISK="y"
+
+# Timeout mode can be set to "menu", "countdown" or "hidden".
+# If not set to "menu", the GRUB menu can be accessed by pressing [ESC].
+GRUB_TIMEOUT_STYLE="menu"
+
+# Uncomment to use the basic console.
+GRUB_TERMINAL_INPUT="console"
+
+# Uncomment to disable the graphical terminal.
+#GRUB_TERMINAL_OUTPUT="console"
+
+# The resolution used by the graphical terminal.
+# Supported resolutions can be checked by running "vbeinfo" from within GRUB.
+# Setting to "auto" will allow it to automatically use the best resolution.
+GRUB_GFXMODE="auto"
+
+# Uncomment to allow the kernel use the same resolution as GRUB.
+GRUB_GFXPAYLOAD_LINUX="keep"
+
+# Uncomment to pass root=/dev/xxx instead of root=UUID=xxx to the kernel.
+# This is not recommended, since the kernel might find the wrong disk.
+#GRUB_DISABLE_LINUX_UUID="true"
+
+# Uncomment to disable menu entry for recovery (single-user) mode.
+#GRUB_DISABLE_RECOVERY="true"
+
+# Uncomment to specify custom menu colours in the format "fg/bg".
+# Note that this cannot be used in combination with the "GRUB_THEME" option.
+#GRUB_COLOR_NORMAL="light-blue/black"
+#GRUB_COLOR_HIGHLIGHT="light-cyan/blue"
+
+# Uncomment ONE of the following to set EITHER a background or a theme.
+#GRUB_BACKGROUND="/usr/share/backgrounds/MassOS-Futuristic-Dark.png"
+#GRUB_THEME="/path/to/theme"
+
+# Uncomment for a beep on startup. Some sound cards may not support this.
+#GRUB_INIT_TUNE="480 440 1"
+
+# Uncomment to make GRUB remember the previous boot selection.
+# This requires setting "GRUB_DEFAULT=saved" above.
+# This functionality may cause boot issues with the btrfs filesystem.
+#GRUB_SAVEDEFAULT="true"
+
+# Uncomment to disable submenus in the GRUB boot menu.
+#GRUB_DISABLE_SUBMENU="y"
+
+# Uncomment to enable detection of other OSes when generating grub.cfg.
+# Any detected OSes will be added to the GRUB boot menu.
+# This is recommended on dual-booted systems.
+GRUB_DISABLE_OS_PROBER="false"

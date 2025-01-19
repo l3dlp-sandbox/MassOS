@@ -343,6 +343,7 @@ rm -rf blueman-2.4.3
 # xfce4-screenshooter.
 tar -xf xfce4-screenshooter-1.11.1.tar.bz2
 cd xfce4-screenshooter-1.11.1
+patch -Np1 -i ../patches/xfce4-screenshooter-1.11.1-upstreamfix.patch
 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static --disable-debug
 make
 make install

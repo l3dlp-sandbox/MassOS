@@ -20,11 +20,15 @@ rm -rf /root/go
 rm -rf /etc/kernel
 # Move any misplaced files.
 if [ -d /usr/etc ]; then
-  cp -r /usr/etc /
+  echo "WARNING: Relocating files in /usr/etc to /etc." >&2
+  echo "WARNING: Ensure all MassOS packages use the correct sysconfdir." >&2
+  cp -rv /usr/etc / >&2
   rm -rf /usr/etc
 fi
 if [ -d /usr/man ]; then
-  cp -r /usr/man /usr/share
+  echo "WARNING: Relocating files in /usr/man to /usr/share/man." >&2
+  echo "WARNING: Ensure all MassOS packages use the correct mandir." >&2
+  cp -r /usr/man /usr/share >&2
   rm -rf /usr/man
 fi
 # Remove static documentation to free up space.
@@ -35,6 +39,7 @@ rm -rf /usr/share/gtk-doc/html/*
 # Remove libtool archives.
 find /usr/{lib,libexec} -name \*.la -delete
 # Remove unwanted Python bytecode cache files in /usr/bin.
+# TODO: Determine the offending package(s) and fix them in the build system.
 rm -rf /usr/bin/__pycache__
 # Remove any temporary files.
 rm -rf /tmp/*

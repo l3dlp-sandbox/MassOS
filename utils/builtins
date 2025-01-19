@@ -106,6 +106,7 @@ egl-wayland
 eglexternalplatform
 elfutils
 enchant
+espeak-ng
 exfatprogs
 exiv2
 expat
@@ -245,6 +246,7 @@ lcms2
 ldac
 less
 libaio
+libao
 libaom
 libarchive
 libass
@@ -374,6 +376,7 @@ libtiff
 libtirpc
 libtool
 libtpms
+libudfread
 libunistring
 libunwind
 liburing
@@ -521,6 +524,7 @@ passim
 patch
 patchelf
 pathspec
+pcaudilib
 pciutils
 pcre
 pcre2
@@ -564,6 +568,7 @@ python
 python-certifi
 python-dbusmock
 python-distutils-extra
+pyxdg
 pyyaml
 qpdf
 qrencode
@@ -595,6 +600,7 @@ setuptools-scm
 setxkbmap
 sgml-common
 sgmlspm
+shaderc
 shadow
 shared-mime-info
 sharutils
@@ -608,6 +614,7 @@ smproxy
 snowball
 sound-theme-freedesktop
 soundtouch
+speech-dispatcher
 speex
 speexdsp
 spirv-headers
@@ -655,7 +662,6 @@ util-macros
 vala
 vim
 vitetris
-volk
 volume-key
 vte
 vulkan-headers

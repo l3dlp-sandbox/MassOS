@@ -1,0 +1,26 @@
+# This is the default configuration for useradd.
+# See 'man 8 useradd' for more information.
+
+# Default login shell for new users.
+SHELL=/bin/bash
+
+# Default group for new users.
+GROUP=users
+
+# Default location of new users' home directories.
+HOME=/home
+
+# Number of days before an expired password turns into a disabled account.
+# Set to -1 to prevent this behaviour from happening entirely.
+INACTIVE=-1
+
+# Default expiry date of user passwords. Leave blank for no expiry.
+EXPIRE=
+
+# Files in this directory should be copied to the home directory when a new
+# user is created. For example, it contains the user-specific shell startup
+# files, and default configuration files for some desktop environments.
+SKEL=/etc/skel
+
+# Whether or not a mail spool should be created for new users.
+CREATE_MAIL_SPOOL=no
