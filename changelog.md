@@ -17,9 +17,11 @@ Changes:
 - Dropped old Xorg input drivers which are replaced by libinput.
 - Split Noto fonts package into normal fonts, CJK fonts and emoji fonts.
 - Added libaom and SVT-AV1 packages for improved AV1 video codec support.
+- Added AMF and NVDEC/NVENC support to FFmpeg for improved hardware acceleration support.
 - Added firewalld and enabled it by default, for enhanced firewall support.
 - Reaplced full OpenLDAP package with only libldap.
 - Replaced pkg-config with pkgconf.
+- Replaced SDL with sdl12-compat.
 - Added libc++ and libc++abi alongside the LLVM installation.
 - Added HTTP/3 support in curl using libnghttp3.
 - Added `verify-sources.sh` script to the build system to allow verifying SHA256 checksums of downloaded sources before building MassOS.
@@ -37,6 +39,7 @@ Upgraded software (core):
 - Acl: `2.3.1 --> 2.3.2`
 - adwaita-icon-theme: `43 --> 47.0`
 - alsa-lib: `1.2.7.2 --> 1.2.13`
+- AMF-Headers: `(new package) --> 1.4.35`
 - AppArmor: `3.1.1 --> 4.0.3`
 - AppStream: `0.15.5 --> 1.0.4`
 - appstream-glib: `0.8.0 --> 0.8.3`
@@ -119,7 +122,7 @@ Upgraded software (core):
 - FAAC: `(new package) --> 1.30`
 - FAAD2: `2.10.0 --> 2.10.1`
 - Fakeroot: `1.29 --> 1.36.2`
-- fastfetch: `(new package) --> 2.33.0`
+- fastfetch: `(new package) --> 2.34.1`
 - fastjsonschema: `(new package) --> 2.21.0`
 - FFmpeg: `5.1.2 --> 7.1`
 - File: `5.43 --> 5.46`
@@ -436,6 +439,8 @@ Upgraded software (core):
 - NSPR: `4.35 --> 4.36`
 - NSS: `3.83 --> 3.107`
 - ntfs-3g: `2022.5.17 --> 2022.10.3`
+- nv-codec-headers: `(new package) --> 12.2.72.0`
+- nvidia-vaapi-driver: `(new package) --> 0.0.13`
 - NVIDIA-Open-Kernel-Modules: `515.76 --> 565.77`
 - nvme-cli: `(new package) --> 2.11`
 - oniguruma: `6.9.8 --> 6.9.9`
@@ -511,6 +516,8 @@ Upgraded software (core):
 - Ruby: `3.1.2 --> 3.4.1`
 - SANE: `1.1.1 --> 1.3.1`
 - scdoc: `(new package) --> 1.11.0`
+- SDL: `1.2.15 --> (removed)`
+- sdl12-compat: `(new package) --> 1.2.68`
 - SDL2: `2.24.0 --> 2.30.10`
 - seatd: `(new package) --> 0.9.1`
 - Sed: `4.8 --> 4.9`
@@ -654,7 +661,7 @@ Upgraded software (Xfce):
 - elementary-icon-theme: `(new package) --> 8.1.0`
 - Evince: `43.0 --> 46.3.1`
 - Exo: `4.17.2 --> 4.20.0`
-- Firefox: `105.0.1 --> 134.0`
+- Firefox: `105.0.1 --> 134.0.2`
 - FreeRDP: `2.8.0 --> (removed)`
 - Garcon: `4.17.1 --> 4.20.0`
 - GParted: `1.4.0 --> 1.6.0`

@@ -4823,14 +4823,14 @@ install -t /usr/share/licenses/hyfetch -Dm644 LICENSE.md
 cd ..
 rm -rf hyfetch-1.99.0
 # fastfetch.
-tar -xf fastfetch-2.33.0.tar.gz
-cd fastfetch-2.33.0
+tar -xf fastfetch-2.34.1.tar.gz
+cd fastfetch-2.34.1
 cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_SYSTEM_YYJSON=ON -DINSTALL_LICENSE=OFF -Wno-dev -G Ninja -B build
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/fastfetch -Dm644 LICENSE
 cd ..
-rm -rf fastfetch-2.33.0
+rm -rf fastfetch-2.34.1
 # htop.
 tar -xf htop-3.3.0.tar.xz
 cd htop-3.3.0
@@ -5712,15 +5712,6 @@ systemctl enable speech-dispatcherd
 install -t /usr/share/licenses/speech-dispatcher -Dm644 COPYING.{GPL-2,GPL-3,LGPL}
 cd ..
 rm -rf speech-dispatcher-0.11.5
-# SDL.
-tar -xf SDL-1.2.15.tar.gz
-cd SDL-1.2.15
-sed -i '/_XData32/s:register long:register _Xconst long:' src/video/x11/SDL_x11sym.h
-./configure --prefix=/usr --disable-static
-make
-make install
-cd ..
-rm -rf SDL-1.2.15
 # SDL2.
 tar -xf SDL2-2.30.10.tar.gz
 cd SDL2-2.30.10
@@ -5730,6 +5721,16 @@ ninja -C build install
 install -t /usr/share/licenses/sdl2 -Dm644 LICENSE.txt
 cd ..
 rm -rf SDL2-2.30.10
+# sdl12-compat (provides SDL).
+tar -xf sdl12-compat-release-1.2.68.tar.gz
+cd sdl12-compat-release-1.2.68
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=MinSizeRel -DSDL12TESTS=OFF -Wno-dev -G Ninja -B build
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/sdl12-compat -Dm644 LICENSE.txt
+ln -sf sdl12-compat /usr/share/licenses/sdl
+cd ..
+rm -rf sdl12-compat-release-1.2.68
 # biosdevname.
 tar -xf biosdevname-0.7.3.tar.gz
 cd biosdevname-0.7.3
@@ -7082,12 +7083,33 @@ ninja -C build install
 install -t /usr/share/licenses/faad2 -Dm644 COPYING
 cd ..
 rm -rf faad2-2.11.1
+# AMF-Headers.
+tar --no-same-owner -xf AMF-headers-v1.4.35.tar.gz -C /usr/include --strip-components=1
+head -n31 /usr/include/AMF/core/Platform.h | install -Dm644 /dev/stdin /usr/share/licenses/amf-headers/LICENSE.txt
+# nv-codec-headers.
+tar -xf nv-codec-headers-12.2.72.0.tar.gz
+cd nv-codec-headers-12.2.72.0
+make PREFIX=/usr
+make PREFIX=/usr install
+install -dm755 /usr/share/licenses/nv-codec-headers
+for h in /usr/include/ffnvcodec/*.h; do head -n26 "$h" > /usr/share/licenses/nv-codec-headers/"$(basename "$h")".txt; done
+cd ..
+rm -rf nv-codec-headers-12.2.72.0
+# OpenAL (initial build - circular dependency with FFmpeg).
+tar -xf openal-soft-1.24.1.tar.gz
+cd openal-soft-1.24.1
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DALSOFT_EXAMPLES=OFF -DALSOFT_UTILS=OFF -Wno-dev -G Ninja -B build
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/openal -Dm644 COPYING BSD-3Clause
+cd ..
+rm -rf openal-soft-1.24.1
 # FFmpeg.
 tar -xf ffmpeg-7.1.tar.xz
 cd ffmpeg-7.1
 patch -Np1 -i ../patches/ffmpeg-7.1-chromium.patch
 sed -i 's/X265_BUILD >= 210/(&) \&\& (X265_BUILD < 213)/' libavcodec/libx265.c
-./configure --prefix=/usr --disable-debug --disable-htmlpages --disable-nonfree --disable-static --enable-alsa --enable-bzlib --enable-gmp --enable-gpl --enable-iconv --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcdio --enable-libdav1d --enable-libdrm --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libiec61883 --enable-libjack --enable-libmodplug --enable-libmp3lame --enable-libopenh264 --enable-libopenjpeg --enable-libopus --enable-libpulse --enable-librav1e --enable-librsvg --enable-librtmp --enable-libshaderc --enable-libspeex --enable-libsvtav1 --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxcb --enable-libxcb-shape --enable-libxcb-shm --enable-libxcb-xfixes --enable-libxml2 --enable-libxvid --enable-manpages --enable-opengl --enable-openssl --enable-optimizations --enable-sdl2 --enable-shared --enable-small --enable-stripping --enable-vaapi --enable-vdpau --enable-version3 --enable-vulkan --enable-xlib --enable-zlib
+./configure --prefix=/usr --disable-debug --disable-htmlpages --disable-nonfree --disable-podpages --disable-rpath --disable-static --disable-txtpages --enable-alsa --enable-amf --enable-bzlib --enable-cuvid --enable-ffnvcodec --enable-gmp --enable-gpl --enable-iconv --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcdio --enable-libdav1d --enable-libdrm --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libiec61883 --enable-libjack --enable-libmodplug --enable-libmp3lame --enable-libopenh264 --enable-libopenjpeg --enable-libopus --enable-libpulse --enable-librav1e --enable-librsvg --enable-librtmp --enable-libshaderc --enable-libspeex --enable-libsvtav1 --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxcb --enable-libxcb-shape --enable-libxcb-shm --enable-libxcb-xfixes --enable-libxml2 --enable-libxvid --enable-manpages --enable-nvdec --enable-nvenc --enable-openal --enable-opengl --enable-openssl --enable-optimizations --enable-sdl2 --enable-shared --enable-small --enable-stripping --enable-vaapi --enable-vdpau --enable-version3 --enable-vulkan --enable-xlib --enable-zlib
 make
 gcc $CFLAGS tools/qt-faststart.c -o tools/qt-faststart $LDFLAGS
 make install
@@ -7095,13 +7117,12 @@ install -t /usr/bin -Dm755 tools/qt-faststart
 install -t /usr/share/licenses/ffmpeg -Dm644 COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1 COPYING.LGPLv3 LICENSE.md
 cd ..
 rm -rf ffmpeg-7.1
-# OpenAL.
+# OpenAL (rebuild - circular dependency with FFmpeg).
 tar -xf openal-soft-1.24.1.tar.gz
 cd openal-soft-1.24.1
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DALSOFT_EXAMPLES=OFF -Wno-dev -G Ninja -B build
+cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_INSTALL_PREFIX=/usr -DALSOFT_EXAMPLES=OFF -DALSOFT_UTILS=ON -Wno-dev -G Ninja -B build
 ninja -C build
 ninja -C build install
-install -t /usr/share/licenses/openal -Dm644 COPYING BSD-3Clause
 cd ..
 rm -rf openal-soft-1.24.1
 # GStreamer / gst-plugins-{base,good,bad,ugly} / gst-libav / gstreamer-vaapi / gst-editing-services / gst-python
@@ -7121,6 +7142,15 @@ install -t /usr/share/licenses/gst-editing-services -Dm644 subprojects/gst-editi
 install -t /usr/share/licenses/gst-python -Dm644 subprojects/gst-python/COPYING
 cd ..
 rm -rf gstreamer-1.24.11.tar.bz2
+# nvidia-vaapi-driver.
+tar -xf nvidia-vaapi-driver-0.0.13.tar.gz
+cd nvidia-vaapi-driver-0.0.13
+meson setup build --prefix=/usr --buildtype=minsize
+ninja -C build
+ninja -C build install
+install -t /usr/share/licenses/nvidia-vaapi-driver -Dm644 COPYING
+cd ..
+rm -rf nvidia-vaapi-driver-0.0.13
 # PipeWire + WirePlumber.
 tar -xf pipewire-1.2.7.tar.bz2
 cd pipewire-1.2.7

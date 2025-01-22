@@ -4,6 +4,7 @@ https://mirror.netcologne.de/savannah/acl/acl-2.3.2.tar.xz
 https://freefr.dl.sourceforge.net/project/acpiclient/acpiclient/1.7/acpi-1.7.tar.gz
 https://mirrors.dotsrc.org/gnome/sources/adwaita-icon-theme/47/adwaita-icon-theme-47.0.tar.xz
 https://www.alsa-project.org/files/pub/lib/alsa-lib-1.2.13.tar.bz2
+https://github.com/GPUOpen-LibrariesAndSDKs/AMF/releases/download/v1.4.35/AMF-headers-v1.4.35.tar.gz
 https://launchpad.net/apparmor/4.0/4.0.3/+download/apparmor-4.0.3.tar.gz
 https://www.freedesktop.org/software/appstream/releases/AppStream-1.0.4.tar.xz
 https://github.com/hughsie/appstream-glib/archive/refs/tags/appstream_glib_0_8_3.tar.gz
@@ -123,7 +124,7 @@ https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot/
 https://github.com/knik0/faac/archive/1_30/faac-1_30.tar.gz
 https://github.com/knik0/faad2/archive/2.11.1/faad2-2.11.1.tar.gz
 http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.36.2.orig.tar.gz
-https://github.com/fastfetch-cli/fastfetch/archive/2.33.0/fastfetch-2.33.0.tar.gz
+https://github.com/fastfetch-cli/fastfetch/archive/2.34.1/fastfetch-2.34.1.tar.gz
 https://files.pythonhosted.org/packages/source/f/fastjsonschema/fastjsonschema-2.21.0.tar.gz
 https://github.com/yo8192/fcron/archive/ver3_3_1/fcron-ver3_3_1.tar.gz
 https://ffmpeg.org/releases/ffmpeg-7.1.tar.xz
@@ -500,6 +501,8 @@ https://www.gnupg.org/ftp/gcrypt/npth/npth-1.8.tar.bz2
 https://archive.mozilla.org/pub/nspr/releases/v4.36/src/nspr-4.36.tar.gz
 https://archive.mozilla.org/pub/security/nss/releases/NSS_3_107_RTM/src/nss-3.107.tar.gz
 https://github.com/tuxera/ntfs-3g/archive/2022.10.3/ntfs-3g-2022.10.3.tar.gz
+https://github.com/FFmpeg/nv-codec-headers/releases/download/n12.2.72.0/nv-codec-headers-12.2.72.0.tar.gz
+https://github.com/elFarto/nvidia-vaapi-driver/archive/v0.0.13/nvidia-vaapi-driver-0.0.13.tar.gz
 https://github.com/linux-nvme/nvme-cli/archive/v2.11/nvme-cli-2.11.tar.gz
 https://github.com/kkos/oniguruma/releases/download/v6.9.9/onig-6.9.9.tar.gz
 https://github.com/NVIDIA/open-gpu-kernel-modules/archive/565.77/open-gpu-kernel-modules-565.77.tar.gz
@@ -592,7 +595,7 @@ https://download.samba.org/pub/samba/stable/samba-4.21.2.tar.gz
 https://github.com/sass/sassc/archive/3.6.2/sassc-3.6.2.tar.gz
 https://cdn.kernel.org/pub/linux/bluetooth/sbc-2.0.tar.xz
 https://github.com/ddevault/scdoc/archive/1.11.0/scdoc-1.11.0.tar.gz
-https://www.libsdl.org/release/SDL-1.2.15.tar.gz
+https://github.com/libsdl-org/sdl12-compat/archive/release-1.2.68/sdl12-compat-release-1.2.68.tar.gz
 https://www.libsdl.org/release/SDL2-2.30.10.tar.gz
 https://github.com/kennylevinsen/seatd/archive/0.9.1/seatd-0.9.1.tar.gz
 https://mirror.lyrahosting.com/gnu/sed/sed-4.9.tar.xz

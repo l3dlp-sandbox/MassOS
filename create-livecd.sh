@@ -92,7 +92,7 @@ ver="$(cat iso-workdir/massos-rootfs/etc/massos-release)"
 echo "Preparing the live system..."
 chroot iso-workdir/massos-rootfs /usr/sbin/groupadd -r autologin
 chroot iso-workdir/massos-rootfs /usr/sbin/useradd -c "Live User" -G wheel,autologin -ms /bin/bash massos
-echo "massos:massos" | chroot iso-workdir/massos-rootfs /usr/sbin/chpasswd
+echo "massos:massos" | chroot iso-workdir/massos-rootfs /usr/sbin/chpasswd -c YESCRYPT
 echo "massos ALL=(ALL) NOPASSWD: ALL" > iso-workdir/massos-rootfs/etc/sudoers.d/live
 cat > iso-workdir/massos-rootfs/etc/polkit-1/rules.d/49-live.rules << "END"
 // Allow elevation without password prompt in the live environment.

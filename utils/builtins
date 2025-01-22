@@ -4,6 +4,7 @@ acl
 acpi
 adwaita-icon-theme
 alsa-lib
+amf-headers
 apparmor
 appstream
 appstream-glib
@@ -497,6 +498,8 @@ npth
 nspr
 nss
 ntfs-3g
+nv-codec-headers
+nvidia-vaapi-driver
 nvidia-open-kernel-modules
 nvme-cli
 oniguruma
@@ -589,6 +592,7 @@ sassc
 sbc
 scdoc
 sdl
+sdl12-compat
 sdl2
 seatd
 sed
