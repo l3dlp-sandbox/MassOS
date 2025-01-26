@@ -11,15 +11,15 @@ cd /sources
 . build.env
 # === IF RESUMING A FAILED BUILD, ONLY REMOVE LINES BELOW THIS ONE.
 # Install Rust to a temporary directory to support building some packages.
-tar -xf rust-1.83.0-x86_64-unknown-linux-gnu.tar.gz
-cd rust-1.83.0-x86_64-unknown-linux-gnu
+tar -xf rust-1.84.0-x86_64-unknown-linux-gnu.tar.gz
+cd rust-1.84.0-x86_64-unknown-linux-gnu
 ./install.sh --prefix=/sources/rust --without=rust-docs
 cd ..
-rm -rf rust-1.83.0-x86_64-unknown-linux-gnu
+rm -rf rust-1.84.0-x86_64-unknown-linux-gnu
 # elementary-icon-theme.
 tar -xf elementary-icon-theme-8.1.0.tar.gz
 cd icons-8.1.0
-meson setup build --prefix=/usr --buildtype=minsize -Dvolume_icons=false
+meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize -Dvolume_icons=false
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/elementary-icon-theme -Dm644 COPYING
@@ -77,7 +77,7 @@ rm -rf libxfce4util-4.20.0
 # libxfce4windowing.
 tar -xf libxfce4windowing-4.20.0.tar.bz2
 cd libxfce4windowing-4.20.0
-meson setup build --prefix=/usr --buildtype=minsize -Dwayland=enabled -Dx11=enabled
+meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize -Dwayland=enabled -Dx11=enabled
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/libxfce4windowing -Dm644 COPYING
@@ -104,8 +104,8 @@ rm -rf libxfce4ui-4.20.0
 # catfish.
 tar -xf catfish-4.18.0.tar.bz2
 cd catfish-4.18.0
-pip wheel --no-build-isolation --no-cache-dir --no-deps -w dist .
-pip install --no-cache-dir --no-index --no-user -f dist catfish
+python -m build -nw -o dist
+python -m installer --compile-bytecode 1 dist/*.whl
 install -t /usr/share/licenses/catfish -Dm644 COPYING
 cd ..
 rm -rf catfish-4.18.0
@@ -212,12 +212,9 @@ rm -rf xfwm4-4.20.0
 # LabWC.
 tar -xf labwc-0.8.2.tar.gz
 cd labwc-0.8.2
-meson setup build --prefix=/usr --buildtype=minsize
+meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize
 ninja -C build
 ninja -C build install
-rm -f /usr/include/sfdo-{basedir,common,desktop,desktop-file,icon}.h
-rm -f /usr/lib/libsfdo-{basedir,desktop,desktop-file,icon}.a
-rm -f /usr/lib/pkgconfig/libsfdo-{basedir,desktop,desktop-file,icon}.pc
 install -t /usr/share/licenses/labwc -Dm644 LICENSE
 cd ..
 rm -rf labwc-0.8.2
@@ -233,14 +230,14 @@ install -t /usr/share/licenses/xfce4-session -Dm644 COPYING
 cd ..
 rm -rf xfce4-session-4.20.0
 # Parole.
-tar -xf parole-4.18.1.tar.bz2
-cd parole-4.18.1
+tar -xf parole-4.18.2.tar.bz2
+cd parole-4.18.2
 ./configure --prefix=/usr
 make
 make install
 install -t /usr/share/licenses/parole -Dm644 COPYING
 cd ..
-rm -rf parole-4.18.1
+rm -rf parole-4.18.2
 # Orage.
 tar -xf orage-4.18.0.tar.bz2
 cd orage-4.18.0
@@ -271,7 +268,7 @@ rm -rf xfce4-terminal-1.1.3
 # Shotwell.
 tar -xf shotwell-0.32.10.tar.gz
 cd shotwell-shotwell-0.32.10
-meson setup build --prefix=/usr --buildtype=minsize
+meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/shotwell -Dm644 COPYING
@@ -312,7 +309,7 @@ sed -i '/^dbusdir =/ s/sysconfdir/datadir/' data/configs/Makefile.{am,in}
 make
 make install
 cp -af /etc/xdg/autostart/blueman.desktop /usr/share/blueman/autostart.desktop
-cat > /usr/sbin/blueman-autostart << "END"
+cat > /usr/bin/blueman-autostart << "END"
 #!/bin/bash
 
 not_root() {
@@ -336,7 +333,7 @@ case "$1" in
   *) usage ;;
 esac
 END
-chmod 755 /sbin/blueman-autostart
+chmod 755 /bin/blueman-autostart
 install -t /usr/share/licenses/blueman -Dm644 COPYING
 cd ..
 rm -rf blueman-2.4.3
@@ -344,7 +341,7 @@ rm -rf blueman-2.4.3
 tar -xf xfce4-screenshooter-1.11.1.tar.bz2
 cd xfce4-screenshooter-1.11.1
 patch -Np1 -i ../patches/xfce4-screenshooter-1.11.1-upstreamfix.patch
-./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static --disable-debug
+./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib --disable-static --disable-debug --enable-wayland --enable-x11
 make
 make install
 install -t /usr/share/licenses/xfce4-screenshooter -Dm644 COPYING
@@ -447,8 +444,7 @@ rm -rf gparted-GPARTED_1_6_0
 # Popsicle.
 tar -xf popsicle-1.3.3.tar.gz
 cd popsicle-1.3.3
-RUSTUP_TOOLCHAIN=stable make vendor
-RUSTUP_TOOLCHAIN=stable make VENDORED=1
+make
 make prefix=/usr install
 install -t /usr/share/licenses/popsicle -Dm644 LICENSE
 cd ..
@@ -472,7 +468,7 @@ rm -rf claws-mail-4.3.0
 # Evince.
 tar -xf evince-46.3.1.tar.xz
 cd evince-46.3.1
-meson setup build --prefix=/usr --buildtype=minsize -Dnautilus=false
+meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize -Dnautilus=false
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/evince -Dm644 COPYING
@@ -481,7 +477,7 @@ rm -rf evince-46.3.1
 # Baobab.
 tar -xf baobab-41.0.tar.xz
 cd baobab-41.0
-meson setup build --prefix=/usr --buildtype=minsize
+meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize
 ninja -C build
 ninja -C build install
 install -t /usr/share/licenses/baobab -Dm644 COPYING{,.docs}
@@ -491,7 +487,7 @@ rm -rf baobab-41.0
 tar -xf gnome-firmware-41.0.tar.bz2
 cd gnome-firmware-41.0
 sed -i 's/master/1.9.27/' subprojects/fwupd.wrap
-CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion" LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/lib/gnome-firmware" meson setup build --prefix=/usr --buildtype=minsize --force-fallback-for=fwupd -Dfwupd:build=library -Dfwupd:docs=disabled -Dfwupd:introspection=false -Dfwupd:tests=false
+CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion" LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/lib/gnome-firmware" meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize --force-fallback-for=fwupd -Dfwupd:build=library -Dfwupd:docs=disabled -Dfwupd:introspection=false -Dfwupd:tests=false
 ninja -C build
 DESTDIR="$PWD"/dest ninja -C build install
 mkdir -p dest/usr/lib/gnome-firmware
@@ -505,7 +501,7 @@ rm -rf gnome-firmware-41.0
 tar -xf gnome-software-41.5.tar.xz
 cd gnome-software-41.5
 patch -Np1 -i ../patches/gnome-software-41.5-fwupd200.patch
-CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=nested-externs" LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/lib/gnome-software" meson setup build --prefix=/usr --buildtype=minsize --force-fallback-for=appstream -Dexternal_appstream=false -Dpackagekit=false -Dtests=false -Dvalgrind=false
+CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=nested-externs" LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/lib/gnome-software" meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize --force-fallback-for=appstream -Dexternal_appstream=false -Dpackagekit=false -Dtests=false -Dvalgrind=false
 ninja -C build
 DESTDIR="$PWD"/dest ninja -C build install
 mv dest/usr/lib/libappstream.so.0.14.1 dest/usr/lib/gnome-software/libappstream.so.4
@@ -519,7 +515,7 @@ rm -rf gnome-software-41.5
 # MassOS-Welcome (modified version of Gnome Tour).
 tar -xf massos-welcome-cc649f83e04f0daa880edf1df8e4d5165b79787c.tar.gz
 cd massos-welcome-cc649f83e04f0daa880edf1df8e4d5165b79787c
-meson setup build --prefix=/usr --buildtype=minsize
+meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize
 ninja -C build
 install -Dm755 build/target/release/gnome-tour /usr/bin/massos-welcome
 cat > /usr/libexec/firstlogin << "END"

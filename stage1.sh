@@ -15,9 +15,8 @@ echo "Starting Stage 1 Build..."
 LC_ALL=C
 MASSOS="$PWD"/massos-rootfs
 PATH="$MASSOS"/tools/bin:$PATH
-SRC="$MASSOS"/sources
 CONFIG_SITE="$MASSOS"/usr/share/config.site
-export LC_ALL MASSOS MASSOS_TARGET PATH SRC CONFIG_SITE
+export LC_ALL MASSOS MASSOS_TARGET PATH CONFIG_SITE
 # Build in parallel using all available CPU cores.
 export MAKEFLAGS="-j$(nproc)"
 # Compiler flags for MassOS. We prefer to optimise for size.
@@ -27,26 +26,24 @@ CPPFLAGS=""
 LDFLAGS=""
 export CFLAGS CXXFLAGS CPPFLAGS LDFLAGS
 # Setup the basic filesystem structure.
-mkdir -p "$MASSOS"/{etc,var}
-mkdir -p "$MASSOS"/usr/{bin,lib,sbin}
-# Ensure the filesystem structure is unified.
+mkdir -p "$MASSOS"/{etc,usr/{bin,lib},var}
+# Ensure the filesystem structure uses unified usr and merged bin-sbin.
 ln -sf usr/bin "$MASSOS"/bin
+ln -sf bin "$MASSOS"/usr/sbin
+ln -sf usr/bin "$MASSOS"/sbin
 ln -sf usr/lib "$MASSOS"/lib
-ln -sf usr/sbin "$MASSOS"/sbin
 ln -sf lib "$MASSOS"/usr/lib64
 ln -sf usr/lib "$MASSOS"/lib64
-# Directory where source tarballs will be placed while building.
+# Move sources into the temporary environment.
+mv sources "$MASSOS"
+# Copy patches into the temporary environment.
+cp -r patches "$MASSOS"/sources
+# Copy systemd units into the temporary environment.
+cp -r utils/systemd-units "$MASSOS"/sources
 # Temporary toolchain directory.
 mkdir "$MASSOS"/tools
-# Move sources into the temporary environment.
-mv sources "$SRC"
-# Copy patches into the temporary environment.
-mkdir -p "$SRC"/patches
-cp patches/* "$SRC"/patches
-# Copy systemd units into the temporary environment.
-cp -r utils/systemd-units "$SRC"
 # Change to the sources directory.
-cd "$SRC"
+cd "$MASSOS"/sources
 # Binutils (Initial build for bootstrapping).
 tar -xf binutils-2.43.1.tar.xz
 cd binutils-2.43.1
@@ -73,20 +70,20 @@ cat ../gcc/{limitx,glimits,limity}.h > "$MASSOS"/tools/lib/gcc/x86_64-stage1-lin
 cd ../..
 rm -rf gcc-14.2.0
 # Linux API Headers.
-tar -xf linux-6.12.10.tar.xz
-cd linux-6.12.10
+tar -xf linux-6.13.tar.xz
+cd linux-6.13
 make mrproper
 make headers
 find usr/include -type f -not -name '*.h' -delete
 cp -r usr/include "$MASSOS"/usr
 cd ..
-rm -rf linux-6.12.10
+rm -rf linux-6.13
 # Glibc.
 tar -xf glibc-2.40.tar.xz
 cd glibc-2.40
 patch -Np1 -i ../patches/glibc-2.40-vardirectories.patch
 mkdir -p build; cd build
-echo "rootsbindir=/usr/sbin" > configparms
+echo "rootsbindir=/usr/bin" > configparms
 CFLAGS="-O2" CXXFLAGS="-O2" ../configure --prefix=/usr --host=x86_64-stage1-linux-gnu --build=$(../scripts/config.guess) --with-pkgversion="MassOS Glibc 2.40" --with-headers="$MASSOS"/usr/include --enable-kernel=4.19 --disable-nscd --disable-werror libc_cv_slibdir=/usr/lib
 make
 make DESTDIR="$MASSOS" install
@@ -183,17 +180,16 @@ cp utils/massos-release "$MASSOS"/usr/lib
 ln -sfr "$MASSOS"/usr/lib/massos-release "$MASSOS"/etc/massos-release
 ln -sfr "$MASSOS"/usr/lib/os-release "$MASSOS"/etc/os-release
 ln -sfr "$MASSOS"/usr/lib/lsb-release "$MASSOS"/etc/lsb-release
-cp utils/programs/{adduser,mass-chroot,mkinitramfs,mklocales} "$MASSOS"/usr/sbin
-cp utils/programs/{un,}zman "$MASSOS"/usr/bin
-cp utils/programs/massos-release.c "$SRC"
-cp -r utils/build-configs/* "$SRC"
-cp -r logo/* "$SRC"
-cp utils/builtins "$SRC"
-cp -r utils/extra-package-licenses "$SRC"
-cp -r backgrounds "$SRC"
-cp -r utils/man "$SRC"
-cp LICENSE "$SRC"
-cp build-system.sh build.env "$SRC"
+cp utils/programs/{adduser,mass-chroot,mkinitramfs,mklocales,{un,}zman} "$MASSOS"/usr/bin
+cp utils/programs/massos-release.c "$MASSOS"/sources
+cp -r utils/build-configs/* "$MASSOS"/sources
+cp -r logo/* "$MASSOS"/sources
+cp utils/builtins "$MASSOS"/sources
+cp -r utils/extra-package-licenses "$MASSOS"/sources
+cp -r backgrounds "$MASSOS"/sources
+cp -r utils/man "$MASSOS"/sources
+cp LICENSE "$MASSOS"/sources
+cp build-system.sh build.env "$MASSOS"/sources
 # If it is an "experimental" build, then date its release.
 sed -i "s|experimental|experimental-$(date "+%Y%m%d")|g" "$MASSOS"/usr/lib/massos-release
 sed -i "s|experimental|experimental-$(date "+%Y%m%d")|g" "$MASSOS"/usr/lib/os-release
@@ -201,3 +197,7 @@ sed -i "s|experimental|experimental-$(date "+%Y%m%d")|g" "$MASSOS"/usr/lib/lsb-r
 # Finishing message.
 echo -e "\nThe Stage 1 bootstrap system was built successfully."
 echo "To build the full MassOS system, now run './stage2.sh' AS ROOT."
+# Send a notification to the system if supported.
+if notify-send --version &>/dev/null; then
+  notify-send -i "$PWD"/logo/massos-logo.png "MassOS Build System" "The Stage 1 build has finished successfully." &>/dev/null || true
+fi

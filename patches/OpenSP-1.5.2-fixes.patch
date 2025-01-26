@@ -1,6 +1,6 @@
 --- a/aclocal.m4
 +++ b/aclocal.m4
-@@ -833,10 +833,6 @@ else
+@@ -833,10 +833,6 @@
  #  endif
  #endif
  
@@ -11,7 +11,7 @@
  void fnord() { int i=42;}
  int main ()
  {
-@@ -850,7 +846,7 @@ int main ()
+@@ -850,7 +846,7 @@
        /* dlclose (self); */
      }
  
@@ -22,7 +22,7 @@
    if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} 2>/dev/null; then
 --- a/configure
 +++ b/configure
-@@ -2917,7 +2917,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+@@ -2917,7 +2917,7 @@
    echo "$as_me:$LINENO: \$? = $ac_status" >&5
    (exit $ac_status); }; }; then
    for ac_declaration in \
@@ -31,7 +31,7 @@
     'extern "C" void std::exit (int) throw (); using std::exit;' \
     'extern "C" void std::exit (int); using std::exit;' \
     'extern "C" void exit (int) throw ();' \
-@@ -5186,8 +5186,8 @@ main ()
+@@ -5186,8 +5186,8 @@
    for (i = 0; i < 256; i++)
      if (XOR (islower (i), ISLOWER (i))
  	|| toupper (i) != TOUPPER (i))
@@ -42,7 +42,7 @@
  }
  _ACEOF
  rm -f conftest$ac_exeext
-@@ -9508,10 +9508,6 @@ else
+@@ -9508,10 +9508,6 @@
  #  endif
  #endif
  
@@ -53,7 +53,7 @@
  void fnord() { int i=42;}
  int main ()
  {
-@@ -9525,7 +9521,7 @@ int main ()
+@@ -9525,7 +9521,7 @@
        /* dlclose (self); */
      }
  
@@ -62,7 +62,7 @@
  }
  EOF
    if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-@@ -9606,10 +9602,6 @@ else
+@@ -9606,10 +9602,6 @@
  #  endif
  #endif
  
@@ -73,7 +73,7 @@
  void fnord() { int i=42;}
  int main ()
  {
-@@ -9623,7 +9615,7 @@ int main ()
+@@ -9623,7 +9615,7 @@
        /* dlclose (self); */
      }
  
@@ -82,7 +82,7 @@
  }
  EOF
    if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-@@ -13321,10 +13313,6 @@ else
+@@ -13321,10 +13313,6 @@
  #  endif
  #endif
  
@@ -93,7 +93,7 @@
  void fnord() { int i=42;}
  int main ()
  {
-@@ -13338,7 +13326,7 @@ int main ()
+@@ -13338,7 +13326,7 @@
        /* dlclose (self); */
      }
  
@@ -102,7 +102,7 @@
  }
  EOF
    if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-@@ -13419,10 +13407,6 @@ else
+@@ -13419,10 +13407,6 @@
  #  endif
  #endif
  
@@ -113,7 +113,7 @@
  void fnord() { int i=42;}
  int main ()
  {
-@@ -13436,7 +13420,7 @@ int main ()
+@@ -13436,7 +13420,7 @@
        /* dlclose (self); */
      }
  
@@ -122,7 +122,7 @@
  }
  EOF
    if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-@@ -19110,10 +19094,6 @@ else
+@@ -19110,10 +19094,6 @@
  #  endif
  #endif
  
@@ -133,7 +133,7 @@
  void fnord() { int i=42;}
  int main ()
  {
-@@ -19127,7 +19107,7 @@ int main ()
+@@ -19127,7 +19107,7 @@
        /* dlclose (self); */
      }
  
@@ -142,7 +142,7 @@
  }
  EOF
    if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-@@ -19208,10 +19188,6 @@ else
+@@ -19208,10 +19188,6 @@
  #  endif
  #endif
  
@@ -153,7 +153,7 @@
  void fnord() { int i=42;}
  int main ()
  {
-@@ -19225,7 +19201,7 @@ int main ()
+@@ -19225,7 +19201,7 @@
        /* dlclose (self); */
      }
  
@@ -162,7 +162,7 @@
  }
  EOF
    if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-@@ -27450,8 +27426,8 @@ main ()
+@@ -27450,8 +27426,8 @@
    for (i = 0; i < 256; i++)
      if (XOR (islower (i), ISLOWER (i))
  	|| toupper (i) != TOUPPER (i))
@@ -173,3 +173,36 @@
  }
  _ACEOF
  rm -f conftest$ac_exeext
+--- a/lib/Syntax.cxx
++++ b/lib/Syntax.cxx
+@@ -24,7 +24,7 @@
+   16,
+   16,
+   16,
+-  32,
++  253,
+   96,
+   16,
+   240,
+--- a/unicode/gensyntax.pl
++++ b/unicode/gensyntax.pl
+@@ -185,7 +185,7 @@
+ 
+ QUANTITY        SGMLREF         -- To be determined --
+         ATTSPLEN        1920    -- ?? --
+-        LITLEN          240     -- ?? --
++        LITLEN          8092    -- ?? --
+         NAMELEN         240     -- ?? --
+         PILEN           1920    -- ?? --
+         TAGLEN          1920    -- ?? --
+--- a/unicode/unicode.syn
++++ b/unicode/unicode.syn
+@@ -1266,7 +1266,7 @@
+ 
+ QUANTITY        SGMLREF         -- To be determined --
+         ATTSPLEN        1920    -- ?? --
+-        LITLEN          240     -- ?? --
++        LITLEN          8092    -- ?? --
+         NAMELEN         240     -- ?? --
+         PILEN           1920    -- ?? --
+         TAGLEN          1920    -- ?? --

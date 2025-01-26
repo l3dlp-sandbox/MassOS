@@ -1,4 +1,4 @@
-.TH "ZMAN" "1" "May 2022" "zman" "MassOS System Utilities"
+.TH "ZMAN" "1" "January 2025" "zman" "MassOS System Utilities"
 .hy
 .SH NAME
 .PP
@@ -11,6 +11,8 @@ zman - Apply compression to groups of man pages in bulk.
 \f[B]zman\f[R] is a small utility which will apply gzip compression to groups of man pages in bulk.
 
 \f[B]zman\f[R] will take a directory as its input and recursively scan and compress man pages within it. Take care when using it.
+
+\f[B]zman\f[R] will not operate on / under any circumstance, and will not operate on /usr (except /usr/local) unless ZMAN_ALLOW_UNSAFE=1 is set in the environment.
 
 \f[B]zman\f[R] will automatically deal with symbolic links and other issues that can occur when attempting to compress man pages.
 .SH EXIT STATUS
@@ -33,7 +35,7 @@ Report bugs to <https://github.com/MassOS-Linux/MassOS/issues>.
 NOTE: Please first check that your issue has not yet been fixed in the development branch!
 .SH COPYRIGHT
 .PP
-Copyright (C) 2022 MassOS Developers.
+Copyright (C) 2025 Daniel Massey / MassOS Developers.
 
 This software is part of the MassOS system, and is licensed under the GNU GPLv3+.
 

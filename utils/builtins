@@ -40,6 +40,7 @@ bzip2
 c-ares
 cairo
 cairomm
+calver
 cdparanoia
 cdrkit
 cffi
@@ -123,6 +124,7 @@ figlet
 file
 findutils
 firewalld
+fish
 flac
 flashrom
 flatpak
@@ -361,6 +363,7 @@ libsamplerate
 libsass
 libseccomp
 libsecret
+libsfdo
 libsigc++
 libsigsegv
 libsm
@@ -642,6 +645,7 @@ texinfo
 tk
 tldr
 toml
+tomli
 tpm2-tools
 tpm2-tss
 tree
@@ -754,4 +758,5 @@ yyjson
 zip
 zipp
 zlib
+zsh
 zstd

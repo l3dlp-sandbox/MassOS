@@ -19,16 +19,26 @@ if [ -z "$INPUTRC" -a ! -f "$HOME/.inputrc" ]; then
   export INPUTRC=/etc/inputrc
 fi
 
-# PS1 prompt for login shells - RED for root, GREEN for users.
-if [ $EUID -eq 0 ]; then
-  PS1="\[\e[1;31m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]# "
+# PS1 prompts - RED for root, GREEN for users.
+if [ -n "$ZSH_VERSION" ]; then
+  # PS1 prompt for zsh.
+  if [ $EUID -eq 0 ]; then
+    PS1="%B%F{red}%n@%m%f%b %B%F{blue}%~%f%b # "
+  else
+    PS1="%B%F{green}%n@%m%f%b %B%F{blue}%~%f%b \$ "
+  fi
 else
-  PS1="\[\e[1;32m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ "
+  # PS1 prompt for normal shell.
+  if [ $EUID -eq 0 ]; then
+    PS1="\[\e[1;31m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]# "
+  else
+    PS1="\[\e[1;32m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ "
+  fi
 fi
 export PS1
 
-# Set the umask for security.
-if [ "$(id -gn)" = "$(id -un)" -a $EUID -gt 99 ]; then
+# Set a permissive umask for users and a restrictive one for system accounts.
+if [ $EUID -ge 1000 ]; then
   umask 002
 else
   umask 022

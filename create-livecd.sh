@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-# MassOS Live CD (ISO) Creation Script - Copyright (C) 2024 Daniel Massey.
+# MassOS Live CD (ISO) Creation Script - Copyright (C) 2025 Daniel Massey.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 set -e
 # Ensure we are running as root.
 if test $EUID -ne 0; then
-  echo "Error: $(basename "$0") must be run as root."
+  echo "ERROR: $(basename "$0") must be run as root."
   exit 1
 fi
 # Add the MassOS programs directory to our path, in case we're not on MassOS.
@@ -32,14 +32,20 @@ which mkfs.fat &>/dev/null || (echo "Error: mkfs.fat from dosfstools is required
 which mksquashfs &>/dev/null || (echo "Error: mksquashfs from squashfs-tools is required." >&2; exit 1)
 which unzip &>/dev/null || (echo "Error: unzip is required." >&2; exit 1)
 which xorriso &>/dev/null || (echo "Error: xorriso from libisoburn is required." >&2; exit 1)
-# Ensure that the rootfs file is specified and valid.
+# Ensure that the rootfs file is specified and exists.
 if test -z "$1"; then
-  echo "Error: Rootfs file must be specified." >&2
+  echo "Error: No rootfs file was specified." >&2
   echo "Usage: $(basename "$0") <rootfs-file-name>.tar.xz" >&2
   exit 1
 fi
 if test ! -f "$1"; then
-  echo "Error: Specified rootfs file $1 is not valid." >&2
+  echo "Error: Specified file $1 does not exist." >&2
+  exit 1
+fi
+# Ensure the rootfs file is a MassOS image and is a new enough version.
+if ! tar tf "$1" 2>/dev/null | grep -q '^usr/lib/massos-release$'; then
+  echo "Error: The specified file $1 is not a valid MassOS rootfs." >&2
+  echo "Note: $(basename "$0") does not support MassOS 2022.10 or older." >&2
   exit 1
 fi
 # Check if an existing directory exists.
@@ -56,13 +62,14 @@ mkdir -p iso-workdir/iso-root/LICENSES
 mkdir -p iso-workdir/iso-root/LiveOS
 mkdir -p iso-workdir/squashfs-tmp/LiveOS
 mkdir -p iso-workdir/efitmp
-# Get firmware versions from the rootfs (before extracting the whole thing).
+# Get information from the rootfs (before extracting the whole thing).
 echo "Gathering information from the rootfs..."
+# Get firmware versions.
 tar -xf "$1" -C iso-workdir --strip-components=3 usr/share/massos/firmwareversions
 FW_VER="$(grep -m1 "^linux-firmware:" iso-workdir/firmwareversions | cut -d' ' -f2-)"
 MVER="$(grep -m1 "^intel-microcode:" iso-workdir/firmwareversions | cut -d' ' -f2-)"
 SOF_VER="$(grep -m1 "^sof-firmware:" iso-workdir/firmwareversions | cut -d' ' -f2-)"
-# Get osinstallgui version from the rootfs (before extracting the whole thing).
+# Get osinstallgui version.
 tar -xf "$1" -C iso-workdir --strip-components=3 usr/share/massos/.osinstallguiver
 OSINSTALLGUI_VER="$(cat iso-workdir/.osinstallguiver)"
 # Download stuff.
@@ -138,7 +145,7 @@ cd ../..
 echo "Installing kernel..."
 cp iso-workdir/massos-rootfs/boot/vmlinuz* iso-workdir/iso-root/vmlinuz
 echo "Generating initramfs..."
-mass-chroot iso-workdir/massos-rootfs /usr/sbin/mkinitramfs "$(ls iso-workdir/massos-rootfs/usr/lib/modules)" >/dev/null
+mass-chroot iso-workdir/massos-rootfs /usr/sbin/mkinitramfs "$(cat iso-workdir/massos-rootfs/usr/share/massos/.krel)" >/dev/null
 mv iso-workdir/massos-rootfs/boot/initramfs-*.img iso-workdir/iso-root/initramfs.img
 # Install bootloader files.
 echo "Setting up bootloader..."

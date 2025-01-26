@@ -1,0 +1,213 @@
+--- a/avahi-core/browse.c
++++ b/avahi-core/browse.c
+@@ -634,6 +634,9 @@
+         AvahiSRecordBrowser *b;
+ 
+         b = avahi_s_record_browser_prepare(server, interface, protocol, key, flags, callback, userdata);
++        if (!b)
++            return NULL;
++
+         avahi_s_record_browser_start_query(b);
+ 
+         return b;
+--- a/avahi-core/browse-dns-server.c
++++ b/avahi-core/browse-dns-server.c
+@@ -343,7 +343,10 @@
+         AvahiSDNSServerBrowser* b;
+ 
+         b = avahi_s_dns_server_browser_prepare(server, interface, protocol, domain, type, aprotocol, flags, callback, userdata);
++        if (!b)
++            return NULL;
++
+         avahi_s_dns_server_browser_start(b);
+ 
+         return b;
+-}
+\ No newline at end of file
++}
+--- a/avahi-core/browse-domain.c
++++ b/avahi-core/browse-domain.c
+@@ -253,7 +253,10 @@
+         AvahiSDomainBrowser *b;
+ 
+         b = avahi_s_domain_browser_prepare(server, interface, protocol, domain, type, flags, callback, userdata);
++        if (!b)
++            return NULL;
++
+         avahi_s_domain_browser_start(b);
+ 
+         return b;
+-}
+\ No newline at end of file
++}
+--- a/avahi-core/browse-service.c
++++ b/avahi-core/browse-service.c
+@@ -103,7 +103,9 @@
+     AVAHI_CHECK_VALIDITY_RETURN_NULL(server, AVAHI_PROTO_VALID(protocol), AVAHI_ERR_INVALID_PROTOCOL);
+     AVAHI_CHECK_VALIDITY_RETURN_NULL(server, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
+     AVAHI_CHECK_VALIDITY_RETURN_NULL(server, AVAHI_FLAGS_VALID(flags, AVAHI_LOOKUP_USE_WIDE_AREA|AVAHI_LOOKUP_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+-    AVAHI_CHECK_VALIDITY_RETURN_NULL(server, avahi_is_valid_service_type_generic(service_type), AVAHI_ERR_INVALID_SERVICE_TYPE);
++
++    if (!avahi_is_valid_service_type_generic(service_type))
++        service_type = "_invalid._tcp";
+ 
+     if (!domain)
+         domain = server->domain_name;
+@@ -184,6 +186,9 @@
+         AvahiSServiceBrowser *b;
+ 
+         b = avahi_s_service_browser_prepare(server, interface, protocol, service_type, domain, flags, callback, userdata);
++        if (!b)
++            return NULL;
++
+         avahi_s_service_browser_start(b);
+ 
+         return b;
+--- a/avahi-core/browse-service-type.c
++++ b/avahi-core/browse-service-type.c
+@@ -171,6 +171,9 @@
+         AvahiSServiceTypeBrowser *b;
+ 
+         b = avahi_s_service_type_browser_prepare(server, interface, protocol, domain, flags, callback, userdata);
++        if (!b)
++            return NULL;
++
+         avahi_s_service_type_browser_start(b);
+ 
+         return b;
+--- a/avahi-core/resolve-address.c
++++ b/avahi-core/resolve-address.c
+@@ -286,7 +286,10 @@
+         AvahiSAddressResolver *b;
+ 
+         b = avahi_s_address_resolver_prepare(server, interface, protocol, address, flags, callback, userdata);
++        if (!b)
++            return NULL;
++
+         avahi_s_address_resolver_start(b);
+ 
+         return b;
+-}
+\ No newline at end of file
++}
+--- a/avahi-core/resolve-host-name.c
++++ b/avahi-core/resolve-host-name.c
+@@ -318,7 +318,10 @@
+         AvahiSHostNameResolver *b;
+ 
+         b = avahi_s_host_name_resolver_prepare(server, interface, protocol, host_name, aprotocol, flags, callback, userdata);
++        if (!b)
++            return NULL;
++
+         avahi_s_host_name_resolver_start(b);
+ 
+         return b;
+-}
+\ No newline at end of file
++}
+--- a/avahi-core/resolve-service.c
++++ b/avahi-core/resolve-service.c
+@@ -519,7 +519,10 @@
+         AvahiSServiceResolver *b;
+ 
+         b = avahi_s_service_resolver_prepare(server, interface, protocol, name, type, domain, aprotocol, flags, callback, userdata);
++        if (!b)
++            return NULL;
++
+         avahi_s_service_resolver_start(b);
+ 
+         return b;
+-}
+\ No newline at end of file
++}
+--- a/avahi-core/server.c
++++ b/avahi-core/server.c
+@@ -193,7 +193,7 @@
+         withdraw_entry(s, e);
+ }
+ 
+-static void incoming_probe(AvahiServer *s, AvahiRecord *record, AvahiInterface *i) {
++static void incoming_probe(AvahiServer *s, AvahiRecord *record, AvahiInterface *i, int from_local_iface) {
+     AvahiEntry *e, *n;
+     int ours = 0, won = 0, lost = 0;
+ 
+@@ -210,7 +210,7 @@
+         if (e->dead)
+             continue;
+ 
+-        if ((cmp = avahi_record_lexicographical_compare(e->record, record)) == 0) {
++        if ((cmp = avahi_record_lexicographical_compare(e->record, record)) == 0 || from_local_iface) {
+             ours = 1;
+             break;
+         } else {
+@@ -639,7 +639,7 @@
+             if (!avahi_key_is_pattern(record->key)) {
+                 if (!from_local_iface)
+                     reflect_probe(s, i, record);
+-                incoming_probe(s, record, i);
++                incoming_probe(s, record, i, from_local_iface);
+             }
+ 
+             avahi_record_unref(record);
+@@ -961,8 +961,7 @@
+         return;
+ 
+     /* We don't want to reflect local traffic, so we check if this packet is generated locally. */
+-    if (s->config.enable_reflector)
+-        from_local_iface = originates_from_local_iface(s, iface, src_address, port);
++    from_local_iface = originates_from_local_iface(s, iface, src_address, port);
+ 
+     if (avahi_dns_packet_check_valid_multicast(p) < 0) {
+         avahi_log_debug("Received invalid packet.");
+--- a/service-type-database/build-db
++++ b/service-type-database/build-db
+@@ -0,0 +1,49 @@
++#!/usr/bin/env python
++# -*-python-*-
++# This file is part of avahi.
++#
++# avahi is free software; you can redistribute it and/or modify it
++# under the terms of the GNU Lesser General Public License as
++# published by the Free Software Foundation; either version 2 of the
++# License, or (at your option) any later version.
++#
++# avahi is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
++# License for more details.
++#
++# You should have received a copy of the GNU Lesser General Public
++# License along with avahi; if not, write to the Free Software
++# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
++# USA.
++
++try:
++    import anydbm as dbm
++except ImportError:
++    import dbm
++
++import sys
++
++if len(sys.argv) > 1:
++    infn = sys.argv[1]
++else:
++    infn = "service-types"
++
++if len(sys.argv) > 2:
++    outfn = sys.argv[2]
++else:
++    outfn = infn + ".db"
++
++db = dbm.open(outfn, "n")
++
++for ln in open(infn, "r"):
++    ln = ln.strip(" \r\n\t")
++    
++    if ln == "" or ln.startswith("#"):
++        continue
++
++    t, n = ln.split(":", 1)
++
++    db[t.strip()] = n.strip()
++
++db.close()

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# zman - Copyright (C) 2022 MassOS Developers.
+# zman - Copyright (C) 2025 Daniel Massey / MassOS Developers.
 #
 # This program is part of the MassOS system. The license (GNU GPLv3+) can be
 # found at the following locations:
@@ -11,10 +11,12 @@
 #
 # Invocation.
 inv="$(basename "$0")"
+# Software version (EDIT when making changes).
+ver="20250124"
 # Usage function.
 usage() {
-  echo "$inv - Copyright (C) 2022 MassOS Developers."
-  echo "This program will apply compression to groups of man pages in bulk."
+  echo "$inv - Compress groups of man pages in bulk."
+  echo "Version $ver - Copyright (C) 2025 Daniel Massey / MassOS Developers."
   echo
   echo "Usage: $inv </path/to/source/directory>"
   echo
@@ -38,13 +40,20 @@ esac
 # Set target directory.
 targetdir="$1"
 # Ensure directory exists.
-if [ ! -d "$targetdir" ]; then
-  echo "Error: $targetdir is not a valid directory." >&2
-  if [ -e "$targetdir" ]; then
-    echo "$inv operates recursively on directories, not individual files." >&2
+if test ! -d "$targetdir"; then
+  if test -e "$targetdir"; then
+    echo "Error: $targetdir is a file; $inv only operates on directories." >&2
+  else
+    echo "Error: $targetdir is not a valid directory." >&2
   fi
   exit 1
 fi
+# Refuse to operate on /
+if test "$targetdir" = "/"; then
+  echo "Error: $inv will not operate on '/' under any circumstance." >&2
+  exit 1
+fi
+# TODO: Implement restriction on operating on /usr.
 # Ensure the variables we use are exported and empty.
 export files="" links=""
 # Use pigz (parallel gzip) if we can, otherwise fallback to standard gzip.

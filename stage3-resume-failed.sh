@@ -77,3 +77,7 @@ echo
 echo "We know it took time, but the build has finally finished successfully!"
 echo "If you want to create a Live ISO file for your build, use the script"
 echo "'./create-livecd.sh'."
+# Send a notification to the system if supported.
+if notify-send --version &>/dev/null; then
+  notify-send -i "$PWD"/logo/massos-logo.png "MassOS Build System" "The Stage 3 build has finished successfully." &>/dev/null || true
+fi

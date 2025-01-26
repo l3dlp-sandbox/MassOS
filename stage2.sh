@@ -34,3 +34,7 @@ echo
 echo "Stage 2 build completed successfully."
 echo "You must now run stage3.sh and pass a supported desktop environment as"
 echo "an argument. See 'stage3/README' for more information."
+# Send a notification to the system if supported.
+if notify-send --version &>/dev/null; then
+  notify-send -i "$PWD"/logo/massos-logo.png "MassOS Build System" "The Stage 2 build has finished successfully." &>/dev/null || true
+fi

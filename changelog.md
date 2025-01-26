@@ -11,11 +11,14 @@ Changes:
 - Moved Live CD creation script to the main MassOS repo (with improvements) and dropped support for "nofirmware" ISOs.
 - Rootfs tarballs will still not contain firmware (only ISOs will), however a new utility will eventually be developed to allow firmware installation to be managed by users at runtime.
 - Added Memtest86+ and UEFI EDK2 Shell to the Live CD as additional tools.
+- Migrated to merged bin-sbin filesystem structure, as required by future systemd versions (`sbin` directories are now symlinks to their `bin` counterpart).
 - Migrated to systemd-sysusers for system user management where possible.
+- Migrated Python modules away from Python EGGs, due to deprecation by pip (builds now use `build` and `installer` instead of `setup.py`.).
 - Switched default tar back to GNU tar (bsdtar is still present), and removed `set-default-tar` utility from the system.
 - Miscellaneous bug and security fixes/improvements.
 - Dropped old Xorg input drivers which are replaced by libinput.
 - Split Noto fonts package into normal fonts, CJK fonts and emoji fonts.
+- Added zsh and fish, both of which can optionally be used for the shell instead of the default Bash.
 - Added libaom and SVT-AV1 packages for improved AV1 video codec support.
 - Added AMF and NVDEC/NVENC support to FFmpeg for improved hardware acceleration support.
 - Added firewalld and enabled it by default, for enhanced firewall support.
@@ -65,16 +68,18 @@ Upgraded software (core):
 - bsd-games: `3.2 --> 3.3`
 - btrfs-progs: `5.19.1 --> 6.12`
 - Bubblewrap: `0.6.2 --> 0.11.0`
+- build: `(new package) --> 1.2.2`
 - Busybox: `1.35.0 --> 1.37.0`
 - c-ares: `1.18.1 --> 1.34.4`
 - Cairo: `1.17.6 --> 1.18.2`
 - Cairomm: `1.14.4 --> 1.14.5`
+- calver: `(new package) --> 2022.06.26`
 - cffi: `1.15.0 --> 1.17.1`
 - chafa: `(new package) --> 1.14.5`
 - chardet: `5.0.0 --> 5.2.0`
 - charset-normalizer: `(new package) --> 3.3.2`
 - Clang: `14.0.6 --> 19.1.7`
-- CMake: `3.24.2 --> 3.31.4`
+- CMake: `3.24.2 --> 3.31.5`
 - compiler-rt: `15.0.3 --> 19.1.7`
 - colord: `1.4.6 --> 1.4.7`
 - Coreutils: `9.1 --> 9.5`
@@ -91,7 +96,7 @@ Upgraded software (core):
 - curl: `7.85.0 --> 8.11.1`
 - Cython: `0.29.25 --> 3.0.11`
 - D-Bus: `1.14.2 --> 1.16.0`
-- dav1d: `1.0.0 --> 1.5.0`
+- dav1d: `1.0.0 --> 1.5.1`
 - desktop-file-utils: `0.27 --> 0.28`
 - dhcpcd: `9.4.1 --> 10.1.0`
 - dialog: `1.3-20220728 --> 1.3-20240619`
@@ -128,6 +133,7 @@ Upgraded software (core):
 - File: `5.43 --> 5.46`
 - Findutils: `4.9.0 --> 4.10.0`
 - firewalld: `(new package) --> 2.3.0`
+- fish: `(new package) --> 3.7.1`
 - flashrom: `1.2 --> 1.5.1`
 - Flatpak: `1.14.0 --> 1.14.10`
 - flit-core: `(new package) --> 3.10.1`
@@ -139,7 +145,7 @@ Upgraded software (core):
 - Fribidi: `1.0.12 --> 1.0.16`
 - FUSE3: `3.12.0 --> 3.16.2`
 - fuseiso: `(new package) --> 20070708`
-- fwupd: `1.7.6 --> 2.0.3`
+- fwupd: `1.7.6 --> 2.0.4`
 - fwupd-efi: `1.3 --> 1.7`
 - Gawk: `5.1.0 --> 5.3.1`
 - gcab: `1.5 --> 1.6`
@@ -155,7 +161,7 @@ Upgraded software (core):
 - gi-docgen: `2022.1 --> 2024.1`
 - giflib: `5.2.1 --> 5.2.2`
 - Git: `2.38.0 --> 2.48.1`
-- GLib: `2.74.0 --> 2.82.2`
+- GLib: `2.74.0 --> 2.82.4`
 - glib-networking: `2.74.0 --> 2.80.1`
 - Glibc: `2.36 --> 2.40`
 - GLibmm: `2.66.5 --> 2.66.7`
@@ -211,9 +217,10 @@ Upgraded software (core):
 - importlib-metadata: `4.10.1 --> 8.5.0`
 - Inetutils: `2.3 --> 2.5`
 - inih: `56 --> 58`
+- installer: `(new package) --> 0.7.0`
 - intel-gmmlib: `(new package) --> 22.5.4`
 - intel-media-driver: `(new package) --> 24.4.4`
-- IPRoute2: `5.19.0 --> 6.12.0`
+- IPRoute2: `5.19.0 --> 6.13.0`
 - iptables: `1.8.8 --> 1.8.11`
 - ISO-Codes: `4.11.0 --> 4.17.0`
 - JACK2: `1.9.21 --> 1.9.22`
@@ -269,6 +276,7 @@ Upgraded software (core):
 - libfreeaptx: `(new package) --> 0.1.1`
 - libFS: `1.0.9 --> 1.0.10`
 - libgcrypt: `1.10.1 --> 1.11.0`
+- libgee: `0.20.6 --> 0.20.8`
 - libglvnd: `1.5.0 --> 1.7.0`
 - libgpg-error: `1.45 --> 1.51`
 - libgphoto2: `2.5.30 --> 2.5.31`
@@ -302,7 +310,7 @@ Upgraded software (core):
 - libnotify: `0.8.1 --> 0.8.3`
 - libnvme: `(new package) --> 1.11.1`
 - libnsl: `2.0.0 --> 2.0.1`
-- libpaper: `1.1.28 --> 2.2.5`
+- libpaper: `1.1.28 --> 2.2.6`
 - libpcap: `1.10.1 --> 1.10.5`
 - libpciaccess: `0.16 --> 0.18`
 - libpeas: `1.34.0 --> 1.36.0`
@@ -321,6 +329,7 @@ Upgraded software (core):
 - libsass: `3.6.5 --> 3.6.6`
 - libseccomp: `2.5.4 --> 2.5.5`
 - libsecret: `0.20.5 --> 0.21.6`
+- libsfdo: `(new package) --> 0.1.3`
 - libsigc++: `2.10.8 --> 2.12.1`
 - libSM: `1.2.3 --> 1.2.5`
 - libsndfile: `1.1.0 --> 1.2.2`
@@ -344,7 +353,7 @@ Upgraded software (core):
 - libwacom: `2.4.0 --> 2.14.0`
 - libwebp: `1.2.5 --> 1.5.0`
 - libwnck: `43.0 --> 43.2`
-- libwpe: `1.14.0 --> 1.16.0`
+- libwpe: `1.14.0 --> 1.16.1`
 - libX11: `1.8.1 --> 1.8.10`
 - libXau: `1.0.10 --> 1.0.12`
 - libXaw: `1.0.14 --> 1.0.16`
@@ -380,7 +389,7 @@ Upgraded software (core):
 - libXxf86dga: `1.1.5 --> 1.1.6`
 - libXxf86vm: `1.1.5 --> 1.1.6`
 - libzip: `1.9.2 --> 1.11.2`
-- Linux: `6.0.0 --> 6.12.10`
+- Linux: `6.0.0 --> 6.13.0`
 - Linux-PAM: `1.5.2 --> 1.7.0`
 - LLD: `14.0.6 --> 19.1.7`
 - LLVM: `14.0.6 --> 19.1.7`
@@ -398,13 +407,13 @@ Upgraded software (core):
 - Make: `4.3 --> 4.4.1`
 - Mako: `1.2.1 --> 1.3.7`
 - Man-DB: `2.10.2 --> 2.13.0`
-- man-pages: `5.13 --> 6.9.1`
+- man-pages: `5.13 --> 6.10`
 - Markdown: `3.3.6 --> 3.7`
 - MarkupSafe: `2.1.1 --> 3.0.2`
 - maturin: `(new package) --> 1.8.1`
 - mdadm: `4.2 --> 4.3`
 - memstrack: `(new package) --> 0.2.2`
-- Mesa: `22.1.7 --> 24.3.2`
+- Mesa: `22.1.7 --> 24.3.4`
 - mesa-utils: `8.5.0 --> 9.0.0`
 - Meson: `0.63.2 --> 1.6.1`
 - meson-python: `(new package) --> 0.16.0`
@@ -457,7 +466,7 @@ Upgraded software (core):
 - p7zip: `17.04 --> 17.05`
 - packaging: `21.3 --> 24.2`
 - Pahole: `1.24 --> 1.28`
-- Pango: `1.50.11 --> 1.56.0`
+- Pango: `1.50.11 --> 1.56.1`
 - Pangomm: `2.46.3 --> 2.46.4`
 - parted: `3.5 --> 3.6`
 - passim: `(new package) --> 0.1.8`
@@ -497,6 +506,7 @@ Upgraded software (core):
 - PyGObject: `3.42.2 --> 3.50.0`
 - pyopenssl: `22.1.0 --> 24.3.0`
 - PyParsing: `3.0.7 --> 3.2.0`
+- pyproject-hooks: `(new package) --> 1.2.0`
 - pyproject-metadata: `(new package) --> 0.9.0`
 - Python: `3.10.7 --> 3.13.1`
 - python-certifi: `2022.06.15 --> 2024.08.30`
@@ -542,7 +552,7 @@ Upgraded software (core):
 - SQLite: `3.39.3 --> 3.48.0`
 - squashfs-tools: `4.5.1 --> 4.6.1`
 - squashfuse: `0.1.105 --> 0.5.2`
-- strace: `5.19 --> 6.12`
+- strace: `5.19 --> 6.13`
 - Sudo: `1.9.11p3 --> 1.9.16p2`
 - SVT-AV1: `(new package) --> 2.3.0`
 - SWIG: `4.0.2 --> 4.3.0`
@@ -555,6 +565,7 @@ Upgraded software (core):
 - Texinfo: `6.8 --> 7.2`
 - thin-provisioning-tools: `0.9.0 --> (removed)`
 - Tk: `8.6.12 --> 8.6.15`
+- tomli: `(new package) --> 2.2.1`
 - tpm2-tools: `(new package) --> 5.7`
 - tpm2-tss: `3.2.0 --> 4.1.3`
 - tree: `2.0.4 --> 2.2.1`
@@ -573,7 +584,7 @@ Upgraded software (core):
 - util-linux: `2.38.1 --> 2.40.4`
 - util-macros: `1.19.3 --> 1.20.2`
 - Vala: `0.56.3 --> 0.56.17`
-- Vim: `9.0.0600 --> 9.1.1020`
+- Vim: `9.0.0600 --> 9.1.1050`
 - VTE: `0.70.0 --> 0.78.2`
 - Vulkan-Headers: `1.3.230 --> 1.4.304`
 - Vulkan-Loader: `1.3.230 --> 1.4.304`
@@ -644,13 +655,14 @@ Upgraded software (core):
 - xwininfo: `1.1.5 --> 1.1.6`
 - xwud: `1.0.6 --> 1.0.7`
 - xxhash: `0.8.1 --> 0.8.3`
-- xz: `5.2.7 --> 5.6.3`
+- xz: `5.2.7 --> 5.6.4`
 - yad: `(new package) --> 14.1`
 - yq: `(new package) --> 4.44.6`
 - ytnef: `2.0 --> 2.1.2`
 - yyjson: `(new package) --> 0.10.0`
 - zipp: `3.7.0 --> 3.21.0`
 - zlib: `1.2.12 --> 1.3.1`
+- zsh: `(new package) --> 5.9`
 - ZSTD: `1.5.2 --> 1.5.6`
 
 Upgraded software (Xfce):
@@ -674,7 +686,7 @@ Upgraded software (Xfce):
 - lightdm-gtk-greeter: `2.0.8 --> 2.0.9`
 - Mousepad: `0.5.10 --> 0.6.3`
 - Orage: `4.16.0 --> 4.18.0`
-- Parole: `4.16.0 --> 4.18.1`
+- Parole: `4.16.0 --> 4.18.2`
 - Popsicle: `1.3.0-65-g389d13d --> 1.3.3`
 - Shotwell: `0.31.5 --> 0.32.10`
 - Thunar: `4.17.9 --> 4.20.0`
