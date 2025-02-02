@@ -50,9 +50,12 @@ rm -rf /tmp/*
 # As a finishing touch, run ldconfig and other misc commands.
 ldconfig
 glib-compile-schemas /usr/share/glib-2.0/schemas
+gdk-pixbuf-query-loaders --update-cache
 gtk-update-icon-cache -q -t -f --include-image-data /usr/share/icons/hicolor
+gtk4-update-icon-cache -q -t -f --include-image-data /usr/share/icons/hicolor
 update-desktop-database
 update-mime-database /usr/share/mime
+dconf update
 # Last but not least, clean up. Then the build will be ready to go.
 cd /
 rm -rf /sources

@@ -119,9 +119,10 @@ chroot iso-workdir/massos-rootfs /usr/bin/install -o massos -g massos -m755 /usr
 # Set up desktop-specific autologin configuration.
 . livecd-data/autologin/autologin.sh
 # Install firmware.
-echo "Installing firmware..."
+echo "Installing firmware (please ignore any citation warnings)..."
 pushd iso-workdir/firmware
-make DESTDIR="$PWD"/../massos-rootfs FIRMWAREDIR=/usr/lib/firmware install-xz
+./copy-firmware.sh -j$(nproc) --xz "$PWD"/../massos-rootfs/usr/lib/firmware
+./dedup-firmware.sh "$PWD"/../massos-rootfs/usr/lib/firmware
 install -t "$PWD"/../massos-rootfs/usr/share/licenses/linux-firmware -Dm644 GPL-2 GPL-3 LICENCE* LICENSE* WHENCE
 popd
 install -dm755 iso-workdir/massos-rootfs/usr/lib/firmware/intel-ucode

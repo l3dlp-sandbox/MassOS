@@ -17,7 +17,9 @@ Changes:
 - Switched default tar back to GNU tar (bsdtar is still present), and removed `set-default-tar` utility from the system.
 - Miscellaneous bug and security fixes/improvements.
 - Dropped old Xorg input drivers which are replaced by libinput.
+- Renamed NVIDIA-Open-Kernel-Modules package to nvidia-modules-open, and marked as provides nvidia-modules.
 - Split Noto fonts package into normal fonts, CJK fonts and emoji fonts.
+- Added GTK4 and libadwaita to the core MassOS system, to support future programs which depend on them.
 - Added zsh and fish, both of which can optionally be used for the shell instead of the default Bash.
 - Added libaom and SVT-AV1 packages for improved AV1 video codec support.
 - Added AMF and NVDEC/NVENC support to FFmpeg for improved hardware acceleration support.
@@ -34,6 +36,7 @@ Changes:
 - [Xfce] Removed Weston and replaced it with LabWC, as required by the Xfce Wayland session.
 - [Xfce] Added openbox compatibility to Arc theme, for LabWC theme support.
 - [Xfce] Added elementary icon theme, for some missing icons not provided by Adwaita or Arc.
+- [Xfce] Updated GNOME apps to their newer GTK4/libadwaita versions, with fixes for consistent theming.
 
 Upgraded software (core):
 
@@ -82,6 +85,7 @@ Upgraded software (core):
 - CMake: `3.24.2 --> 3.31.5`
 - compiler-rt: `15.0.3 --> 19.1.7`
 - colord: `1.4.6 --> 1.4.7`
+- colord-gtk: `(new package) --> 0.3.1`
 - Coreutils: `9.1 --> 9.5`
 - cowsay: `3.04 --> 3.8.4`
 - cpio: `(new package) --> 2.15`
@@ -97,6 +101,7 @@ Upgraded software (core):
 - Cython: `0.29.25 --> 3.0.11`
 - D-Bus: `1.14.2 --> 1.16.0`
 - dav1d: `1.0.0 --> 1.5.1`
+- dconf: `(new package) --> 0.40.0`
 - desktop-file-utils: `0.27 --> 0.28`
 - dhcpcd: `9.4.1 --> 10.1.0`
 - dialog: `1.3-20220728 --> 1.3-20240619`
@@ -137,7 +142,7 @@ Upgraded software (core):
 - flashrom: `1.2 --> 1.5.1`
 - Flatpak: `1.14.0 --> 1.14.10`
 - flit-core: `(new package) --> 3.10.1`
-- fmt: `9.1.0 --> 11.1.2`
+- fmt: `9.1.0 --> 11.1.3`
 - font-util: `1.3.3 --> 1.4.1`
 - Fontconfig: `2.14.0 --> 2.16.0`
 - FreeGLUT: `3.2.2 --> 3.6.0`
@@ -169,7 +174,7 @@ Upgraded software (core):
 - GLU: `9.0.2 --> 9.0.3`
 - GMP: `6.2.1 --> 6.3.0`
 - gnome-keyring: `42.1 --> 46.2`
-- gnome-online-accounts: `3.46.0 --> 3.48.3`
+- gnome-online-accounts: `3.46.0 --> 3.52.3`
 - GNU-EFI: `3.0.15 --> 3.0.18`
 - GNUPG: `2.3.7 --> 2.5.1`
 - GNUTLS: `3.7.8 --> 3.8.8`
@@ -183,19 +188,21 @@ Upgraded software (core):
 - GRUB: `2.06 --> 2.12`
 - gsettings-desktop-schemas: `43.0 --> 47.1`
 - gspell: `1.12.0 --> 1.14.0`
-- gst-editing-services: `(new package) --> 1.24.11`
-- gst-libav: `1.20.3 --> 1.24.11`
-- gst-plugins-bad: `1.20.3 --> 1.24.11`
-- gst-plugins-base: `1.20.3 --> 1.24.11`
-- gst-plugins-good: `1.20.3 --> 1.24.11`
+- gst-editing-services: `(new package) --> 1.25.1`
+- gst-libav: `1.20.3 --> 1.25.1`
+- gst-plugin-gtk4: `(new package) --> 0.13.4`
+- gst-plugins-bad: `1.20.3 --> 1.25.1`
+- gst-plugins-base: `1.20.3 --> 1.25.1`
+- gst-plugins-good: `1.20.3 --> 1.25.1`
 - gst-plugins-rs: `0.8.4 --> (removed)`
-- gst-plugins-ugly: `1.20.3 --> 1.24.11`
-- gst-python: `(new package) --> 1.24.11`
-- GStreamer: `1.20.3 --> 1.24.11`
-- gstreamer-vaapi: `1.20.3 --> 1.24.11`
+- gst-plugins-ugly: `1.20.3 --> 1.25.1`
+- gst-python: `(new package) --> 1.25.1`
+- GStreamer: `1.20.3 --> 1.25.1`
+- gstreamer-vaapi: `1.20.3 --> 1.25.1`
 - GTK-Doc: `1.33.2 --> 1.34.0`
 - gtk-layer-shell: `(new package) --> 0.9.0`
-- GTK3: `3.24.34 --> 3.24.43`
+- GTK3: `3.24.34 --> 3.24.48`
+- GTK4: `(new package) --> 4.16.12`
 - gtksourceview3: `(new package) --> 3.24.11-28-g73e57b5`
 - gtksourceview4: `(new package) --> 4.8.4`
 - Gtkmm3: `3.24.7 --> 3.24.9`
@@ -206,6 +213,7 @@ Upgraded software (core):
 - hatchling: `(new package) --> 1.27.0`
 - help2man: `1.49.2 --> 1.49.3`
 - hicolor-icon-theme: `0.17 --> 0.18`
+- highway: `(new package) --> 1.2.0`
 - HPLIP: `3.22.6 --> 3.24.4`
 - htop: `3.2.1 --> 3.3.0`
 - hwdata: `0.363 --> 0.391`
@@ -218,7 +226,7 @@ Upgraded software (core):
 - Inetutils: `2.3 --> 2.5`
 - inih: `56 --> 58`
 - installer: `(new package) --> 0.7.0`
-- intel-gmmlib: `(new package) --> 22.5.4`
+- intel-gmmlib: `(new package) --> 22.6.0`
 - intel-media-driver: `(new package) --> 24.4.4`
 - IPRoute2: `5.19.0 --> 6.13.0`
 - iptables: `1.8.8 --> 1.8.11`
@@ -241,6 +249,7 @@ Upgraded software (core):
 - lark: `(new package) --> 1.2.2`
 - lcms2: `2.13.1 --> 2.16`
 - Less: `608 --> 668`
+- libadwaita: `(new package) --> 1.6.3`
 - libao: `(new package) --> 1.2.2`
 - libaom: `(new package) --> 3.11.0`
 - libarchive: `3.6.1 --> 3.7.7`
@@ -258,6 +267,7 @@ Upgraded software (core):
 - libcdio-paranoia: `10.2+2.0.1 --> 10.2+2.0.2`
 - libchamplain: `0.12.20 --> 0.12.21`
 - libclc: `(new package) --> 19.1.7`
+- libcloudproviders: `(new package) --> 0.3.6`
 - libcupsfilters: `(new package) --> 2.1.0`
 - libc++: `(new package) --> 19.1.7`
 - libc++abi: `(new package) --> 19.1.7`
@@ -294,8 +304,10 @@ Upgraded software (core):
 - libisofs: `1.5.4 --> 1.5.6`
 - libjcat: `0.1.11 --> 0.2.2`
 - libjpeg-turbo: `2.1.3 --> 3.1.0`
+- libjxl: `(new package) --> 1.2.0`
 - libksba: `1.6.1 --> 1.6.7`
 - libldap: `2.6.3 --> 2.6.9`
+- libmanette: `(new package) --> 0.2.9`
 - libmbim: `1.26.4 --> 1.30.0`
 - libmtp: `1.1.20 --> 1.1.22`
 - libndp: `1.8 --> 1.9`
@@ -316,7 +328,7 @@ Upgraded software (core):
 - libpeas: `1.34.0 --> 1.36.0`
 - libpipeline: `1.5.6 --> 1.5.8`
 - libplist: `2.2.0 --> 2.6.0`
-- libpng: `1.6.38 --> 1.6.45`
+- libpng: `1.6.38 --> 1.6.46`
 - libportal: `0.6 --> 0.9.0`
 - libppd: `(new package) --> 2.1.0`
 - libproxy: `(new package) --> 0.5.9`
@@ -327,7 +339,7 @@ Upgraded software (core):
 - libraw: `0.20.2 --> 0.21.3`
 - librsvg: `2.54.5 --> 2.59.2`
 - libsass: `3.6.5 --> 3.6.6`
-- libseccomp: `2.5.4 --> 2.5.5`
+- libseccomp: `2.5.4 --> 2.6.0`
 - libsecret: `0.20.5 --> 0.21.6`
 - libsfdo: `(new package) --> 0.1.3`
 - libsigc++: `2.10.8 --> 2.12.1`
@@ -389,7 +401,7 @@ Upgraded software (core):
 - libXxf86dga: `1.1.5 --> 1.1.6`
 - libXxf86vm: `1.1.5 --> 1.1.6`
 - libzip: `1.9.2 --> 1.11.2`
-- Linux: `6.0.0 --> 6.13.0`
+- Linux: `6.0.0 --> 6.13.1`
 - Linux-PAM: `1.5.2 --> 1.7.0`
 - LLD: `14.0.6 --> 19.1.7`
 - LLVM: `14.0.6 --> 19.1.7`
@@ -416,7 +428,7 @@ Upgraded software (core):
 - Mesa: `22.1.7 --> 24.3.4`
 - mesa-utils: `8.5.0 --> 9.0.0`
 - Meson: `0.63.2 --> 1.6.1`
-- meson-python: `(new package) --> 0.16.0`
+- meson-python: `(new package) --> 0.17.1`
 - minizip: `1.2.13 --> 1.3.1`
 - mkfontscale: `1.2.2 --> 1.2.3`
 - mobile-broadband-provider-info: `20220725 --> 20240407`
@@ -436,6 +448,7 @@ Upgraded software (core):
 - Nettle: `3.8.1 --> 3.10.1`
 - network-manager-applet: `1.28.0 --> 1.36.0`
 - Neofetch: `7.3.0 --> (removed)`
+- net-tools: `(new package) --> 2.10`
 - NetworkManager: `1.40.0 --> 1.50.1`
 - NetworkManager-openvpn: `1.10.0 --> 1.12.0`
 - newt: `0.52.21 --> 0.52.24`
@@ -449,8 +462,9 @@ Upgraded software (core):
 - NSS: `3.83 --> 3.107`
 - ntfs-3g: `2022.5.17 --> 2022.10.3`
 - nv-codec-headers: `(new package) --> 12.2.72.0`
+- nvidia-modules-open: `(new package) --> 570.86.16`
 - nvidia-vaapi-driver: `(new package) --> 0.0.13`
-- NVIDIA-Open-Kernel-Modules: `515.76 --> 565.77`
+- NVIDIA-Open-Kernel-Modules: `515.76 --> (removed)`
 - nvme-cli: `(new package) --> 2.11`
 - oniguruma: `6.9.8 --> 6.9.9`
 - OpenAL: `1.22.2 --> 1.24.1`
@@ -468,6 +482,7 @@ Upgraded software (core):
 - Pahole: `1.24 --> 1.28`
 - Pango: `1.50.11 --> 1.56.1`
 - Pangomm: `2.46.3 --> 2.46.4`
+- parallel: `(new package) --> 20250122`
 - parted: `3.5 --> 3.6`
 - passim: `(new package) --> 0.1.8`
 - patchelf: `0.14.5 --> 0.18.0`
@@ -515,6 +530,7 @@ Upgraded software (core):
 - PyYAML: `(new package) --> 6.0.2`
 - Qpdf: `11.1.1 --> 11.9.1`
 - rav1e: `0.5.1 --> 0.7.1`
+- rdfind: `(new package) --> 1.6.0`
 - Readline: `8.2 --> 8.2.13`
 - reiserfsprogs: `(new package) --> 3.6.27`
 - requests: `2.28.1 --> 2.32.3`
@@ -561,6 +577,7 @@ Upgraded software (core):
 - Taglib: `1.12 --> 2.0.2`
 - tar: `1.34 --> 1.35`
 - Tcl: `8.6.12 --> 8.6.15`
+- tinysparql: `(new package) --> 3.8.2`
 - tldr: `1.5.0 --> 1.7.1`
 - Texinfo: `6.8 --> 7.2`
 - thin-provisioning-tools: `0.9.0 --> (removed)`
@@ -569,8 +586,9 @@ Upgraded software (core):
 - tpm2-tools: `(new package) --> 5.7`
 - tpm2-tss: `3.2.0 --> 4.1.3`
 - tree: `2.0.4 --> 2.2.1`
-- trove-classifiers: `(new package) --> 2024.9.12`
+- trove-classifiers: `(new package) --> 2025.1.15.22`
 - typing-extensions: `(new package) --> 4.12.2`
+- typogrify: `2.0.7 --> 2.1.0`
 - tzdata: `2022d --> 2024b`
 - UDisks: `2.9.4 --> 2.10.1`
 - UFW: `0.36.1 --> 0.36.2`
@@ -585,24 +603,26 @@ Upgraded software (core):
 - util-macros: `1.19.3 --> 1.20.2`
 - Vala: `0.56.3 --> 0.56.17`
 - Vim: `9.0.0600 --> 9.1.1050`
-- VTE: `0.70.0 --> 0.78.2`
+- VTE: `0.70.0 --> 0.78.3`
+- VTE4: `(new package) --> 0.78.3`
 - Vulkan-Headers: `1.3.230 --> 1.4.304`
 - Vulkan-Loader: `1.3.230 --> 1.4.304`
 - Vulkan-Tools: `1.3.230 --> 1.4.304.0`
 - wavpack: `5.5.0 --> 5.7.0`
 - Wayland: `1.21.0 --> 1.23.1`
-- wayland-protocols: `1.26 --> 1.39`
+- wayland-protocols: `1.26 --> 1.40`
 - WebKitGTK: `2.38.0 --> 2.46.5`
 - webp-pixbuf-loader: `0.0.6 --> 0.2.7`
 - Wget: `1.21.3 --> 1.25.0`
 - wheel: `(new package) --> 0.45.1`
+- Which: `2.21 --> 2.22`
 - whois: `5.5.13 --> 5.5.23`
 - WirePlumber: `0.4.12 --> 0.5.7`
 - wlr-protocols: `(new package) --> 107`
 - wpa-supplicant: `2.10 --> 2.11`
 - wpebackend-fdo: `1.14.0 --> 1.14.3`
 - x11perf: `1.6.1 --> 1.7.0`
-- x264: `0.164.3099 --> 0.164.3198`
+- x264: `0.164.3099 --> 0.164.3204`
 - x265: `3.5-40-g931178347 --> 4.1`
 - xauth: `1.1.2 --> 1.1.3`
 - xbacklight: `1.2.3 --> 1.2.4`
@@ -667,6 +687,7 @@ Upgraded software (core):
 
 Upgraded software (Xfce):
 
+- Baobab: `41.0 --> 47.0`
 - Blueman: `2.2.2 --> 2.4.3`
 - catfish: `(new package) --> 4.18.0`
 - Claws-Mail: `4.1.0 --> 4.3.0`
@@ -676,7 +697,9 @@ Upgraded software (Xfce):
 - Firefox: `105.0.1 --> 134.0.2`
 - FreeRDP: `2.8.0 --> (removed)`
 - Garcon: `4.17.1 --> 4.20.0`
-- GParted: `1.4.0 --> 1.6.0`
+- GNOME-Firmware: `41.0 --> 47.0`
+- GNOME-Software: `41.5 --> 47.4`
+- GParted: `1.4.0 --> 1.7.0`
 - gtksourceview4: `4.8.3 --> (removed)`
 - LabWC: `(new package) --> 0.8.2`
 - libetpan: `1.9.4 --> (removed)`
@@ -684,6 +707,7 @@ Upgraded software (Xfce):
 - libxfce4util: `4.17.2 --> 4.20.0`
 - libxfce4windowing: `(new package) --> 4.20.0`
 - lightdm-gtk-greeter: `2.0.8 --> 2.0.9`
+- MassOS-Welcome: `001 --> 002`
 - Mousepad: `0.5.10 --> 0.6.3`
 - Orage: `4.16.0 --> 4.18.0`
 - Parole: `4.16.0 --> 4.18.2`
@@ -714,6 +738,13 @@ Upgraded software (Xfce):
 - xfconf: `4.16.0 --> 4.20.0`
 - xfdesktop: `4.17.0 --> 4.20.0`
 - xfwm4: `4.16.1 --> 4.20.0`
+
+Upgraded software (extras - may not be installed by default):
+
+- Linux-Firmware: `(new package) --> 20250109`
+- Intel-Microcode: `(new package) --> 20241112`
+- Snapd: `(new package) --> 2.66.1`
+- SOF-Firmware: `(new package) --> 2024.09.2`
 
 # MassOS 2022.10
 Changes:

@@ -11,11 +11,11 @@ cd /sources
 . build.env
 # === IF RESUMING A FAILED BUILD, ONLY REMOVE LINES BELOW THIS ONE.
 # Install Rust to a temporary directory to support building some packages.
-tar -xf rust-1.84.0-x86_64-unknown-linux-gnu.tar.gz
-cd rust-1.84.0-x86_64-unknown-linux-gnu
+tar -xf rust-1.84.1-x86_64-unknown-linux-gnu.tar.gz
+cd rust-1.84.1-x86_64-unknown-linux-gnu
 ./install.sh --prefix=/sources/rust --without=rust-docs
 cd ..
-rm -rf rust-1.84.0-x86_64-unknown-linux-gnu
+rm -rf rust-1.84.1-x86_64-unknown-linux-gnu
 # elementary-icon-theme.
 tar -xf elementary-icon-theme-8.1.0.tar.gz
 cd icons-8.1.0
@@ -33,14 +33,14 @@ install -dm755 arc-theme-20220102/usr/share/licenses/arc-theme
 mv arc-theme-20220102/usr/share/{themes,licenses/arc-theme}/LICENSE
 cp -r arc-theme-20220102/usr /
 gtk-update-icon-cache /usr/share/icons/Arc
-mkdir -p /etc/gtk-2.0
+gtk4-update-icon-cache /usr/share/icons/Arc
+install -dm755 /etc/gtk-{2,3,4}.0
 cat > /etc/gtk-2.0/gtkrc << "END"
 gtk-theme-name = "Arc-Dark"
 gtk-icon-theme-name = "Arc"
 gtk-cursor-theme-name = "Adwaita"
 gtk-font-name = "Noto Sans 10"
 END
-mkdir -p /etc/gtk-3.0
 cat > /etc/gtk-3.0/settings.ini << "END"
 [Settings]
 gtk-theme-name = Arc-Dark
@@ -53,6 +53,16 @@ gtk-xft-hinting = 1
 gtk-xft-hintstyle = hintnone
 gtk-xft-rgba = rgb
 gtk-cursor-theme-name = Adwaita
+END
+cat > /etc/gtk-4.0/settings.ini << "END"
+[Settings]
+gtk-theme-name = Arc-Dark
+gtk-icon-theme-name = Arc
+gtk-font-name = Noto Sans 10
+gtk-cursor-theme-name = Adwaita
+END
+cat > /etc/profile.d/arc-theme.sh << "END"
+export GTK_THEME="Arc-Dark"
 END
 flatpak install -y runtime/org.gtk.Gtk3theme.Arc{,-Dark}/x86_64/3.22
 rm -rf arc-theme-20220102
@@ -266,7 +276,7 @@ install -t /usr/share/licenses/xfce4-terminal -Dm644 COPYING
 cd ..
 rm -rf xfce4-terminal-1.1.3
 # Shotwell.
-tar -xf shotwell-0.32.10.tar.gz
+tar -xf shotwell-shotwell-0.32.10.tar.bz2
 cd shotwell-shotwell-0.32.10
 meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize
 ninja -C build
@@ -432,15 +442,15 @@ install -t /usr/share/licenses/galculator -Dm644 COPYING
 cd ..
 rm -rf galculator-2.1.4
 # GParted.
-tar -xf gparted-GPARTED_1_6_0.tar.bz2
-cd gparted-GPARTED_1_6_0
+tar -xf gparted-GPARTED_1_7_0.tar.bz2
+cd gparted-GPARTED_1_7_0
 autoreconf -fi
 ./configure --prefix=/usr --disable-doc --disable-static --enable-libparted-dmraid --enable-online-resize --enable-xhost-root
 make
 make install
 install -t /usr/share/licenses/gparted -Dm644 COPYING
 cd ..
-rm -rf gparted-GPARTED_1_6_0
+rm -rf gparted-GPARTED_1_7_0
 # Popsicle.
 tar -xf popsicle-1.3.3.tar.gz
 cd popsicle-1.3.3
@@ -475,46 +485,36 @@ install -t /usr/share/licenses/evince -Dm644 COPYING
 cd ..
 rm -rf evince-46.3.1
 # Baobab.
-tar -xf baobab-41.0.tar.xz
-cd baobab-41.0
+tar -xf baobab-47.0.tar.bz2
+cd baobab-47.0
 meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize
 ninja -C build
 ninja -C build install
-install -t /usr/share/licenses/baobab -Dm644 COPYING{,.docs}
+install -t /usr/share/licenses/baobab -Dm644 COPYING
 cd ..
-rm -rf baobab-41.0
+rm -rf baobab-47.0
 # GNOME-Firmware.
-tar -xf gnome-firmware-41.0.tar.bz2
-cd gnome-firmware-41.0
-sed -i 's/master/1.9.27/' subprojects/fwupd.wrap
-CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion" LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/lib/gnome-firmware" meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize --force-fallback-for=fwupd -Dfwupd:build=library -Dfwupd:docs=disabled -Dfwupd:introspection=false -Dfwupd:tests=false
+tar -xf gnome-firmware-47.0.tar.bz2
+cd gnome-firmware-47.0
+meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize
 ninja -C build
-DESTDIR="$PWD"/dest ninja -C build install
-mkdir -p dest/usr/lib/gnome-firmware
-mv dest/usr/lib/libfwupd.so.2.0.0 dest/usr/lib/gnome-firmware/libfwupd.so.2
-rm -rf dest/usr/include dest/usr/lib/{libfwupd.so{,.2},pkgconfig} dest/usr/share/polkit-1
-cp -ar dest/* /
+ninja -C build install
 install -t /usr/share/licenses/gnome-firmware -Dm644 COPYING
 cd ..
-rm -rf gnome-firmware-41.0
+rm -rf gnome-firmware-47.0
 # GNOME-Software.
-tar -xf gnome-software-41.5.tar.xz
-cd gnome-software-41.5
-patch -Np1 -i ../patches/gnome-software-41.5-fwupd200.patch
-CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=nested-externs" LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/lib/gnome-software" meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize --force-fallback-for=appstream -Dexternal_appstream=false -Dpackagekit=false -Dtests=false -Dvalgrind=false
+tar -xf gnome-software-47.4.tar.bz2
+cd gnome-software-47.4
+tar -xf ../gnome-pwa-list-3bb1260.tar.bz2 -C subprojects/gnome-pwa-list --strip-components=1
+meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize -Ddkms=true -Dexternal_appstream=true -Dpackagekit=false -Dtests=false
 ninja -C build
-DESTDIR="$PWD"/dest ninja -C build install
-mv dest/usr/lib/libappstream.so.0.14.1 dest/usr/lib/gnome-software/libappstream.so.4
-rm -f dest/usr/bin/appstreamcli dest/etc/appstream.conf dest/usr/lib/libappstream.so{,.4} dest/usr/lib/pkgconfig/appstream.pc dest/usr/share/man/man1/appstreamcli.1
-rm -rf dest/usr/include/appstream dest/usr/lib/girepository-1.0 dest/usr/share/{gettext,gir-1.0}
-find dest -type f -name appstream.mo -delete
-cp -ar dest/* /
+ninja -C build install
 install -t /usr/share/licenses/gnome-software -Dm644 COPYING
 cd ..
-rm -rf gnome-software-41.5
-# MassOS-Welcome (modified version of Gnome Tour).
-tar -xf massos-welcome-cc649f83e04f0daa880edf1df8e4d5165b79787c.tar.gz
-cd massos-welcome-cc649f83e04f0daa880edf1df8e4d5165b79787c
+rm -rf gnome-software-47.4
+# MassOS-Welcome.
+tar -xf massos-welcome-002.tar.gz
+cd massos-welcome-f978ef71ca6f58156969860d34a706943b79db79
 meson setup build --prefix=/usr --sbindir=bin --buildtype=minsize
 ninja -C build
 install -Dm755 build/target/release/gnome-tour /usr/bin/massos-welcome
@@ -533,7 +533,7 @@ Exec=/usr/libexec/firstlogin
 END
 install -t /usr/share/licenses/massos-welcome -Dm644 LICENSE.md
 cd ..
-rm -rf massos-welcome-cc649f83e04f0daa880edf1df8e4d5165b79787c
+rm -rf massos-welcome-f978ef71ca6f58156969860d34a706943b79db79
 # LightDM.
 tar -xf lightdm-1.32.0.tar.xz
 cd lightdm-1.32.0

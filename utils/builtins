@@ -55,6 +55,7 @@ cmake
 cmatrix
 cogl
 colord
+colord-gtk
 compiler-rt
 coreutils
 cowsay
@@ -74,6 +75,7 @@ dav1d
 dbus
 dbus-glib
 dbus-python
+dconf
 desktop-file-utils
 dhcpcd
 dialog
@@ -197,6 +199,7 @@ gtk-doc
 gtk-layer-shell
 gtk2
 gtk3
+gtk4
 gtkmm3
 gtksourceview3
 gtksourceview4
@@ -207,6 +210,7 @@ harfbuzz
 hatchling
 help2man
 hicolor-icon-theme
+highway
 hplip
 htop
 hwdata
@@ -248,6 +252,7 @@ lark
 lcms2
 ldac
 less
+libadwaita
 libaio
 libao
 libaom
@@ -270,6 +275,8 @@ libcbor
 libcdio
 libcdio-paranoia
 libchamplain
+libclc
+libcloudproviders
 libcupsfilters
 libc++
 libc++abi
@@ -317,6 +324,7 @@ libisoburn
 libisofs
 libjcat
 libjpeg-turbo
+libjxl
 libksba
 liblc3
 libldap
@@ -337,6 +345,7 @@ libnghttp3
 libnice
 libnl
 libnma
+libnma-gtk4
 libnotify
 libnsl
 libnvme
@@ -350,6 +359,7 @@ libplist
 libpng
 libportal
 libportal-gtk3
+libportal-gtk4
 libppd
 libproxy
 libpsl
@@ -486,6 +496,7 @@ nasm
 ncurses
 neofetch
 net-snmp
+net-tools
 netcat
 nettle
 network-manager-applet
@@ -502,8 +513,9 @@ nspr
 nss
 ntfs-3g
 nv-codec-headers
+nvidia-modules
+nvidia-modules-open
 nvidia-vaapi-driver
-nvidia-open-kernel-modules
 nvme-cli
 oniguruma
 openal
@@ -524,6 +536,7 @@ packaging
 pahole
 pango
 pangomm
+parallel
 parse-yapp
 parted
 passim
@@ -579,6 +592,7 @@ pyyaml
 qpdf
 qrencode
 rav1e
+rdfind
 readline
 reiserfsprogs
 requests
@@ -643,11 +657,13 @@ tar
 tcl
 texinfo
 tk
+tinysparql
 tldr
 toml
 tomli
 tpm2-tools
 tpm2-tss
+tracker
 tree
 trove-classifiers
 twolame
@@ -672,6 +688,7 @@ vim
 vitetris
 volume-key
 vte
+vte4
 vulkan-headers
 vulkan-loader
 wavpack
