@@ -32,7 +32,7 @@ if [ ! -e "stage3/$1/stage3-$1.sh" ]; then
   exit 1
 fi
 if [ ! -e "stage3/$1/source-urls" ]; then
-  echo "Stage 3 directory and built script for '$1' was found, but there" >&2
+  echo "Stage 3 directory and build script for '$1' was found, but there" >&2
   echo "is no source-urls file." >&2
   exit 1
 fi
@@ -43,7 +43,7 @@ if [ "$1" != "nodesktop" ] && [ ! -e "stage3/$1/builtins" ]; then
 fi
 # Download source URls for Stage 3.
 echo "Downloading sources for '$1' (Stage 3)..."
-mkdir -p stage3/sources; cd stage3/sources
+mkdir -p stage3/sources; pushd stage3/sources
 set +e
 wget -nc --continue --input-file=../"$1"/source-urls
 STATUS=$?
@@ -54,15 +54,15 @@ if [ $STATUS -ne 0 ]; then
   exit $STATUS
 fi
 set -e
-cd ../..
-
+popd
 # Put Stage 3 files into the system.
 echo "Starting Stage 3 build for '$1'..."
+mkdir -p "$MASSOS"/root/mbs/{extras,work}
 ## Build script, sources and patches.
-mv stage3/sources "$MASSOS"/
-cp stage3/"$1"/stage3-"$1".sh "$MASSOS"/sources/build-stage3.sh
+mv stage3/sources "$MASSOS"/root/mbs
+cp stage3/"$1"/stage3-"$1".sh "$MASSOS"/root/mbs/build-stage3.sh
 if [ -d stage3/"$1"/patches ]; then
-  cp -r stage3/"$1"/patches "$MASSOS"/sources/patches
+  cp -r stage3/"$1"/patches "$MASSOS"/root/mbs
 fi
 ## Builtins.
 if [ -e stage3/"$1"/builtins ]; then
@@ -82,23 +82,23 @@ if [ -d stage3/"$1"/systemd-units ]; then
 fi
 ## extra-package-licenses, if present.
 if [ -d stage3/"$1"/extra-package-licenses ]; then
-  cp -r stage3/"$1"/extra-package-licenses "$MASSOS"/sources
+  cp -r stage3/"$1"/extra-package-licenses "$MASSOS"/root/mbs/extras
 fi
 ## build environment file.
-cp build.env "${MASSOS}"/sources
+cp build.env "${MASSOS}"/root/mbs
 # Re-enter the chroot and continue the build.
-utils/programs/mass-chroot "$MASSOS" /sources/build-stage3.sh
+utils/programs/mass-chroot "$MASSOS" /root/mbs/build-stage3.sh
 # Put in finalize.sh and finish the build.
 echo "Finalizing the build..."
-cp finalize.sh "$MASSOS"/sources
-utils/programs/mass-chroot "$MASSOS" /sources/finalize.sh
+cp finalize.sh "$MASSOS"/root/mbs
+utils/programs/mass-chroot "$MASSOS" /root/mbs/finalize.sh
 # Install preupgrade and postupgrade.
 cp utils/{pre,post}upgrade "$MASSOS"/tmp
 # Install Live CD cleanup script for osinstallgui.
 install -t "$MASSOS"/tmp -m755 utils/livecd-cleanup.sh
 # Strip executables and libraries to free up space.
 printf "Stripping binaries and libraries... "
-find "$MASSOS"/usr/{bin,lib,libexec,sbin} -type f -not -name \*.a -and -not -name \*.o -and -not -name \*.mod -and -not -name \*.module -exec strip --strip-unneeded {} + &> /dev/null || true
+find "$MASSOS"/usr/{bin,lib,libexec,sbin} -type f ! -name \*.a ! -name \*.o ! -name \*.mod ! -name \*.module -exec strip --strip-unneeded {} + &>/dev/null || true
 find "$MASSOS"/usr/lib -type f -name \*.a -or -name \*.o -or -name \*.mod -or -name \*.module -exec strip --strip-debug {} + &>/dev/null || true
 echo "Done!"
 # Finish the MassOS system.

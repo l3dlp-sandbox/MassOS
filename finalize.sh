@@ -4,13 +4,13 @@
 # build is finished.
 set -e
 # Ensure we're running in the MassOS chroot.
-if [ $EUID -ne 0 ] || [ ! -d /sources ]; then
+if [ $EUID -ne 0 ] || [ ! -d /root/mbs/sources ]; then
   echo "This script should not be run manually." >&2
   echo "stage3.sh will automatically run it in a chroot environment." >&2
   exit 1
 fi
 # Set up basic environment variables, still necessary here unfortunately.
-. sources/build.env
+. /root/mbs/build.env
 # Remove leftover junk in /root.
 rm -rf /root/.{cache,cargo,cmake}
 rm -rf /root/go
@@ -29,7 +29,7 @@ fi
 if [ -d /usr/man ]; then
   echo "WARNING: Relocating files in /usr/man to /usr/share/man." >&2
   echo "WARNING: Ensure all MassOS packages use the correct mandir." >&2
-  cp -r /usr/man /usr/share >&2
+  cp -rv /usr/man /usr/share >&2
   rm -rf /usr/man
 fi
 # Compress manual pages.
@@ -57,5 +57,4 @@ update-desktop-database
 update-mime-database /usr/share/mime
 dconf update
 # Last but not least, clean up. Then the build will be ready to go.
-cd /
-rm -rf /sources
+rm -rf /root/mbs

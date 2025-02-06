@@ -13,7 +13,8 @@ Changes:
 - Added Memtest86+ and UEFI EDK2 Shell to the Live CD as additional tools.
 - Migrated to merged bin-sbin filesystem structure, as required by future systemd versions (`sbin` directories are now symlinks to their `bin` counterpart).
 - Migrated to systemd-sysusers for system user management where possible.
-- Migrated Python modules away from Python EGGs, due to deprecation by pip (builds now use `build` and `installer` instead of `setup.py`.).
+- Changed minimum supported kernel version in Glibc from 3.2 to 5.10, to improve optimisation.
+- Migrated Python modules away from Python EGGs, due to deprecation by pip (builds now use `build` and `installer` modules instead of `setup.py`.).
 - Switched default tar back to GNU tar (bsdtar is still present), and removed `set-default-tar` utility from the system.
 - Miscellaneous bug and security fixes/improvements.
 - Dropped old Xorg input drivers which are replaced by libinput.
@@ -29,7 +30,8 @@ Changes:
 - Replaced SDL with sdl12-compat.
 - Added libc++ and libc++abi alongside the LLVM installation.
 - Added HTTP/3 support in curl using libnghttp3.
-- Added `verify-sources.sh` script to the build system to allow verifying SHA256 checksums of downloaded sources before building MassOS.
+- Began revamp of MassOS build system. This is not intended to impact the builds produced by the build system, but will make MassOS development easier/simpler when fully complete.
+- Added `verify-sources.sh` script to the build system to allow verifying Blake-2 checksums of downloaded sources before building MassOS.
 - Numerous build system and packaging improvements.
 - Removed deprecated static documentation from the MassOS repo, in favour of the GitHub wiki.
 - [Xfce] Upgraded to Xfce 4.20 with initial (experimental) Wayland support.
@@ -61,8 +63,8 @@ Upgraded software (core):
 - Bash: `5.2 --> 5.2.37`
 - bash-completion: `2.11 --> 2.16.0`
 - bc: `6.0.3 --> 7.0.3`
-- BIND-Utils: `9.18.6 --> 9.20.4`
-- Binutils: `2.39 --> 2.43.1`
+- BIND-Utils: `9.18.6 --> 9.20.5`
+- Binutils: `2.39 --> 2.44`
 - biosdevname: `(new package) --> 0.7.3`
 - BlueZ: `5.65 --> 5.79`
 - Boost: `1.80.0 --> 1.87.0`
@@ -115,7 +117,7 @@ Upgraded software (core):
 - dos2unix: `0.4.2 --> 0.5.2`
 - dotconf: `(new package) --> 1.4.1`
 - dracut: `056 --> 105`
-- e2fsprogs: `1.46.5 --> 1.47.1`
+- e2fsprogs: `1.46.5 --> 1.47.2`
 - easy-rsa: `3.1.0 --> 3.2.1`
 - Ed: `1.18 --> 1.21`
 - editables: `(new package) --> 0.5`
@@ -168,7 +170,7 @@ Upgraded software (core):
 - Git: `2.38.0 --> 2.48.1`
 - GLib: `2.74.0 --> 2.82.4`
 - glib-networking: `2.74.0 --> 2.80.1`
-- Glibc: `2.36 --> 2.40`
+- Glibc: `2.36 --> 2.41`
 - GLibmm: `2.66.5 --> 2.66.7`
 - glslang: `11.11.0 --> 15.1.0`
 - GLU: `9.0.2 --> 9.0.3`
@@ -218,7 +220,7 @@ Upgraded software (core):
 - htop: `3.2.1 --> 3.3.0`
 - hwdata: `0.363 --> 0.391`
 - hyfetch: `(new package) --> 1.99.0`
-- iana-etc: `20220922 --> 20250108`
+- iana-etc: `20220922 --> 20250123`
 - iceauth: `1.0.9 --> 1.0.10`
 - ICU: `71.1 --> 76.1`
 - idna: `3.4 --> 3.10`
@@ -230,6 +232,7 @@ Upgraded software (core):
 - intel-media-driver: `(new package) --> 24.4.4`
 - IPRoute2: `5.19.0 --> 6.13.0`
 - iptables: `1.8.8 --> 1.8.11`
+- ISL: `(new package) --> 0.27`
 - ISO-Codes: `4.11.0 --> 4.17.0`
 - JACK2: `1.9.21 --> 1.9.22`
 - Jansson: `2.13.1 --> 2.14`
@@ -366,12 +369,12 @@ Upgraded software (core):
 - libwebp: `1.2.5 --> 1.5.0`
 - libwnck: `43.0 --> 43.2`
 - libwpe: `1.14.0 --> 1.16.1`
-- libX11: `1.8.1 --> 1.8.10`
+- libX11: `1.8.1 --> 1.8.11`
 - libXau: `1.0.10 --> 1.0.12`
 - libXaw: `1.0.14 --> 1.0.16`
 - libxcb: `1.15 --> 1.17`
 - libXcomposite: `0.4.5 --> 0.4.6`
-- libxcrypt: `(new package) --> 4.4.37`
+- libxcrypt: `(new package) --> 4.4.38`
 - libXcursor: `1.2.1 --> 1.2.3`
 - libxcvt: `0.1.2 --> 0.1.3`
 - libXdamage: `1.4.5 --> 1.4.6`
@@ -402,6 +405,8 @@ Upgraded software (core):
 - libXxf86vm: `1.1.5 --> 1.1.6`
 - libzip: `1.9.2 --> 1.11.2`
 - Linux: `6.0.0 --> 6.13.1`
+- Linux-API-Headers: `6.0.0 --> 6.13.1`
+- Linux-Headers: `6.0.0 --> 6.13.1`
 - Linux-PAM: `1.5.2 --> 1.7.0`
 - LLD: `14.0.6 --> 19.1.7`
 - LLVM: `14.0.6 --> 19.1.7`
@@ -427,7 +432,7 @@ Upgraded software (core):
 - memstrack: `(new package) --> 0.2.2`
 - Mesa: `22.1.7 --> 24.3.4`
 - mesa-utils: `8.5.0 --> 9.0.0`
-- Meson: `0.63.2 --> 1.6.1`
+- Meson: `0.63.2 --> 1.7.0`
 - meson-python: `(new package) --> 0.17.1`
 - minizip: `1.2.13 --> 1.3.1`
 - mkfontscale: `1.2.2 --> 1.2.3`
@@ -491,14 +496,14 @@ Upgraded software (core):
 - pciutils: `3.8.0 --> 3.13.0`
 - PCRE2: `10.40 --> 10.44`
 - pefile: `(new package) --> 2024.8.26`
-- Perl: `5.36.0 --> 5.40.0`
+- Perl: `5.36.0 --> 5.40.1`
 - pexpect: `4.8.0 --> 4.9`
 - pkcs11-helper: `1.29.0 --> 1.30.0`
 - pkg-config: `0.29.2 --> (removed)`
 - pkgconf: `(new package) --> 2.3.0`
 - pigz: `2.6 --> 2.8`
 - pinentry: `1.2.1 --> 1.3.1`
-- pip: `(new package) --> 24.3.1`
+- pip: `(new package) --> 25.0`
 - PipeWire: `0.3.59 --> 1.2.7`
 - Pixman: `0.40.0 --> 0.44.2`
 - pluggy: `(new package) --> 1.5.0`
@@ -523,7 +528,7 @@ Upgraded software (core):
 - PyParsing: `3.0.7 --> 3.2.0`
 - pyproject-hooks: `(new package) --> 1.2.0`
 - pyproject-metadata: `(new package) --> 0.9.0`
-- Python: `3.10.7 --> 3.13.1`
+- Python: `3.10.7 --> 3.13.2`
 - python-certifi: `2022.06.15 --> 2024.08.30`
 - python-dbusmock: `0.28.4 --> 0.32.2`
 - pyxdg: `(new package) --> 0.28`
@@ -563,7 +568,7 @@ Upgraded software (core):
 - SoundTouch: `2.3.1 --> 2.3.3`
 - speech-dispatcher: `(new package) --> 0.11.5`
 - SPIRV-Headers: `1.3.216.0 --> 1.4.304.0`
-- SPIRV-LLVM-Translator: `(new package) --> 19.1.3`
+- SPIRV-LLVM-Translator: `(new package) --> 19.1.4`
 - SPIRV-Tools: `2022.2 --> 1.4.304.0`
 - SQLite: `3.39.3 --> 3.48.0`
 - squashfs-tools: `4.5.1 --> 4.6.1`
@@ -576,12 +581,12 @@ Upgraded software (core):
 - systemd: `251.5 --> 257.2`
 - Taglib: `1.12 --> 2.0.2`
 - tar: `1.34 --> 1.35`
-- Tcl: `8.6.12 --> 8.6.15`
+- Tcl: `8.6.12 --> 8.6.16`
 - tinysparql: `(new package) --> 3.8.2`
 - tldr: `1.5.0 --> 1.7.1`
 - Texinfo: `6.8 --> 7.2`
 - thin-provisioning-tools: `0.9.0 --> (removed)`
-- Tk: `8.6.12 --> 8.6.15`
+- Tk: `8.6.12 --> 8.6.16`
 - tomli: `(new package) --> 2.2.1`
 - tpm2-tools: `(new package) --> 5.7`
 - tpm2-tss: `3.2.0 --> 4.1.3`
@@ -615,7 +620,7 @@ Upgraded software (core):
 - webp-pixbuf-loader: `0.0.6 --> 0.2.7`
 - Wget: `1.21.3 --> 1.25.0`
 - wheel: `(new package) --> 0.45.1`
-- Which: `2.21 --> 2.22`
+- Which: `2.21 --> 2.23`
 - whois: `5.5.13 --> 5.5.23`
 - WirePlumber: `0.4.12 --> 0.5.7`
 - wlr-protocols: `(new package) --> 107`
@@ -646,7 +651,7 @@ Upgraded software (core):
 - xf86-input-libinput: `1.2.1 --> 1.5.0`
 - xfsprogs: `5.19.0 --> 6.12.0`
 - xgamma: `1.0.6 --> 1.0.7`
-- xhost: `1.0.8 --> 1.0.9`
+- xhost: `1.0.8 --> 1.0.10`
 - xinit: `1.4.1 --> 1.4.3`
 - xinput: `1.6.3 --> 1.6.4`
 - xkbcomp: `1.4.5 --> 1.4.7`
@@ -694,7 +699,7 @@ Upgraded software (Xfce):
 - elementary-icon-theme: `(new package) --> 8.1.0`
 - Evince: `43.0 --> 46.3.1`
 - Exo: `4.17.2 --> 4.20.0`
-- Firefox: `105.0.1 --> 134.0.2`
+- Firefox: `105.0.1 --> 135.0`
 - FreeRDP: `2.8.0 --> (removed)`
 - Garcon: `4.17.1 --> 4.20.0`
 - GNOME-Firmware: `41.0 --> 47.0`
@@ -705,7 +710,7 @@ Upgraded software (Xfce):
 - libetpan: `1.9.4 --> (removed)`
 - libxfce4ui: `4.17.6 --> 4.20.0`
 - libxfce4util: `4.17.2 --> 4.20.0`
-- libxfce4windowing: `(new package) --> 4.20.0`
+- libxfce4windowing: `(new package) --> 4.20.2`
 - lightdm-gtk-greeter: `2.0.8 --> 2.0.9`
 - MassOS-Welcome: `001 --> 002`
 - Mousepad: `0.5.10 --> 0.6.3`
@@ -725,7 +730,7 @@ Upgraded software (Xfce):
 - xfce4-dev-tools: `(new package) --> 4.20.0`
 - xfce4-mount-plugin: `1.1.5 --> 1.1.6`
 - xfce4-notifyd: `0.6.4 --> 0.9.6`
-- xfce4-panel: `4.17.3 --> 4.20.0`
+- xfce4-panel: `4.17.3 --> 4.20.3`
 - xfce4-power-manager: `4.16.0 --> 4.20.0`
 - xfce4-pulseaudio-plugin: `0.4.5 --> 0.4.9`
 - xfce4-screensaver: `4.16.0 --> 4.18.4`
@@ -743,7 +748,7 @@ Upgraded software (extras - may not be installed by default):
 
 - Linux-Firmware: `(new package) --> 20250109`
 - Intel-Microcode: `(new package) --> 20241112`
-- Snapd: `(new package) --> 2.66.1`
+- Snapd: `(new package) --> 2.67`
 - SOF-Firmware: `(new package) --> 2024.09.2`
 
 # MassOS 2022.10

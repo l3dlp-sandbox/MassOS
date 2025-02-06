@@ -10,12 +10,12 @@ fi
 # Setup the environment.
 export MASSOS="$PWD"/massos-rootfs
 # Ensure stage1 has been run first.
-if [ ! -e "$MASSOS"/sources/build-system.sh ]; then
+if [ ! -e "$MASSOS"/root/mbs/build-system.sh ]; then
   echo "Error: You must run stage1.sh first!" >&2
   exit 1
 fi
 # Ensure this is not resuming a failed build.
-if [ -e "$MASSOS"/sources/.BUILD_HAS_STARTED ]; then
+if [ -e "$MASSOS"/root/mbs/.BUILD_HAS_STARTED ]; then
   echo "Error: The previous stage 2 build failed or was interrupted." >&2
   echo "Please use stage2-resume-failed.sh to attempt resuming it." >&2
   exit 1
@@ -28,7 +28,7 @@ mkdir -p "$MASSOS"/{dev,proc,sys,run}
 mknod -m 600 "$MASSOS"/dev/console c 5 1
 mknod -m 666 "$MASSOS"/dev/null c 1 3
 # Chroot into the MassOS environment and start the stage 2 build.
-utils/programs/mass-chroot "$MASSOS" /sources/build-system.sh
+utils/programs/mass-chroot "$MASSOS" /root/mbs/build-system.sh
 # Finishing message.
 echo
 echo "Stage 2 build completed successfully."

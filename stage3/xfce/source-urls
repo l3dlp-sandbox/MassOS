@@ -7,7 +7,7 @@ https://www.claws-mail.org/releases/claws-mail-4.3.0.tar.xz
 https://github.com/elementary/icons/archive/8.1.0/elementary-icon-theme-8.1.0.tar.gz
 https://mirror.dotsrc.org/pub/gnome/sources/evince/46/evince-46.3.1.tar.xz
 https://mirror.netcologne.de/xfce/src/xfce/exo/4.20/exo-4.20.0.tar.bz2
-https://archive.mozilla.org/pub/firefox/releases/134.0.2/linux-x86_64/en-US/firefox-134.0.2.tar.bz2
+https://archive.mozilla.org/pub/firefox/releases/135.0/linux-x86_64/en-US/firefox-135.0.tar.xz
 https://github.com/galculator/galculator/archive/v2.1.4/galculator-2.1.4.tar.gz
 https://mirror.netcologne.de/xfce/src/xfce/garcon/4.20/garcon-4.20.0.tar.bz2
 https://gitlab.gnome.org/World/gnome-firmware/-/archive/47.0/gnome-firmware-47.0.tar.bz2
@@ -17,7 +17,7 @@ https://gitlab.gnome.org/GNOME/gparted/-/archive/GPARTED_1_7_0/gparted-GPARTED_1
 https://github.com/labwc/labwc/archive/0.8.2/labwc-0.8.2.tar.gz
 https://mirror.netcologne.de/xfce/src/xfce/libxfce4ui/4.20/libxfce4ui-4.20.0.tar.bz2
 https://mirror.netcologne.de/xfce/src/xfce/libxfce4util/4.20/libxfce4util-4.20.0.tar.bz2
-https://mirror.netcologne.de/xfce/src/xfce/libxfce4windowing/4.20/libxfce4windowing-4.20.0.tar.bz2
+https://mirror.netcologne.de/xfce/src/xfce/libxfce4windowing/4.20/libxfce4windowing-4.20.2.tar.bz2
 https://github.com/CanonicalLtd/lightdm/releases/download/1.32.0/lightdm-1.32.0.tar.xz
 https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-2.0.9/lightdm-gtk-greeter-2.0.9.tar.gz
 https://github.com/MassOS-Linux/massos-welcome/archive/f978ef7/massos-welcome-002.tar.gz
@@ -40,7 +40,7 @@ https://mirror.netcologne.de/xfce/src/panel-plugins/xfce4-clipman-plugin/1.6/xfc
 https://mirror.netcologne.de/xfce/src/xfce/xfce4-dev-tools/4.20/xfce4-dev-tools-4.20.0.tar.bz2
 https://mirror.netcologne.de/xfce/src/panel-plugins/xfce4-mount-plugin/1.1/xfce4-mount-plugin-1.1.6.tar.bz2
 https://mirror.netcologne.de/xfce/src/apps/xfce4-notifyd/0.9/xfce4-notifyd-0.9.6.tar.bz2
-https://mirror.netcologne.de/xfce/src/xfce/xfce4-panel/4.20/xfce4-panel-4.20.0.tar.bz2
+https://mirror.netcologne.de/xfce/src/xfce/xfce4-panel/4.20/xfce4-panel-4.20.3.tar.bz2
 https://mirror.netcologne.de/xfce/src/xfce/xfce4-power-manager/4.20/xfce4-power-manager-4.20.0.tar.bz2
 https://mirror.netcologne.de/xfce/src/panel-plugins/xfce4-pulseaudio-plugin/0.4/xfce4-pulseaudio-plugin-0.4.9.tar.bz2
 https://mirror.netcologne.de/xfce/src/apps/xfce4-screensaver/4.18/xfce4-screensaver-4.18.4.tar.bz2

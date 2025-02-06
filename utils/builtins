@@ -228,6 +228,7 @@ intel-vaapi-driver
 intltool
 iproute2
 iptables
+isl
 iso-codes
 itstool
 jack2
@@ -443,6 +444,8 @@ libxxf86vm
 libyaml
 libzip
 linux
+linux-api-headers
+linux-headers
 linux-pam
 lld
 llvm

@@ -20,12 +20,12 @@ fi
 # Setup the environment.
 export MASSOS="$PWD"/massos-rootfs
 # Ensure stage1 has been run first.
-if [ ! -d "$MASSOS" ]; then
+if [ ! -e "$MASSOS"/root/mbs/build-system.sh ]; then
   echo "Error: You must run stage1.sh first!" >&2
   exit 1
 fi
 # Chroot into the MassOS environment and continue the build.
-utils/programs/mass-chroot "$MASSOS" /sources/build-system.sh
+utils/programs/mass-chroot "$MASSOS" /root/mbs/build-system.sh
 # Finishing message.
 echo
 echo "Stage 2 build completed successfully."

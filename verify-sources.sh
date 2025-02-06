@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # This script verifies the sources downloaded by 'retrieve-sources.sh'.
+# MassOS now uses Blake-2 (b2) checksums, so the 'b2sum' program is required.
 #
 # Cannot verify anything if the sources directory is missing.
 if [ ! -d sources ]; then
@@ -9,8 +10,8 @@ if [ ! -d sources ]; then
 fi
 # Change into the sources directory.
 cd sources
-# Run recursive sha256sum on all downloaded files.
-cat ../source-urls.sha256 | sha256sum -c
+# Run b2sum on all downloaded files.
+cat ../source-urls.b2 | b2sum -c
 STATUS=$?
 # Ensure everything verified successfully.
 if [ $STATUS -ne 0 ]; then

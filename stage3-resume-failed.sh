@@ -44,19 +44,19 @@ fi
 # Put Stage 3 files into the system.
 echo "Trying to resume Stage 3 build for '$1'..."
 # Re-enter the chroot and continue the build.
-utils/programs/mass-chroot "$MASSOS" /sources/build-stage3.sh
+utils/programs/mass-chroot "$MASSOS" /root/mbs/build-stage3.sh
 # Put in finalize.sh and finish the build.
 echo "Finalizing the build..."
-cp finalize.sh "$MASSOS"/sources
-utils/programs/mass-chroot "$MASSOS" /sources/finalize.sh
+cp finalize.sh "$MASSOS"/root/mbs
+utils/programs/mass-chroot "$MASSOS" /root/mbs/finalize.sh
 # Install preupgrade and postupgrade.
 cp utils/{pre,post}upgrade "$MASSOS"/tmp
 # Install Live CD cleanup script for osinstallgui.
 install -t "$MASSOS"/tmp -m755 utils/livecd-cleanup.sh
 # Strip executables and libraries to free up space.
 printf "Stripping binaries and libraries... "
-find "$MASSOS"/usr/{bin,lib,libexec,sbin} -type f -not -name \*.a -and -not -name \*.o -and -not -name \*.mod -and -not -name \*.module -exec strip --strip-unneeded {} ';' &> /dev/null || true
-find "$MASSOS"/usr/lib -type f -name \*.a -or -name \*.o -or -name \*.mod -or -name \*.module -exec strip --strip-debug {} ';' &>/dev/null || true
+find "$MASSOS"/usr/{bin,lib,libexec,sbin} -type f ! -name \*.a ! -name \*.o ! -name \*.mod ! -name \*.module -exec strip --strip-unneeded {} + &>/dev/null || true
+find "$MASSOS"/usr/lib -type f -name \*.a -or -name \*.o -or -name \*.mod -or -name \*.module -exec strip --strip-debug {} + &>/dev/null || true
 echo "Done!"
 # Finish the MassOS system.
 outfile="massos-$(cat "$MASSOS"/etc/massos-release)-rootfs-x86_64-$1.tar"
